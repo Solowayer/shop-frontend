@@ -5,7 +5,7 @@ import { Input } from '@/ui/Input'
 const Signup = () => {
 	return (
 		<>
-			<form className="flex flex-col bg-surface border border-line rounded-lg gap-4 p-6">
+			<form className="flex flex-col bg-surface border rounded gap-4 p-6">
 				<p className="text-2xl font-medium">Вхід</p>
 				<hr />
 				<Input label="Ваше ім'я" />
@@ -16,7 +16,7 @@ const Signup = () => {
 				<Button>Зареєструватись</Button>
 			</form>
 			<p>Вже є аккаунт?</p>
-			<ButtonLink href="auth/signin" fullWidth>
+			<ButtonLink variant="secondary" href="auth/signin" fullWidth>
 				Увійти
 			</ButtonLink>
 		</>

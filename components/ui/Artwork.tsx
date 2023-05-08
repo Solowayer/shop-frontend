@@ -5,12 +5,11 @@ interface ImageProps {
 	alt: string
 	height?: string
 	width?: string
-	shape: 'round' | 'rectangle'
 }
 
-export default function Artwork({ src, alt, height, width, shape = 'rectangle' }: ImageProps) {
+export default function Artwork({ src, alt, height, width }: ImageProps) {
 	return (
-		<div className={`relative h-[${height}] w-[${width}] ${shape}`}>
+		<div className={`relative h-[${height}] w-[${width}]`}>
 			<Image src={src} alt={alt} fill />
 		</div>
 	)

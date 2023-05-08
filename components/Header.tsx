@@ -6,12 +6,15 @@ import { ButtonLink } from '@/ui/ButtonLink'
 
 export default function Header() {
 	return (
-		<div className="flex items-center px-10 gap-4 text-black h-20 border-b-slate-100">
-			<Link href="/" className="font-bold text-2xl text-lime-600">
+		<div className="flex items-center px-10 gap-4 text-black h-20 border border-b-slate-200">
+			<Link href="/" className="font-bold text-2xl">
 				SHOP
 			</Link>
 			<Input icon={<Search />} fullWidth />
 			<ButtonLink href="/auth/signin">Увійти</ButtonLink>
+			<ButtonLink variant="secondary" href="/cart">
+				Корзина
+			</ButtonLink>
 		</div>
 	)
 }

@@ -11,7 +11,9 @@ export interface Props extends ButtonLinkProps {
 export function ButtonLink({ href, ...props }: Props) {
 	return (
 		<Link href={href} className="inline-flex">
-			<Button fullWidth={props.fullWidth}>{props.children}</Button>
+			<Button fullWidth={props.fullWidth} variant={props.variant}>
+				{props.children}
+			</Button>
 		</Link>
 	)
 }

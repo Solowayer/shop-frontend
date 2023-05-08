@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 		<html lang="en">
 			<body className={inter.className}>
 				<main className="flex flex-col items-center gap-6 px-10 mt-6">
-					<Link href="/" className="font-bold text-3xl text-lime-600">
+					<Link href="/" className="font-bold text-3xl">
 						SHOP
 					</Link>
 					<div className="w-[440px] flex flex-col gap-4">{children}</div>
