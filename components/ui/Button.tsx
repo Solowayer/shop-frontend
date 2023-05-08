@@ -16,7 +16,7 @@ const secondary = [
 ].join(' ')
 
 const buttonStyles = [
-	'inline-flex items-center justify-center',
+	'inline-flex max-h-[40px] items-center justify-center',
 	'font-medium',
 	'disabled:bg-button-disabled',
 	'disabled:text-content-muted',
