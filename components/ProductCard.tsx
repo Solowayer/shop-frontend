@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Star } from './icons'
 
-interface IProductCard {
+export interface IProductCard {
 	href: string
 	image?: string
 	name: string
@@ -13,7 +13,7 @@ interface IProductCard {
 
 export default function ProductCard({ href, image, name, price, rating }: IProductCard) {
 	return (
-		<div className="flex flex-col w-[300px] border-2 border-zinc-100 rounded">
+		<div className="flex flex-col min-w-[300px] border-2 border-zinc-100 rounded">
 			<Link href={href}>
 				{image && (
 					<div className="relative h-[272px] w-full">
@@ -21,11 +21,11 @@ export default function ProductCard({ href, image, name, price, rating }: IProdu
 					</div>
 				)}
 				<div className="flex flex-col p-4 gap-2">
-					<span className="font-bold text-xl">{price} ₴</span>
 					<span className="hover:text-amber-700">{name}</span>
 					<span className="flex items-center gap-1">
 						{rating} <Star fill="#ffa41c" />
 					</span>
+					<span className="font-bold text-xl">{price} ₴</span>
 				</div>
 			</Link>
 		</div>

@@ -19,8 +19,8 @@ export default function CartItem({ image, name, price, quantity }: ICartItem) {
 			)}
 			<div className="flex flex-1 flex-col justify-between">
 				<div className="flex justify-between gap-6">
-					<span className="font-medium text-lg">{name}</span>
-					<span className="font-bold text-xl">{price} ₴</span>
+					<span className="w-full flex flex-1 font-medium text-lg">{name}</span>
+					<span className="font-bold text-xl min-w-[200px] inline-flex justify-end">{price} ₴</span>
 				</div>
 				<div className="flex items-center justify-between">
 					<span>{quantity}</span>

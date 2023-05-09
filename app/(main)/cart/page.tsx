@@ -10,7 +10,7 @@ export default function Cart() {
 				<div className="flex flex-col gap-8 w-full">
 					<CartItem
 						image="https://m.media-amazon.com/images/I/51HqC0rU9HL._AC_AA180_.jpg"
-						name="AMD Ryzen 7 7800X3D 8-Core, 16-Thread Desktop Processor"
+						name="Монітор 28 Samsung Odyssey G7 S28AG702 (LS28AG702NIXCI) 4K HDR400 / IPS 8-Bit / 144Гц / sRGB 99% / G-SYNC Compatible"
 						price={717}
 						quantity={0}
 					/>
