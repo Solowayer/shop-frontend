@@ -7,3 +7,10 @@ type Product = {
 	price: number
 	rating: number
 }
+
+type UserSignup = {
+	username: string
+	email: string
+	phoneNumber?: string
+	password: string
+}
