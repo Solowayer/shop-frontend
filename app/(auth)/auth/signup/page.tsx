@@ -1,5 +1,6 @@
 'use client'
 
+import axios from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signupSchema } from '@/validation/signup-schema'
@@ -23,7 +24,15 @@ const Signup = () => {
 		resolver: zodResolver(signupSchema)
 	})
 
-	const onSubmit: SubmitHandler<UserSignup> = data => console.log(data)
+	const onSubmit: SubmitHandler<UserSignup> = data =>
+		axios
+			.post('http://localhost:4200/user-auth/signup', data)
+			.then(function (response) {
+				console.log(response)
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
 
 	return (
 		<>
