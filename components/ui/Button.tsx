@@ -18,6 +18,7 @@ const secondary = [
 
 const buttonStyles = [
 	'inline-flex max-h-[40px] items-center justify-center',
+	'gap-2',
 	'font-medium',
 	'disabled:bg-button-disabled',
 	'disabled:text-content-muted',

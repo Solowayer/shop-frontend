@@ -8,12 +8,11 @@ const Signup = () => {
 			<form className="flex flex-col bg-surface border rounded gap-4 p-6">
 				<p className="text-2xl font-medium">Вхід</p>
 				<hr />
-				<Input label="Ваше ім'я" />
-				<Input label="Електронна пошта" />
-				<Input label="Номер телефону" />
-				<Input label="Пароль" />
-				<Input label="Повторіть пароль" />
-				<Button>Зареєструватись</Button>
+				<Input id="username" type="text" label="Ваше ім'я" required />
+				<Input id="email" type="email" label="Електронна пошта" required />
+				<Input id="phoneNumber" type="tel" label="Номер телефону" />
+				<Input id="password" type="password" label="Пароль" required />
+				<Button type="submit">Зареєструватись</Button>
 			</form>
 			<p>Вже є аккаунт?</p>
 			<ButtonLink variant="secondary" href="auth/signin" fullWidth>

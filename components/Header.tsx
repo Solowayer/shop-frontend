@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { Input } from '@/ui/Input'
-import { Search } from './icons'
+import { Cart, Person, Search } from './icons'
 import { ButtonLink } from '@/ui/ButtonLink'
 
 export default function Header() {
@@ -17,8 +17,12 @@ export default function Header() {
 			</div>
 			<div className="flex items-center gap-4">
 				<Input placeholder="Шукати..." icon={<Search />} />
-				<ButtonLink href="/auth/signin">Увійти</ButtonLink>
+				<ButtonLink href="/auth/signin">
+					<Person />
+					Увійти
+				</ButtonLink>
 				<ButtonLink variant="secondary" href="/cart">
+					<Cart />
 					Корзина
 				</ButtonLink>
 			</div>
