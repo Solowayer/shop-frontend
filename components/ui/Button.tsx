@@ -7,6 +7,7 @@ export interface ButtonProps extends ComponentProps<'button'> {
 }
 
 const primary = ['text-black', 'bg-[#ffd814]', 'hover:bg-[#eec90f]', 'active:bg-[#c0a108]'].join(' ')
+
 const secondary = [
 	'text-black',
 	'bg-transparent',

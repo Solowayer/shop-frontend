@@ -1,36 +1,17 @@
-'use client'
-
 import ProductCard from '@/components/ProductCard'
-import { Button } from '@/components/ui/Button'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import getAllProducts from '@/lib/getAllProducts'
 
-export interface Product {
-	id: number
-	name: string
-	price: number
-	rating: number
-}
-
-export default function Home() {
-	const [products, setProducts] = useState([])
-
-	useEffect(() => {
-		async function fetchProducts() {
-			const res = await fetch('http://localhost:4200/products')
-			const products = await res.json()
-			setProducts(products)
-		}
-
-		fetchProducts()
-	}, [])
+export default async function Home() {
+	const productsData: Promise<Product[]> = getAllProducts()
+	const products = await productsData
 
 	return (
 		<div className="grid grid-cols-4 gap-4">
-			{products.map((product: Product) => (
+			{products.map(product => (
 				<ProductCard
 					key={product.id}
-					href={`/${product.id}`}
+					href={`/product/${product.slug}`}
+					images={product.images}
 					name={product.name}
 					price={product.price}
 					rating={product.rating}

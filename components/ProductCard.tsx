@@ -1,25 +1,29 @@
 import React from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
 import { Star } from './icons'
+import Link from 'next/link'
 
-export interface IProductCard {
+interface ProductProps extends Omit<Product, 'id' | 'slug' | 'description'> {
 	href: string
-	image?: string
-	name: string
-	price: number
-	rating: number
 }
 
-export default function ProductCard({ href, image, name, price, rating }: IProductCard) {
+export default function ProductCard({ href, images, name, price, rating }: ProductProps) {
 	return (
-		<div className="flex flex-col min-w-[300px] border-2 border-zinc-100 rounded">
+		<div className="flex flex-col min-w-[240px] border-2 border-zinc-100 rounded hover:border-zinc-300 overflow-hidden">
 			<Link href={href}>
-				{image && (
-					<div className="relative h-[272px] w-full">
-						<Image src={image} alt={'cringe'} fill className="p-4 object-contain bg-zinc-100" />
-					</div>
-				)}
+				<div className="relative h-[272px] w-full">
+					{images.length > 0 ? (
+						<Image src={images[0]} alt={'Product photo'} fill className="p-4 object-contain bg-zinc-100" />
+					) : (
+						<Image
+							src="/../public/no-product-photo.png"
+							alt={'Product photo'}
+							className="object-contain bg-zinc-100"
+							fill
+						/>
+					)}
+				</div>
+
 				<div className="flex flex-col p-4 gap-2">
 					<span className="hover:text-amber-700">{name}</span>
 					<span className="flex items-center gap-1">

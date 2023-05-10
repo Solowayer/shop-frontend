@@ -16,7 +16,7 @@ export default function Header() {
 				</ButtonLink>
 			</div>
 			<div className="flex items-center gap-4">
-				<Input icon={<Search />} />
+				<Input placeholder="Шукати..." icon={<Search />} />
 				<ButtonLink href="/auth/signin">Увійти</ButtonLink>
 				<ButtonLink variant="secondary" href="/cart">
 					Корзина
