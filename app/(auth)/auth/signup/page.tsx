@@ -4,12 +4,15 @@ import axios from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signupSchema } from '@/validation/signup-schema'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/ui/Button'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { Input } from '@/ui/Input'
 
-const Signup = () => {
+export default function Signup() {
+	const router = useRouter()
+
 	const {
 		register,
 		handleSubmit,
@@ -24,20 +27,20 @@ const Signup = () => {
 		resolver: zodResolver(signupSchema)
 	})
 
-	const onSubmit: SubmitHandler<UserSignup> = data =>
-		axios
-			.post('http://localhost:4200/user-auth/signup', data)
-			.then(function (response) {
-				console.log(response)
-			})
-			.catch(function (error) {
-				console.log(error)
-			})
+	const onSubmit: SubmitHandler<UserSignup> = async data => {
+		try {
+			const response = await axios.post(`${process.env.api}/user-auth/signup`, data)
+			console.log(response)
+			router.push('/')
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	return (
 		<>
 			<form className="flex flex-col bg-surface border rounded gap-4 p-6" onSubmit={handleSubmit(onSubmit)}>
-				<p className="text-2xl font-medium">Вхід</p>
+				<p className="text-2xl font-medium">Реєстрація</p>
 				<hr />
 				<Input id="username" type="text" label="Ваше ім'я" {...register('username')} disabled={isSubmitting} />
 				{errors.username?.message && <p className="text-red-500">{errors.username?.message}</p>}
@@ -61,5 +64,3 @@ const Signup = () => {
 		</>
 	)
 }
-
-export default Signup

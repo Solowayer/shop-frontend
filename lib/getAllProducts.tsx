@@ -1,7 +1,10 @@
+import axios from 'axios'
+
 export default async function getAllProducts() {
-	const res = await fetch(`http://localhost:4200/products`, { next: { revalidate: 5 } })
-
-	if (!res.ok) throw new Error('Failed to fetch')
-
-	return (await res.json()) as Product[]
+	try {
+		const response = await axios.get(`${process.env.api}/products`, { params: { next: 'revalidate=5' } })
+		return response.data as Product[]
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
 }
