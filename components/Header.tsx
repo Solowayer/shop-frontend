@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import React from 'react'
 import { Input } from '@/ui/Input'
@@ -5,6 +7,8 @@ import { Cart, Person, Search } from './icons'
 import { ButtonLink } from '@/ui/ButtonLink'
 
 export default function Header() {
+	const token = localStorage.getItem('token')
+
 	return (
 		<div className="flex items-center justify-between px-10 gap-4 text-black h-20 border-b">
 			<div className="flex gap-4 items-center">
@@ -17,10 +21,16 @@ export default function Header() {
 			</div>
 			<div className="flex items-center gap-4">
 				<Input placeholder="Шукати..." icon={<Search />} />
-				<ButtonLink href="/auth/signin">
-					<Person />
-					Увійти
-				</ButtonLink>
+				{token ? (
+					<ButtonLink variant="secondary" href="/account">
+						Мій аккаунт
+					</ButtonLink>
+				) : (
+					<ButtonLink href="/auth/signin">
+						<Person />
+						Увійти
+					</ButtonLink>
+				)}
 				<ButtonLink variant="secondary" href="/cart">
 					<Cart />
 					Корзина
