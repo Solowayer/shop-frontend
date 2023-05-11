@@ -9,3 +9,10 @@ export const signupSchema = z.object({
 	}),
 	password: z.string().min(6, { message: 'Вкажіть password' }).max(20)
 })
+
+export const signinSchema = z.object({
+	emailOrPhoneNumber: z
+		.string()
+		.regex(/^(380\d{9}|[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3})$/, { message: 'Invalid email or phone number format' }),
+	password: z.string().min(6, { message: 'Вкажіть password' }).max(20)
+})

@@ -3,7 +3,7 @@
 import axios from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { signupSchema } from '@/validation/signup-schema'
+import { signupSchema } from '@/validation/authorization'
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/ui/Button'
@@ -11,7 +11,7 @@ import { ButtonLink } from '@/ui/ButtonLink'
 import { Input } from '@/ui/Input'
 
 export default function Signup() {
-	const router = useRouter()
+	// const router = useRouter()
 
 	const {
 		register,
@@ -31,7 +31,10 @@ export default function Signup() {
 		try {
 			const response = await axios.post(`${process.env.api}/user-auth/signup`, data)
 			console.log(response)
-			router.push('/')
+			const { token } = await response.data
+			console.log(token)
+
+			// router.push('/')
 		} catch (error) {
 			console.log(error)
 		}

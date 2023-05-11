@@ -14,3 +14,8 @@ type UserSignup = {
 	phoneNumber?: string
 	password: string
 }
+
+type UserSignin = {
+	emailOrPhoneNumber: string
+	password: string
+}
