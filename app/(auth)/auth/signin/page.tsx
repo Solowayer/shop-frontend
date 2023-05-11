@@ -4,7 +4,6 @@ import axios from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signinSchema } from '@/validation/authorization'
-import Cookies from 'js-cookie'
 
 import { Button } from '@/components/ui/Button'
 import { ButtonLink } from '@/components/ui/ButtonLink'
@@ -32,8 +31,6 @@ const Signin = () => {
 			console.log(response)
 			const { token } = await response.data
 			console.log(token)
-
-			localStorage.setItem('token', token) // зберегти токен у localStorage
 
 			// оновити хедер для авторизованого користувача
 			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`

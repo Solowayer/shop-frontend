@@ -5,7 +5,7 @@ import React from 'react'
 export default function Cart() {
 	return (
 		<div className="flex flex-col gap-8">
-			<h1 className="text-4xl font-bold">Корзина</h1>
+			<h1 className="text-3xl font-bold">Корзина</h1>
 			<div className="flex gap-10">
 				<div className="flex flex-col gap-8 w-full">
 					<CartItem

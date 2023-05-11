@@ -7,7 +7,7 @@ import { Cart, Person, Search } from './icons'
 import { ButtonLink } from '@/ui/ButtonLink'
 
 export default function Header() {
-	const token = localStorage.getItem('token')
+	const token = null
 
 	return (
 		<div className="flex items-center justify-between px-10 gap-4 text-black h-20 border-b">

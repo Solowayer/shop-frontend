@@ -4,6 +4,7 @@ export interface ButtonProps extends ComponentProps<'button'> {
 	children: React.ReactNode
 	fullWidth?: boolean
 	variant?: 'primary' | 'secondary'
+	onClick?: () => void
 }
 
 const primary = ['text-black', 'bg-[#ffd814]', 'hover:bg-[#eec90f]', 'active:bg-[#c0a108]'].join(' ')
@@ -27,9 +28,12 @@ const buttonStyles = [
 	'rounded'
 ].join(' ')
 
-export function Button({ fullWidth, children, variant = 'primary' }: ButtonProps) {
+export function Button({ fullWidth, children, variant = 'primary', onClick }: ButtonProps) {
 	return (
-		<button className={`${fullWidth ? `w-full` : ''} ${variant === 'primary' ? primary : secondary}  ${buttonStyles} `}>
+		<button
+			className={`${fullWidth ? `w-full` : ''} ${variant === 'primary' ? primary : secondary}  ${buttonStyles} `}
+			onClick={onClick}
+		>
 			{children}
 		</button>
 	)
