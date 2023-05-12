@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signinSchema } from '@/validation/authorization'
 
-import { Button } from '@/components/ui/Button'
+import Button from '@/components/ui/Button'
 import { ButtonLink } from '@/components/ui/ButtonLink'
 import { Input } from '@/components/ui/Input'
 import { useRouter } from 'next/navigation'
@@ -27,13 +27,13 @@ const Signin = () => {
 
 	const onSubmit: SubmitHandler<UserSignin> = async data => {
 		try {
-			const response = await axios.post(`${process.env.api}/user-auth/signin`, data)
+			const response = await axios.post(`${process.env.api}/user-auth/signin`, data, { withCredentials: true })
 			console.log(response)
 			const { token } = await response.data
 			console.log(token)
 
 			// оновити хедер для авторизованого користувача
-			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+			// axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
 			router.push('/')
 		} catch (error) {

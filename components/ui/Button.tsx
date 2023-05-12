@@ -28,7 +28,7 @@ const buttonStyles = [
 	'rounded'
 ].join(' ')
 
-export function Button({ fullWidth, children, variant = 'primary', onClick }: ButtonProps) {
+export default function Button({ fullWidth, children, variant = 'primary', onClick }: ButtonProps) {
 	return (
 		<button
 			className={`${fullWidth ? `w-full` : ''} ${variant === 'primary' ? primary : secondary}  ${buttonStyles} `}

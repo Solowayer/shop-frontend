@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import { Star } from './icons'
+import { Star } from '../icons'
 import Link from 'next/link'
 
 interface ProductProps extends Omit<Product, 'id' | 'slug' | 'description'> {
@@ -15,12 +15,7 @@ export default function ProductCard({ href, images, name, price, rating }: Produ
 					{images.length > 0 ? (
 						<Image src={images[0]} alt={'Product photo'} fill className="p-4 object-contain" />
 					) : (
-						<Image
-							src="/../public/no-product-photo.png"
-							alt={'Product photo'}
-							className="object-contain"
-							fill
-						/>
+						<Image src="/../public/no-product-photo.png" alt={'Product photo'} className="object-contain" fill />
 					)}
 				</div>
 

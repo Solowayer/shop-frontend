@@ -1,13 +1,12 @@
-'use client'
-
 import Link from 'next/link'
-import React from 'react'
 import { Input } from '@/ui/Input'
 import { Cart, Person, Search } from './icons'
 import { ButtonLink } from '@/ui/ButtonLink'
+import { cookies } from 'next/headers'
 
 export default function Header() {
-	const token = null
+	const cookieStore = cookies()
+	const token = cookieStore.get('token')
 
 	return (
 		<div className="flex items-center justify-between px-10 gap-4 text-black h-20 border-b">

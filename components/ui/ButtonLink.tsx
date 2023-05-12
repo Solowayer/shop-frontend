@@ -1,6 +1,7 @@
 import React, { ComponentProps } from 'react'
 import Link from 'next/link'
-import { Button, ButtonProps } from './Button'
+import { ButtonProps } from './Button'
+import Button from './Button'
 
 type ButtonLinkProps = ComponentProps<'a'> & ButtonProps
 
