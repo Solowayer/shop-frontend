@@ -3,36 +3,34 @@
 import axios from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { signupSchema } from '@/validation/authorization'
+import { registerSchema } from '@/validation/authorization'
 import { useRouter } from 'next/navigation'
 
 import Button from '@/ui/Button'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { Input } from '@/ui/Input'
 
-export default function Signup() {
+export default function Register() {
 	// const router = useRouter()
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting }
-	} = useForm<UserSignup>({
+	} = useForm<UserRegister>({
 		defaultValues: {
 			username: '',
 			email: '',
 			phoneNumber: '',
 			password: ''
 		},
-		resolver: zodResolver(signupSchema)
+		resolver: zodResolver(registerSchema)
 	})
 
-	const onSubmit: SubmitHandler<UserSignup> = async data => {
+	const onSubmit: SubmitHandler<UserRegister> = async data => {
 		try {
-			const response = await axios.post(`${process.env.api}/user-auth/signup`, data)
+			const response = await axios.post(`${process.env.api}/user-auth/register`, data)
 			console.log(response)
-			const { token } = await response.data
-			console.log(token)
 
 			// router.push('/')
 		} catch (error) {

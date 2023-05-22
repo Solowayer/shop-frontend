@@ -17,6 +17,9 @@ export default function Header() {
 				<ButtonLink variant="secondary" href="/seller-auth/signin">
 					Продавати на Shop
 				</ButtonLink>
+				<Link href="users" className="text-xxl red font-black flex my-8">
+					Fucking users
+				</Link>
 			</div>
 			<div className="flex items-center gap-4">
 				<Input placeholder="Шукати..." icon={<Search />} />
@@ -25,7 +28,7 @@ export default function Header() {
 						Мій аккаунт
 					</ButtonLink>
 				) : (
-					<ButtonLink href="/auth/signin">
+					<ButtonLink href="/auth/login">
 						<Person />
 						Увійти
 					</ButtonLink>

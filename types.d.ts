@@ -8,14 +8,20 @@ type Product = {
 	rating: number
 }
 
-type UserSignup = {
+type UserRegister = {
 	username: string
 	email: string
 	phoneNumber?: string
 	password: string
 }
 
-type UserSignin = {
-	emailOrPhoneNumber: string
+type UserLogin = {
+	email: string
 	password: string
+}
+
+type User = {
+	username: string
+	email: string
+	phoneNumber: string
 }
