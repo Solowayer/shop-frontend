@@ -17,8 +17,11 @@ export default function Header() {
 				<ButtonLink variant="secondary" href="/seller-auth/signin">
 					Продавати на Shop
 				</ButtonLink>
-				<Link href="users" className="text-xxl red font-black flex my-8">
-					Fucking users
+				<Link href="/users" className="text-md font-medium flex my-8">
+					Users
+				</Link>
+				<Link href="/account" className="text-md font-medium flex my-8">
+					Account
 				</Link>
 			</div>
 			<div className="flex items-center gap-4">
