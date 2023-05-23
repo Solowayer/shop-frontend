@@ -13,9 +13,15 @@ export default function ProductCard({ href, images, name, price, rating }: Produ
 			<Link href={href}>
 				<div className="relative h-[272px] w-full">
 					{images.length > 0 ? (
-						<Image src={images[0]} alt={'Product photo'} fill className="p-4 object-contain" />
+						<Image src={images[0]} alt={'Product photo'} fill sizes="fill" className="p-4 object-contain" />
 					) : (
-						<Image src="/../public/no-product-photo.png" alt={'Product photo'} className="object-contain" fill />
+						<Image
+							src="/../public/no-product-photo.png"
+							alt={'Product photo'}
+							className="object-contain"
+							fill
+							sizes="fill"
+						/>
 					)}
 				</div>
 

@@ -1,10 +1,19 @@
+'use client'
+
 import Link from 'next/link'
 import { Input } from '@/ui/Input'
 import { Cart, Person, Search } from './icons'
 import { ButtonLink } from '@/ui/ButtonLink'
 
+import { RootState } from '@/store'
+import { useSelector } from 'react-redux'
+
 export default function Header() {
-	const isAuth = null
+	const isAuth: boolean = useSelector((state: RootState) => state.auth.isAuth)
+	const user = useSelector((state: RootState) => state.auth.user)
+
+	console.log(isAuth)
+	console.log(user)
 
 	return (
 		<div className="flex items-center justify-between px-10 gap-4 text-black h-20 border-b">

@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import '../globals.css'
 import { Inter } from 'next/font/google'
-
 const inter = Inter({ subsets: ['latin'] })
+
+import StoreProvider from '@/store/provider'
 
 export const metadata = {
 	title: 'Authorization',
@@ -17,7 +18,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 					<Link href="/" className="font-bold text-3xl">
 						SHOP
 					</Link>
-					<div className="w-[440px] flex flex-col gap-4">{children}</div>
+					<div className="w-[440px] flex flex-col gap-4">
+						<StoreProvider>{children}</StoreProvider>
+					</div>
 				</main>
 			</body>
 		</html>

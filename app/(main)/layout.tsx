@@ -1,8 +1,9 @@
 import '../globals.css'
 import Header from '@/components/Header'
 import { Inter } from 'next/font/google'
-
 const inter = Inter({ subsets: ['latin'] })
+
+import StoreProvider from '@/store/provider'
 
 export const metadata = {
 	title: 'Shop',
@@ -13,7 +14,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<Header />
+				<StoreProvider>
+					<Header />
+				</StoreProvider>
 				<main className="px-10 my-6 max-w-[1500px] m-auto">{children}</main>
 			</body>
 		</html>

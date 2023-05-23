@@ -5,13 +5,19 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema } from '@/validation/authorization'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '@/store/slices/authSlice'
+
 import Button from '@/components/ui/Button'
 import { ButtonLink } from '@/components/ui/ButtonLink'
 import { Input } from '@/components/ui/Input'
 import { useRouter } from 'next/navigation'
+import { RootState } from '@/store'
 
 export default function Login() {
 	const router = useRouter()
+
+	const loginState = useSelector((state: RootState) => state.auth)
 
 	const {
 		register,
@@ -25,13 +31,18 @@ export default function Login() {
 		resolver: zodResolver(loginSchema)
 	})
 
+	const dispatch = useDispatch()
+
 	const onSubmit: SubmitHandler<UserLogin> = async data => {
 		try {
 			const response = await axios.post(`${process.env.api}/user-auth/login`, data, {
 				withCredentials: true
 			})
-			console.log(response)
-			router.push('/')
+			dispatch(login(response.data))
+
+			console.log(loginState)
+
+			// router.push('/')
 		} catch (error) {
 			console.log(error)
 		}
