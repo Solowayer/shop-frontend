@@ -11,7 +11,7 @@ export default function AccountExit() {
 
 	const handleLogout = async () => {
 		try {
-			const res = await axios.post(`${process.env.api}/user-auth/logout`, { withCredentials: true })
+			const res = await axios.post(`${process.env.api}/user-auth/logout`, {}, { withCredentials: true })
 			router.push('/')
 			router.refresh()
 			return res

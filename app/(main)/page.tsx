@@ -1,6 +1,5 @@
 import ProductCard from '@/components/shop/ProductCard'
 import getAllProducts from '@/lib/getAllProducts'
-import Link from 'next/link'
 
 export default async function Home() {
 	const productsData: Promise<Product[]> = getAllProducts()

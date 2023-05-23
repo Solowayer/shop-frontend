@@ -59,7 +59,7 @@ export default function Register() {
 				<Button type="submit">Зареєструватись</Button>
 			</form>
 			<p>Вже є аккаунт?</p>
-			<ButtonLink variant="secondary" href="auth/signin" fullWidth disabled={isSubmitting}>
+			<ButtonLink variant="secondary" href="auth/login" fullWidth disabled={isSubmitting}>
 				Увійти
 			</ButtonLink>
 		</>
