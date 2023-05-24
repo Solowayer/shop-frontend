@@ -5,15 +5,18 @@ import { Input } from '@/ui/Input'
 import { Cart, Person, Search } from './icons'
 import { ButtonLink } from '@/ui/ButtonLink'
 
-import { RootState } from '@/store'
-import { useSelector } from 'react-redux'
+import { RootState } from '@/redux/store'
+import { useAppSelector } from '@/redux/hooks'
+import { useEffect } from 'react'
 
 export default function Header() {
-	const isAuth: boolean = useSelector((state: RootState) => state.auth.isAuth)
-	const user = useSelector((state: RootState) => state.auth.user)
+	const isAuth: boolean = useAppSelector((state: RootState) => state.auth.isAuth)
+	const user = useAppSelector((state: RootState) => state.auth.user)
 
-	console.log(isAuth)
-	console.log(user)
+	useEffect(() => {
+		console.log(isAuth)
+		console.log(user)
+	}, [isAuth, user])
 
 	return (
 		<div className="flex items-center justify-between px-10 gap-4 text-black h-20 border-b">

@@ -3,7 +3,7 @@ import Header from '@/components/Header'
 import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
-import StoreProvider from '@/store/provider'
+import StoreProvider from '@/redux/provider'
 
 export const metadata = {
 	title: 'Shop',

@@ -1,23 +1,31 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import axios from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { loginSchema } from '@/validation/authorization'
+import { useRouter } from 'next/navigation'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { login } from '@/store/slices/authSlice'
+import { loginSchema } from '@/validation/authorization'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { login } from '@/redux/slices/authSlice'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 
 import Button from '@/components/ui/Button'
 import { ButtonLink } from '@/components/ui/ButtonLink'
 import { Input } from '@/components/ui/Input'
-import { useRouter } from 'next/navigation'
-import { RootState } from '@/store'
+import { RootState } from '@/redux/store'
+
+import { useAuthLoginMutation } from '@/redux/api/authLoginApi'
 
 export default function Login() {
+	const [authLogin, { isLoading, isError }] = useAuthLoginMutation()
+
 	const router = useRouter()
 
-	const loginState = useSelector((state: RootState) => state.auth)
+	const loginState = useAppSelector((state: RootState) => state.auth)
+	const dispatch = useAppDispatch()
 
 	const {
 		register,
@@ -31,22 +39,20 @@ export default function Login() {
 		resolver: zodResolver(loginSchema)
 	})
 
-	const dispatch = useDispatch()
-
 	const onSubmit: SubmitHandler<UserLogin> = async data => {
 		try {
-			const response = await axios.post(`${process.env.api}/user-auth/login`, data, {
-				withCredentials: true
-			})
-			dispatch(login(response.data))
-
-			console.log(loginState)
-
-			// router.push('/')
+			const payload = await authLogin(data).unwrap()
+			dispatch(login(payload))
+			console.log('fulfilled', payload)
+			return payload
 		} catch (error) {
-			console.log(error)
+			console.error('rejected', error)
 		}
 	}
+
+	useEffect(() => {
+		console.log(loginState)
+	}, [loginState])
 
 	return (
 		<>
