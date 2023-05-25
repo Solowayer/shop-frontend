@@ -2,21 +2,29 @@
 
 import React from 'react'
 import Button from '@/ui/Button'
-import axios from 'axios'
+import { useAuthCheckQuery, useAuthLogoutMutation } from '@/redux/api/authLoginApi'
 
-import { useRouter } from 'next/navigation'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { login, logout } from '@/redux/slices/authSlice'
+import { RootState } from '@/redux/store'
 
 export default function AccountExit() {
-	const router = useRouter()
+	const { data } = useAuthCheckQuery('')
+	const [authLogout, { isError, isLoading, isSuccess }] = useAuthLogoutMutation()
+	const dispatch = useAppDispatch()
+
+	if (data) {
+		dispatch(login())
+	}
 
 	const handleLogout = async () => {
 		try {
-			const res = await axios.post(`${process.env.api}/user-auth/logout`, {}, { withCredentials: true })
-			router.push('/')
-			router.refresh()
-			return res
+			const payload = await authLogout().unwrap()
+			console.log('fulfilled', payload)
+			dispatch(logout())
+			return payload
 		} catch (error) {
-			throw new Error('Failed to fetch')
+			console.error('rejected', error)
 		}
 	}
 

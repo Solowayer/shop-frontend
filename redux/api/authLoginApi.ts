@@ -11,8 +11,20 @@ export const authLoginApi = createApi({
 				method: 'POST',
 				body
 			})
+		}),
+		authLogout: builder.mutation<void, void>({
+			query: body => ({
+				url: 'logout',
+				method: 'POST',
+				body
+			})
+		}),
+		authCheck: builder.query<boolean, string>({
+			query: () => ({
+				url: 'check-auth'
+			})
 		})
 	})
 })
 
-export const { useAuthLoginMutation } = authLoginApi
+export const { useAuthLoginMutation, useAuthLogoutMutation, useAuthCheckQuery } = authLoginApi
