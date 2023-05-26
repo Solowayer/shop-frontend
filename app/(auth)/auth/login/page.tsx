@@ -1,6 +1,5 @@
 'use client'
 
-import axios from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema } from '@/validation/authorization'
@@ -10,7 +9,14 @@ import { ButtonLink } from '@/components/ui/ButtonLink'
 import { Input } from '@/components/ui/Input'
 import { useRouter } from 'next/navigation'
 
+import { useMutation } from '@tanstack/react-query'
+import { login } from '@/lib/mutations'
+
 export default function Login() {
+	const mutation = useMutation({
+		mutationFn: login
+	})
+
 	const router = useRouter()
 
 	const {
@@ -27,11 +33,9 @@ export default function Login() {
 
 	const onSubmit: SubmitHandler<UserLogin> = async data => {
 		try {
-			const response = await axios.post(`${process.env.api}/user-auth/login`, data, {
-				withCredentials: true
-			})
-			console.log(response)
+			mutation.mutate({ ...data })
 			router.push('/')
+			console.log({ ...data })
 		} catch (error) {
 			console.log(error)
 		}
@@ -47,6 +51,9 @@ export default function Login() {
 				<Input label="Пароль" type="password" {...register('password')} disabled={isSubmitting} />
 				{errors.password?.message && <p className="text-red-500">{errors.password?.message}</p>}
 				<Button type="submit">Увійти</Button>
+				{mutation.isError && <div>Something wrong</div>}
+				{mutation.isLoading && <div>Loading...</div>}
+				{mutation.isSuccess && <div>Done</div>}
 			</form>
 			<p>Ще немає аккаунту?</p>
 			<ButtonLink variant="secondary" href="/auth/register" fullWidth>
