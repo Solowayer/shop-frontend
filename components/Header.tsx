@@ -15,9 +15,6 @@ export default function Header() {
 				<ButtonLink variant="secondary" href="/">
 					Продавати на Shop
 				</ButtonLink>
-				<Link href="/account" className="text-md font-medium flex my-8">
-					Account
-				</Link>
 			</div>
 			<div className="flex items-center gap-4">
 				<Input placeholder="Шукати..." icon={<Search />} />
