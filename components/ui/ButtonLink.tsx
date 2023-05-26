@@ -1,3 +1,5 @@
+'use client'
+
 import React, { ComponentProps } from 'react'
 import Link from 'next/link'
 import { ButtonProps } from './Button'

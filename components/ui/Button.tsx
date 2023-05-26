@@ -1,3 +1,5 @@
+'use client'
+
 import React, { ComponentProps } from 'react'
 
 export interface ButtonProps extends ComponentProps<'button'> {
