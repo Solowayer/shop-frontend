@@ -5,3 +5,9 @@ export const login = (data: UserLogin) => {
 		withCredentials: true
 	})
 }
+
+export const logout = (data: void) => {
+	return axios.post(`${process.env.api}/user-auth/logout`, data, {
+		withCredentials: true
+	})
+}

@@ -12,9 +12,14 @@ import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import { login } from '@/lib/mutations'
 
+import { useAuthStore } from '@/store/authStore'
+
 export default function Login() {
+	const { setIsAuth } = useAuthStore()
+
 	const mutation = useMutation({
-		mutationFn: login
+		mutationFn: login,
+		onSuccess: () => setIsAuth(true)
 	})
 
 	const router = useRouter()

@@ -2,20 +2,29 @@
 
 import React from 'react'
 import Button from '@/ui/Button'
-import axios from 'axios'
 
 import { useRouter } from 'next/navigation'
 
+import { useMutation } from '@tanstack/react-query'
+import { logout } from '@/lib/mutations'
+import { useAuthStore } from '@/store/authStore'
+
 export default function AccountExit() {
+	const { setIsAuth } = useAuthStore()
+
+	const mutation = useMutation({
+		mutationFn: logout,
+		onSuccess: () => setIsAuth(false)
+	})
+
 	const router = useRouter()
 
 	const handleLogout = async () => {
 		try {
-			const res = await axios.post(`${process.env.api}/user-auth/logout`, {}, { withCredentials: true })
+			mutation.mutate()
 			router.push('/')
-			return res
 		} catch (error) {
-			throw new Error('Failed to fetch')
+			console.log(error)
 		}
 	}
 

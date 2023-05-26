@@ -6,11 +6,14 @@ import { Cart, Person, Search } from './icons'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCheckAuth } from '@/lib/queries'
-import { useState } from 'react'
 import Spinner from '@/ui/Spinner'
 
+import { useAuthStore } from '@/store/authStore'
+import { useStore } from '@/store/use-store-hook'
+
 export default function Header() {
-	const [isAuth, setIsAuth] = useState(false)
+	const isAuth = useStore(useAuthStore, state => state.isAuth)
+	const { setIsAuth } = useAuthStore()
 
 	const { isLoading } = useQuery({
 		queryKey: ['check-auth'],
@@ -19,6 +22,8 @@ export default function Header() {
 			setIsAuth(data)
 		}
 	})
+
+	console.log(isAuth)
 
 	return (
 		<>
