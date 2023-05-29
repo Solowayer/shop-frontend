@@ -10,9 +10,11 @@ import Spinner from '@/ui/Spinner'
 
 import { useAuthStore } from '@/store/authStore'
 import { useStore } from '@/store/use-store-hook'
+import { useCartStore } from '@/store/cartStore'
 
 export default function Header() {
 	const isAuth = useStore(useAuthStore, state => state.isAuth)
+	const cartItemCount = useStore(useCartStore, state => state.cartItemCount)
 	const { setIsAuth } = useAuthStore()
 
 	const { isLoading } = useQuery({
@@ -22,8 +24,6 @@ export default function Header() {
 			setIsAuth(data)
 		}
 	})
-
-	console.log(isAuth)
 
 	return (
 		<>
@@ -54,7 +54,11 @@ export default function Header() {
 					)}
 					<ButtonLink variant="secondary" href="/cart">
 						<Cart />
-						Корзина
+						{isAuth && (
+							<span className="absolute py-1 px-2 left-10 bottom-6 bg-red-500 text-white rounded-lg text-sm">
+								{cartItemCount}
+							</span>
+						)}
 					</ButtonLink>
 				</div>
 			</div>

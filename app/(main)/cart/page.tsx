@@ -1,28 +1,47 @@
-import CartItem from '@/components/CartItem'
+'use client'
+
+import CartItemList from '@/components/cart/CartItemList'
 import Button from '@/components/ui/Button'
-import React from 'react'
+import Spinner from '@/components/ui/Spinner'
+import { fetchCartData } from '@/lib/queries'
+import { useCartStore } from '@/store/cartStore'
+import { useQuery } from '@tanstack/react-query'
+import { useStore } from '@/store/use-store-hook'
 
 export default function Cart() {
+	const { setCartItemCount } = useCartStore()
+	const cartItemCount = useStore(useCartStore, state => state.cartItemCount)
+
+	const { data, isLoading, isError } = useQuery({
+		queryKey: ['cart'],
+		queryFn: fetchCartData,
+		retry: false,
+		onSuccess: data => {
+			setCartItemCount(data.cartItems.reduce((total, item) => total + item.quantity, 0))
+		}
+	})
+
+	if (isLoading) {
+		return <Spinner width="full" />
+	}
+
 	return (
-		<div className="flex flex-col gap-8">
+		<div className="flex flex-col gap-8 w-full">
 			<h1 className="text-3xl font-bold">Корзина</h1>
-			<div className="flex gap-10">
-				<div className="flex flex-col gap-8 w-full">
-					<CartItem
-						image="https://m.media-amazon.com/images/I/51HqC0rU9HL._AC_AA180_.jpg"
-						name="Монітор 28 Samsung Odyssey G7 S28AG702 (LS28AG702NIXCI) 4K HDR400 / IPS 8-Bit / 144Гц / sRGB 99% / G-SYNC Compatible"
-						price={717}
-						quantity={0}
-					/>
-				</div>
-				<div className="flex flex-col w-[400px] gap-4">
-					<div className="flex justify-between">
-						<span>Всього (2 товари):</span>
-						<span className="text-lg font-bold">400 ₴</span>
+			{isError ? (
+				<h3>Увійдіть, щоб додавати товари в корзину</h3>
+			) : (
+				<div className="flex gap-10">
+					{data ? <CartItemList cartItems={data.cartItems} /> : <h3 className="w-full">Тут поки що нічого немає</h3>}
+					<div className="flex flex-col w-[400px] gap-4">
+						<div className="flex justify-between">
+							<span>Всього товарів ({data ? cartItemCount : 0}):</span>
+							<span className="text-lg font-bold">{data ? data.totalAmount : 0} ₴</span>
+						</div>
+						<Button>Оформити замовлення</Button>
 					</div>
-					<Button>Оформити замовлення</Button>
 				</div>
-			</div>
+			)}
 		</div>
 	)
 }

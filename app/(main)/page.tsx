@@ -1,9 +1,8 @@
 import ProductCard from '@/components/shop/ProductCard'
-import getAllProducts from '@/lib/getAllProducts'
+import { fetchAllProducts } from '@/lib/queries'
 
 export default async function Home() {
-	const productsData: Promise<Product[]> = getAllProducts()
-	const products = await productsData
+	const products = await fetchAllProducts()
 
 	return (
 		<>

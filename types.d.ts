@@ -25,3 +25,15 @@ type User = {
 	email: string
 	phoneNumber: string
 }
+
+type Cart = {
+	totalAmount: number
+	cartItems: CartItem[]
+}
+
+type CartItem = {
+	name: string
+	image: string
+	quantity: number
+	price: number
+}

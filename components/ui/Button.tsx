@@ -20,6 +20,7 @@ const secondary = [
 ].join(' ')
 
 const buttonStyles = [
+	'relative',
 	'inline-flex max-h-[40px] items-center justify-center',
 	'gap-2',
 	'font-medium',
