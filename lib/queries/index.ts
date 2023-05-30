@@ -29,9 +29,20 @@ export const fetchAllProducts = async (): Promise<Product[]> => {
 	}
 }
 
-export default async function fetchProduct(slug: string): Promise<Product> {
+export async function fetchProduct(slug: string): Promise<Product> {
 	try {
 		const response = await axios.get(`${process.env.api}/products/${slug}`)
+		return response.data
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
+}
+
+export async function getAllUsers(): Promise<User[]> {
+	try {
+		const response = await axios.get(`${process.env.api}/users`, {
+			withCredentials: true
+		})
 		return response.data
 	} catch (error) {
 		throw new Error('Failed to fetch')

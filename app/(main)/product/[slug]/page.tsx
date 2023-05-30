@@ -1,5 +1,5 @@
 import AddToCartForm from '@/components/cart/AddToCartForm'
-import fetchProduct from '@/lib/queries'
+import { fetchProduct } from '@/lib/queries'
 import Image from 'next/image'
 import React from 'react'
 

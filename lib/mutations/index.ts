@@ -17,3 +17,9 @@ export const addtoCart = (data: AddToCart) => {
 		withCredentials: true
 	})
 }
+
+export const deleteCart = () => {
+	return axios.delete(`${process.env.api}/cart`, {
+		withCredentials: true
+	})
+}

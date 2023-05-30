@@ -5,13 +5,14 @@ import Button from '@/components/ui/Button'
 import Spinner from '@/components/ui/Spinner'
 import { fetchCartData } from '@/lib/queries'
 import { useCartStore } from '@/store/cartStore'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useStore } from '@/store/use-store-hook'
 import Link from 'next/link'
+import { deleteCart } from '@/lib/mutations'
 
 export default function Cart() {
-	const { setCartItemCount } = useCartStore()
-	const cartItemCount = useStore(useCartStore, state => state.cartItemCount)
+	const { setCartItemCount, setCartItems, setCartTotalAmountPrice } = useCartStore()
+	const { cartItemCount, cartItems, cartTotalAmountPrice } = useCartStore()
 
 	const { data, isLoading, isError } = useQuery({
 		queryKey: ['cart'],
@@ -19,8 +20,25 @@ export default function Cart() {
 		retry: false,
 		onSuccess: data => {
 			setCartItemCount(data ? data.cartItems.reduce((total, item) => total + item.quantity, 0) : 0)
+			setCartItems(data.cartItems)
+			setCartTotalAmountPrice(data.totalAmount)
 		}
 	})
+
+	const mutation = useMutation({
+		mutationFn: deleteCart
+	})
+
+	const handleDeleteCart = () => {
+		try {
+			mutation.mutate()
+		} catch (error) {
+			console.log(error)
+		}
+		setCartItemCount(0)
+		setCartItems(null)
+		setCartTotalAmountPrice(0)
+	}
 
 	if (isLoading) {
 		return <Spinner width="full" />
@@ -38,15 +56,18 @@ export default function Cart() {
 				</h3>
 			) : (
 				<>
-					{data ? (
+					{cartItems ? (
 						<div className="flex gap-10">
-							<CartItemList cartItems={data.cartItems} />
+							<CartItemList cartItems={cartItems} />
 							<div className="flex flex-col w-[400px] gap-4">
 								<div className="flex justify-between">
 									<span>Всього товарів ({data ? cartItemCount : 0}):</span>
-									<span className="text-lg font-bold">{data ? data.totalAmount : 0} ₴</span>
+									<span className="text-lg font-bold">{data ? cartTotalAmountPrice : 0} ₴</span>
 								</div>
 								<Button>Оформити замовлення</Button>
+								<Button variant="secondary" onClick={() => handleDeleteCart()}>
+									Очистити корзину
+								</Button>
 							</div>
 						</div>
 					) : (
