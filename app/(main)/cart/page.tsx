@@ -6,7 +6,6 @@ import Spinner from '@/components/ui/Spinner'
 import { fetchCartData } from '@/lib/queries'
 import { useCartStore } from '@/store/cartStore'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useStore } from '@/store/use-store-hook'
 import Link from 'next/link'
 import { deleteCart } from '@/lib/mutations'
 

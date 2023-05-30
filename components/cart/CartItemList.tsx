@@ -7,6 +7,7 @@ export default function CartItemList({ cartItems }: { cartItems: CartItem[] }) {
 			{cartItems.map((cartItem, index) => (
 				<CartItem
 					key={index}
+					id={cartItem.id}
 					image={cartItem.image}
 					name={cartItem.name}
 					price={cartItem.price}

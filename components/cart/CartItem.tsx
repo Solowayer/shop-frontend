@@ -2,14 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import Button from '@/ui/Button'
 
-interface ICartItem {
-	image?: string
-	name: string
-	price: number
-	quantity: number
-}
-
-export default function CartItem({ image, name, price, quantity }: ICartItem) {
+export default function CartItem({ id, image, name, price, quantity }: CartItem) {
 	return (
 		<div className="flex gap-6 bg-white drop-shadow-[0_4px_20px_rgba(34,34,34,.15)] p-6 rounded">
 			{image && (
@@ -24,7 +17,9 @@ export default function CartItem({ image, name, price, quantity }: ICartItem) {
 				</div>
 				<div className="flex items-center justify-between">
 					<span>{quantity}</span>
-					<Button variant="secondary">Видалити</Button>
+					<Button variant="secondary" onClick={() => console.log(id)}>
+						Видалити
+					</Button>
 				</div>
 			</div>
 		</div>

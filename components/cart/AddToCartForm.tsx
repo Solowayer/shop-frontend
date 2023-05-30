@@ -5,18 +5,19 @@ import { useMutation } from '@tanstack/react-query'
 import { addtoCart } from '@/lib/mutations'
 import Button from '@/ui/Button'
 import { useCartStore } from '@/store/cartStore'
-import { useStore } from 'zustand'
 import { ExpandMore } from '../icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addToCartSchema } from '@/lib/validation/cart'
 
 export default function AddToCartForm({ productId }: { productId: number }) {
 	const { setCartItemCount } = useCartStore()
-	const cartItemCount = useStore(useCartStore, state => state.cartItemCount)
+	const { cartItemCount } = useCartStore()
 
 	const mutation = useMutation({
 		mutationFn: addtoCart
 	})
+
+	const { isError } = mutation
 
 	const options = Array.from({ length: 100 }, (_, index) => (
 		<option key={index + 1} value={index + 1}>
@@ -65,6 +66,7 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 				</select>
 				<ExpandMore className="pointer-events-none absolute end-1" />
 			</div>
+			{isError && <span className="text-red-500">Увійдіть, щоб додавати товари в корзину</span>}
 			{errors.quantity && <span className="text-red-500">Помилка</span>}
 			<Button type="submit" fullWidth disabled={isSubmitting}>
 				{isSubmitting ? 'Додається...' : 'Додати в корзину'}

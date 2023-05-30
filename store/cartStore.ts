@@ -4,8 +4,8 @@ import { devtools, persist } from 'zustand/middleware'
 type CartState = {
 	cartItemCount: number
 	setCartItemCount: (value: number) => void
-	cartItems: CartItem[] | null
-	setCartItems: (value: CartItem[] | null) => void
+	cartItems: CartItems
+	setCartItems: (value: CartItems) => void
 	cartTotalAmountPrice: number
 	setCartTotalAmountPrice: (value: number) => void
 }

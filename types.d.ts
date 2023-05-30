@@ -32,11 +32,14 @@ type Cart = {
 }
 
 type CartItem = {
+	id: number
+	image?: string
 	name: string
-	image: string
 	quantity: number
 	price: number
 }
+
+type CartItems = CartItem[] | null
 
 type AddToCart = {
 	quantity: string
