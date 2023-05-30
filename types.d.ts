@@ -37,3 +37,8 @@ type CartItem = {
 	quantity: number
 	price: number
 }
+
+type AddToCart = {
+	quantity: string
+	productId: number
+}

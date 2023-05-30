@@ -1,11 +1,10 @@
-import Button from '@/components/ui/Button'
+import AddToCartForm from '@/components/cart/AddToCartForm'
+import fetchProduct from '@/lib/queries'
 import Image from 'next/image'
 import React from 'react'
-import getProduct from '@/lib/getProduct'
 
 export default async function Product({ params }: { params: { slug: string } }) {
-	const productData: Promise<Product> = getProduct(params.slug)
-	const product = await productData
+	const product = await fetchProduct(params.slug)
 
 	return (
 		<div className="flex gap-10">
@@ -34,7 +33,7 @@ export default async function Product({ params }: { params: { slug: string } }) 
 				</div>
 				<div className="flex flex-col gap-4 w-[372px] p-4 border rounded">
 					<span className="text-xl">{product.price} ₴</span>
-					<Button fullWidth>Додати в корзину</Button>
+					<AddToCartForm productId={product.id} />
 				</div>
 			</div>
 		</div>

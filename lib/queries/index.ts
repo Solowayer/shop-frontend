@@ -28,3 +28,12 @@ export const fetchAllProducts = async (): Promise<Product[]> => {
 		throw new Error('Failed to fetch')
 	}
 }
+
+export default async function fetchProduct(slug: string): Promise<Product> {
+	try {
+		const response = await axios.get(`${process.env.api}/products/${slug}`)
+		return response.data
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
+}

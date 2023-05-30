@@ -11,3 +11,9 @@ export const logout = (data: void) => {
 		withCredentials: true
 	})
 }
+
+export const addtoCart = (data: AddToCart) => {
+	return axios.post(`${process.env.api}/cart`, data, {
+		withCredentials: true
+	})
+}
