@@ -10,7 +10,7 @@ import { addToCartSchema } from '@/lib/validation/cart'
 import { Input } from '@/ui/Input'
 
 export default function AddToCartForm({ productId }: { productId: number }) {
-	const { setcartItemsQuantity, cartItemsQuantity } = useCartStore()
+	const { setCartItemsQuantity, cartItemsQuantity } = useCartStore()
 
 	const mutation = useMutation({
 		mutationFn: addtoCart
@@ -36,7 +36,7 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 			{ ...data },
 			{
 				onSuccess: () => {
-					setcartItemsQuantity(cartItemsQuantity + quantityValue)
+					setCartItemsQuantity(cartItemsQuantity + quantityValue)
 					console.log({ ...data })
 				},
 				onError: error => {

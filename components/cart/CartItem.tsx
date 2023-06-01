@@ -22,7 +22,7 @@ export default function CartItem({ id, image, name, price, quantity }: CartItem)
 			mutation.mutate(id)
 			console.log(id)
 			setCartItemDelete(id, quantity, price)
-			if (cartItems && cartItems.length === 0) setCartItems(null)
+			if (cartItems && cartItems.length === 0) setCartItems([])
 			console.log(cartItems)
 		} catch (error) {
 			console.log(error)

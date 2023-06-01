@@ -5,10 +5,11 @@ type CartState = {
 	cartItemsQuantity: number
 	cartItems: CartItems
 	cartTotalAmountPrice: number
-	setcartItemsQuantity: (value: number) => void
+	setCartItemsQuantity: (value: number) => void
 	setCartItems: (value: CartItems) => void
 	setCartTotalAmountPrice: (value: number) => void
 	setCartDelete: () => void
+	setCartItemCreate: (quantity: number, cartItems: CartItems, totalAmount: number) => void
 	setCartItemDelete: (id: number, quantity: number, price: number) => void
 }
 
@@ -16,12 +17,18 @@ export const useCartStore = create<CartState>()(
 	persist(
 		devtools(set => ({
 			cartItemsQuantity: 0,
-			cartItems: null,
+			cartItems: [],
 			cartTotalAmountPrice: 0,
-			setcartItemsQuantity: value => set(() => ({ cartItemsQuantity: Math.max(value, 0) })),
+			setCartItemsQuantity: value => set(() => ({ cartItemsQuantity: Math.max(value, 0) })),
 			setCartItems: value => set(() => ({ cartItems: value })),
 			setCartTotalAmountPrice: value => set(() => ({ cartTotalAmountPrice: value })),
-			setCartDelete: () => set(() => ({ cartItems: null, cartItemsQuantity: 0, cartTotalAmountPrice: 0 })),
+			setCartDelete: () => set(() => ({ cartItems: [], cartItemsQuantity: 0, cartTotalAmountPrice: 0 })),
+			setCartItemCreate: (quantity, cartItems, totalAmount) =>
+				set(() => ({
+					cartItemsQuantity: quantity,
+					cartItems: cartItems,
+					cartTotalAmountPrice: totalAmount
+				})),
 			setCartItemDelete: (id, quantity, price) =>
 				set((state: CartState) => ({
 					cartItems: state.cartItems && state.cartItems.filter(item => item.id !== id),

@@ -39,7 +39,7 @@ type CartItem = {
 	price: number
 }
 
-type CartItems = CartItem[] | null
+type CartItems = CartItem[]
 
 type AddToCart = {
 	quantity: string
