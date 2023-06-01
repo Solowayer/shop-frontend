@@ -10,17 +10,26 @@ import Link from 'next/link'
 import { deleteCart } from '@/lib/mutations'
 
 export default function Cart() {
-	const { setCartItemCount, setCartItems, setCartTotalAmountPrice } = useCartStore()
-	const { cartItemCount, cartItems, cartTotalAmountPrice } = useCartStore()
+	const {
+		cartItemsQuantity,
+		cartItems,
+		cartTotalAmountPrice,
+		setcartItemsQuantity,
+		setCartItems,
+		setCartTotalAmountPrice,
+		setCartDelete
+	} = useCartStore()
 
 	const { data, isLoading, isError } = useQuery({
 		queryKey: ['cart'],
 		queryFn: fetchCartData,
 		retry: false,
 		onSuccess: data => {
-			setCartItemCount(data ? data.cartItems.reduce((total, item) => total + item.quantity, 0) : 0)
+			const count = data ? data.cartItems.reduce((total, item) => total + item.quantity, 0) : 0
+			setcartItemsQuantity(count)
 			setCartItems(data.cartItems)
 			setCartTotalAmountPrice(data.totalAmount)
+			if (data.cartItems && data.cartItems.length === 0) handleDeleteCart()
 		}
 	})
 
@@ -28,15 +37,13 @@ export default function Cart() {
 		mutationFn: deleteCart
 	})
 
-	const handleDeleteCart = () => {
+	const handleDeleteCart = async () => {
 		try {
 			mutation.mutate()
 		} catch (error) {
 			console.log(error)
 		}
-		setCartItemCount(0)
-		setCartItems(null)
-		setCartTotalAmountPrice(0)
+		setCartDelete()
 	}
 
 	if (isLoading) {
@@ -60,7 +67,7 @@ export default function Cart() {
 							<CartItemList cartItems={cartItems} />
 							<div className="flex flex-col w-[400px] gap-4">
 								<div className="flex justify-between">
-									<span>Всього товарів ({data ? cartItemCount : 0}):</span>
+									<span>Всього товарів ({data ? cartItemsQuantity : 0}):</span>
 									<span className="text-lg font-bold">{data ? cartTotalAmountPrice : 0} ₴</span>
 								</div>
 								<Button>Оформити замовлення</Button>

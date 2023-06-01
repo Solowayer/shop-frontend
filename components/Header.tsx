@@ -14,7 +14,7 @@ import { useCartStore } from '@/store/cartStore'
 
 export default function Header() {
 	const isAuth = useStore(useAuthStore, state => state.isAuth)
-	const cartItemCount = useStore(useCartStore, state => state.cartItemCount)
+	const cartItemsQuantity = useStore(useCartStore, state => state.cartItemsQuantity)
 	const { setIsAuth } = useAuthStore()
 
 	const { isLoading } = useQuery({
@@ -56,7 +56,7 @@ export default function Header() {
 						<Cart />
 						{isAuth && (
 							<span className="absolute py-1 px-2 left-10 bottom-6 bg-red-500 text-white rounded-lg text-sm">
-								{cartItemCount}
+								{cartItemsQuantity}
 							</span>
 						)}
 					</ButtonLink>

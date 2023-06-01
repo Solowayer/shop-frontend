@@ -2,23 +2,32 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
 type CartState = {
-	cartItemCount: number
-	setCartItemCount: (value: number) => void
+	cartItemsQuantity: number
 	cartItems: CartItems
-	setCartItems: (value: CartItems) => void
 	cartTotalAmountPrice: number
+	setcartItemsQuantity: (value: number) => void
+	setCartItems: (value: CartItems) => void
 	setCartTotalAmountPrice: (value: number) => void
+	setCartDelete: () => void
+	setCartItemDelete: (id: number, quantity: number, price: number) => void
 }
 
 export const useCartStore = create<CartState>()(
 	persist(
 		devtools(set => ({
-			cartItemCount: 0,
-			setCartItemCount: value => set(() => ({ cartItemCount: value })),
-			cartItems: [],
-			setCartItems: value => set(() => ({ cartItems: value })),
+			cartItemsQuantity: 0,
+			cartItems: null,
 			cartTotalAmountPrice: 0,
-			setCartTotalAmountPrice: value => set(() => ({ cartTotalAmountPrice: value }))
+			setcartItemsQuantity: value => set(() => ({ cartItemsQuantity: Math.max(value, 0) })),
+			setCartItems: value => set(() => ({ cartItems: value })),
+			setCartTotalAmountPrice: value => set(() => ({ cartTotalAmountPrice: value })),
+			setCartDelete: () => set(() => ({ cartItems: null, cartItemsQuantity: 0, cartTotalAmountPrice: 0 })),
+			setCartItemDelete: (id, quantity, price) =>
+				set((state: CartState) => ({
+					cartItems: state.cartItems && state.cartItems.filter(item => item.id !== id),
+					cartItemsQuantity: Math.max(state.cartItemsQuantity - quantity, 0),
+					cartTotalAmountPrice: state.cartTotalAmountPrice - price
+				}))
 		})),
 		{ name: 'cart', version: 1 }
 	)
