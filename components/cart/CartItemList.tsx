@@ -12,6 +12,7 @@ export default function CartItemList({ cartItems }: { cartItems: CartItem[] }) {
 					name={cartItem.name}
 					price={cartItem.price}
 					quantity={cartItem.quantity}
+					productId={cartItem.productId}
 				/>
 			))}
 		</div>

@@ -1,4 +1,4 @@
-import ProductCard from '@/components/shop/ProductCard'
+import ProductCard from '@/components/product/ProductCard'
 import { fetchAllProducts } from '@/lib/queries'
 
 export default async function Home() {

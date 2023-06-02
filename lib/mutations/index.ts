@@ -22,7 +22,17 @@ export const logout = async (data: void) => {
 
 export const addtoCart = async (data: AddToCart) => {
 	try {
-		await axios.post(`${process.env.api}/cart`, data, {
+		await axios.post(`${process.env.api}/cart/add`, data, {
+			withCredentials: true
+		})
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+export const deleteCart = async () => {
+	try {
+		await axios.delete(`${process.env.api}/cart/delete`, {
 			withCredentials: true
 		})
 	} catch (error) {
@@ -33,16 +43,6 @@ export const addtoCart = async (data: AddToCart) => {
 export const deleteCartItem = async (id: number) => {
 	try {
 		await axios.delete(`${process.env.api}/cart/${id}`, {
-			withCredentials: true
-		})
-	} catch (error) {
-		console.log(error)
-	}
-}
-
-export const deleteCart = async () => {
-	try {
-		await axios.delete(`${process.env.api}/cart`, {
 			withCredentials: true
 		})
 	} catch (error) {

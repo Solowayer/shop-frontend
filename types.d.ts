@@ -37,6 +37,7 @@ type CartItem = {
 	name: string
 	quantity: number
 	price: number
+	productId: number
 }
 
 type CartItems = CartItem[]

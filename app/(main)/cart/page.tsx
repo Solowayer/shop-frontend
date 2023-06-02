@@ -14,7 +14,7 @@ export default function Cart() {
 	const { cartItemsQuantity, cartItems, cartTotalAmountPrice, setCartItemCreate, setCartDelete } = useCartStore()
 	const { isAuth } = useAuthStore()
 
-	const { data, isLoading, isError, error } = useQuery({
+	const { data, isLoading, isError } = useQuery({
 		queryKey: ['cart'],
 		queryFn: fetchCartData,
 		retry: false,

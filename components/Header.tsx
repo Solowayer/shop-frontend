@@ -54,11 +54,11 @@ export default function Header() {
 					)}
 					<ButtonLink variant="secondary" href="/cart">
 						<Cart />
-						{isAuth && (
+						{isAuth && cartItemsQuantity && cartItemsQuantity > 0 ? (
 							<span className="absolute py-1 px-2 left-10 bottom-6 bg-red-500 text-white rounded-lg text-sm">
 								{cartItemsQuantity}
 							</span>
-						)}
+						) : null}
 					</ButtonLink>
 				</div>
 			</div>
