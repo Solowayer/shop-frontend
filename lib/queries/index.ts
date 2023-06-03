@@ -19,11 +19,13 @@ export const fetchCartData = async (): Promise<Cart> => {
 	}
 }
 
-export const fetchAllProducts = async (): Promise<Product[]> => {
+export const fetchAllProducts = async (sort?: string): Promise<Product[]> => {
 	try {
-		const res = await axios.get(`${process.env.api}/products`, { params: { next: 'revalidate=5' } })
+		const res = await axios.get(`${process.env.api}/products`, {
+			params: { next: 'revalidate=5', sort }
+		})
 		return res.data
-	} catch (error: any) {
+	} catch (error) {
 		throw new Error('Failed to fetch')
 	}
 }
