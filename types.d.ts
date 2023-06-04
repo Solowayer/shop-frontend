@@ -1,3 +1,10 @@
+type Category = {
+	id: number
+	name: string
+	subCategories: Category[]
+	products: Product[]
+}
+
 type Product = {
 	id: number
 	slug: string

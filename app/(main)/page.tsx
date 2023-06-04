@@ -3,7 +3,7 @@
 import ProductsList from '@/components/product/ProductsList'
 import Button from '@/ui/Button'
 import Spinner from '@/ui/Spinner'
-import { fetchAllProducts, fetchProductsMaxPrice } from '@/lib/queries'
+import { fetchAllCategories, fetchAllProducts, fetchProductsMaxPrice } from '@/lib/queries'
 import { useQuery } from '@tanstack/react-query'
 import { useSortStore } from '@/store/sortFIlterStore'
 import { Input } from '@/components/ui/Input'
@@ -11,6 +11,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { filterSchema } from '@/lib/validation/filterSchema'
+import StyledLink from '@/components/ui/StyledLink'
 
 export default function Home() {
 	const {
@@ -24,6 +25,12 @@ export default function Home() {
 		isClearButton,
 		setClearButton
 	} = useSortStore()
+
+	const { data: categories } = useQuery({
+		queryKey: ['categories'],
+		queryFn: () => fetchAllCategories(),
+		retry: false
+	})
 
 	const { data, isLoading, isError } = useQuery({
 		queryKey: ['products', { sort: sortProducts }, { filter: [minPrice, maxPrice] }],
@@ -74,6 +81,13 @@ export default function Home() {
 
 	return (
 		<div className="flex flex-col gap-8">
+			<div className="grid grid-cols-4 gap-4">
+				{categories?.map((category, index) => (
+					<StyledLink key={index} href={`category/${category.id}`}>
+						{category.name}
+					</StyledLink>
+				))}
+			</div>
 			<div className="flex bg-white items-center justify-between drop-shadow rounded p-4 gap-4">
 				<div className="flex gap-4">
 					<button
