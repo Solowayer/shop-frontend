@@ -19,12 +19,29 @@ export const fetchCartData = async (): Promise<Cart> => {
 	}
 }
 
-export const fetchAllProducts = async (sort?: string): Promise<Product[]> => {
+export const fetchAllProducts = async (sort?: string, min_price?: number, max_price?: number): Promise<Product[]> => {
 	try {
 		const res = await axios.get(`${process.env.api}/products`, {
-			params: { next: 'revalidate=5', sort }
+			params: {
+				next: 'revalidate=5',
+				sort,
+				min_price,
+				max_price
+			}
 		})
+		console.log(res.data)
+
 		return res.data
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
+}
+
+export const fetchProductsMaxPrice = async (): Promise<number> => {
+	try {
+		const res = await axios.get(`${process.env.api}/products/max-price`)
+		const { productsMaxPrice } = res.data
+		return productsMaxPrice
 	} catch (error) {
 		throw new Error('Failed to fetch')
 	}

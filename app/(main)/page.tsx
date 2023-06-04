@@ -3,16 +3,43 @@
 import ProductsList from '@/components/product/ProductsList'
 import Button from '@/ui/Button'
 import Spinner from '@/ui/Spinner'
-import { fetchAllProducts } from '@/lib/queries'
+import { fetchAllProducts, fetchProductsMaxPrice } from '@/lib/queries'
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useSortStore } from '@/store/sortFIlterStore'
+import { Input } from '@/components/ui/Input'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { useEffect } from 'react'
 
 export default function Home() {
-	const [sort, setSort] = useState<string>('')
+	const { sortProducts, setSortProducts, minPrice, maxPrice, setMaxPrice, setMinPrice, setDeleteFilters } =
+		useSortStore()
 
-	const { data, isLoading, isError } = useQuery(['products', { sort: sort }], () => fetchAllProducts(sort))
+	const { data, isLoading, isError } = useQuery({
+		queryKey: ['products', { sort: sortProducts }, { filter: [minPrice, maxPrice] }],
+		queryFn: () => fetchAllProducts(sortProducts, minPrice, maxPrice),
+		retry: false
+	})
 
-	console.log(data)
+	useEffect(() => {
+		const fetchData = async () => {
+			const productsMaxPrice = await fetchProductsMaxPrice()
+			setMaxPrice(productsMaxPrice)
+		}
+
+		if (!maxPrice) fetchData()
+	}, [maxPrice, setMaxPrice])
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isSubmitting },
+		setValue
+	} = useForm<{ minPrice?: number; maxPrice?: number }>({
+		defaultValues: {
+			minPrice,
+			maxPrice
+		}
+	})
 
 	if (isError) {
 		return <h3>Помилка</h3>
@@ -22,11 +49,66 @@ export default function Home() {
 		return <Spinner />
 	}
 
+	const onSubmit: SubmitHandler<{ minPrice?: number; maxPrice?: number }> = async data => {
+		setMinPrice(data.minPrice)
+		setMaxPrice(data.maxPrice)
+	}
+
+	const handleDeleteFilters = () => {
+		setMinPrice(1)
+		setMaxPrice(undefined)
+		setValue('minPrice', 1)
+		setValue('maxPrice', undefined)
+	}
+
 	return (
-		<div className="flex flex-col gap-4">
-			<div className="flex gap-4">
-				<Button onClick={() => setSort('price_asc')}>Сортувати asc</Button>
-				<Button onClick={() => setSort('price_desc')}>Сортувати desc</Button>
+		<div className="flex flex-col gap-8">
+			<div className="flex bg-white items-center justify-between drop-shadow rounded p-4 gap-4">
+				<div className="flex gap-4">
+					<button
+						className={`${sortProducts === 'rating' ? 'text-red-500' : ''}`}
+						onClick={() => setSortProducts('rating')}
+					>
+						За рейтингом
+					</button>
+					<button
+						className={`${sortProducts === 'price_asc' ? 'text-red-500' : ''}`}
+						onClick={() => setSortProducts('price_asc')}
+					>
+						Спочатку дешевші
+					</button>
+					<button
+						className={`${sortProducts === 'price_desc' ? 'text-red-500' : ''}`}
+						onClick={() => setSortProducts('price_desc')}
+					>
+						Спочатку дорожчі
+					</button>
+				</div>
+				<form className="flex gap-4 max-w-[380px]" onSubmit={handleSubmit(onSubmit)}>
+					<Input
+						min={1}
+						placeholder="Мінімальна ціна"
+						fullWidth
+						id="minPrice"
+						type="number"
+						{...register('minPrice')}
+					/>
+					<Input
+						min={1}
+						placeholder="Максимальна ціна"
+						fullWidth
+						id="maxPrice"
+						type="number"
+						{...register('maxPrice')}
+					/>
+					{errors.maxPrice && <span className="text-red-500">Помилка</span>}
+					<Button type="submit" disabled={isSubmitting}>
+						Шукати
+					</Button>
+				</form>
+				<Button variant="secondary" onClick={() => handleDeleteFilters()}>
+					Очистити фільтр
+				</Button>
 			</div>
 			<ProductsList products={data} />
 		</div>

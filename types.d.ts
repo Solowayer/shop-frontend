@@ -8,6 +8,8 @@ type Product = {
 	rating: number
 }
 
+type ProductSortOption = 'price_asc' | 'price_desc' | 'rating'
+
 type UserRegister = {
 	username: string
 	email: string
