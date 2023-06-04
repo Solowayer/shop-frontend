@@ -9,10 +9,21 @@ import { useSortStore } from '@/store/sortFIlterStore'
 import { Input } from '@/components/ui/Input'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useEffect } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { filterSchema } from '@/lib/validation/filterSchema'
 
 export default function Home() {
-	const { sortProducts, setSortProducts, minPrice, maxPrice, setMaxPrice, setMinPrice, setDeleteFilters } =
-		useSortStore()
+	const {
+		sortProducts,
+		setSortProducts,
+		minPrice,
+		maxPrice,
+		setMaxPrice,
+		setMinPrice,
+		setDeleteFilters,
+		isClearButton,
+		setClearButton
+	} = useSortStore()
 
 	const { data, isLoading, isError } = useQuery({
 		queryKey: ['products', { sort: sortProducts }, { filter: [minPrice, maxPrice] }],
@@ -55,10 +66,10 @@ export default function Home() {
 	}
 
 	const handleDeleteFilters = () => {
-		setMinPrice(1)
-		setMaxPrice(undefined)
+		setDeleteFilters()
 		setValue('minPrice', 1)
 		setValue('maxPrice', undefined)
+		setClearButton(false)
 	}
 
 	return (
@@ -93,6 +104,7 @@ export default function Home() {
 						type="number"
 						{...register('minPrice')}
 					/>
+					{errors.minPrice && <span className="text-red-500">Помилка</span>}
 					<Input
 						min={1}
 						placeholder="Максимальна ціна"
@@ -102,13 +114,15 @@ export default function Home() {
 						{...register('maxPrice')}
 					/>
 					{errors.maxPrice && <span className="text-red-500">Помилка</span>}
-					<Button type="submit" disabled={isSubmitting}>
+					<Button type="submit" disabled={isSubmitting} onClick={() => setClearButton(true)}>
 						Шукати
 					</Button>
 				</form>
-				<Button variant="secondary" onClick={() => handleDeleteFilters()}>
-					Очистити фільтр
-				</Button>
+				{isClearButton && (
+					<Button variant="secondary" onClick={() => handleDeleteFilters()}>
+						Очистити фільтр
+					</Button>
+				)}
 			</div>
 			<ProductsList products={data} />
 		</div>

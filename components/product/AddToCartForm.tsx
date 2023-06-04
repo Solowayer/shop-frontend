@@ -6,7 +6,7 @@ import { addtoCart } from '@/lib/mutations'
 import Button from '@/ui/Button'
 import { useCartStore } from '@/store/cartStore'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { addToCartSchema } from '@/lib/validation/cart'
+import { addToCartSchema } from '@/lib/validation/cartSchema'
 import { Input } from '@/ui/Input'
 
 export default function AddToCartForm({ productId }: { productId: number }) {

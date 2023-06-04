@@ -3,7 +3,7 @@
 import axios from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { registerSchema } from '@/lib/validation/authorization'
+import { registerSchema } from '@/lib/validation/authorizationSchema'
 import { useRouter } from 'next/navigation'
 
 import Button from '@/ui/Button'

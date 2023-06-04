@@ -2,7 +2,7 @@
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { loginSchema } from '@/lib/validation/authorization'
+import { loginSchema } from '@/lib/validation/authorizationSchema'
 
 import Button from '@/components/ui/Button'
 import { ButtonLink } from '@/components/ui/ButtonLink'
