@@ -31,7 +31,7 @@ export const fetchAllCategories = async (): Promise<Category[]> => {
 
 export async function fetchCategoryById(id: number): Promise<Category> {
 	try {
-		const res = await axios.get(`${process.env.api}/categories/${id}`)
+		const res = await axios.get(`${process.env.api}/categories/${id}`, { params: { next: 'revalidate=5' } })
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')
@@ -50,6 +50,15 @@ export const fetchAllProducts = async (sort?: string, min_price?: number, max_pr
 		})
 		console.log(res.data)
 
+		return res.data
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
+}
+
+export async function fetchProductsByCategoryId(categoryId: number): Promise<Product[]> {
+	try {
+		const res = await axios.get(`${process.env.api}/products/c${categoryId}`)
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')
