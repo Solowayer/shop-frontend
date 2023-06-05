@@ -3,6 +3,7 @@ type Category = {
 	name: string
 	subCategories: Category[]
 	products: Product[]
+	parentId: number
 }
 
 type Product = {
