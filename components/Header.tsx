@@ -22,7 +22,8 @@ export default function Header() {
 		queryFn: fetchCheckAuth,
 		onSuccess: data => {
 			setIsAuth(data)
-		}
+		},
+		retry: false
 	})
 
 	return (

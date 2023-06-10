@@ -8,7 +8,23 @@ const nextConfig = {
 			{
 				protocol: 'https',
 				hostname: 'm.media-amazon.com'
+			},
+			{
+				protocol: 'https',
+				hostname: 'content.rozetka.com.ua'
+			},
+			{
+				protocol: 'https',
+				hostname: 'content1.rozetka.com.ua'
+			},
+			{
+				protocol: 'https',
+				hostname: 'content2.rozetka.com.ua'
 			}
+			// {
+			// 	protocol: 'https',
+			// 	hostname: 'content3.rozetka.com.ua'
+			// }
 		]
 	}
 }

@@ -1,9 +1,10 @@
 type Category = {
 	id: number
 	name: string
-	subCategories: Category[]
-	products: Product[]
+	isMain: boolean
 	parentId: number
+	childrens: Category[]
+	products: Product[]
 }
 
 type Product = {

@@ -19,9 +19,9 @@ export const fetchCartData = async (): Promise<Cart> => {
 	}
 }
 
-export const fetchAllCategories = async (): Promise<Category[]> => {
+export const fetchMainCategories = async (): Promise<Category[]> => {
 	try {
-		const res = await axios.get(`${process.env.api}/categories`)
+		const res = await axios.get(`${process.env.api}/categories`, { params: { next: 'revalidate=5' } })
 		console.log(res)
 		return res.data
 	} catch (error) {
@@ -32,6 +32,15 @@ export const fetchAllCategories = async (): Promise<Category[]> => {
 export async function fetchCategoryById(id: number): Promise<Category> {
 	try {
 		const res = await axios.get(`${process.env.api}/categories/${id}`, { params: { next: 'revalidate=5' } })
+		return res.data
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
+}
+
+export async function fetchCategoryBySlug(slug: string): Promise<Category> {
+	try {
+		const res = await axios.get(`${process.env.api}/categories/${slug}`, { params: { next: 'revalidate=5' } })
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')

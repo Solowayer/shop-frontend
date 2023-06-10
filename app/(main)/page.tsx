@@ -1,24 +1,24 @@
 'use client'
 
 import Spinner from '@/ui/Spinner'
-import { fetchAllCategories } from '@/lib/queries'
+import { fetchMainCategories } from '@/lib/queries'
 import { useQuery } from '@tanstack/react-query'
 
 import StyledLink from '@/components/ui/StyledLink'
 
 export default function Home() {
 	const {
-		data: categories,
+		data: mainCategories,
 		isError,
 		isLoading
 	} = useQuery({
 		queryKey: ['categories'],
-		queryFn: () => fetchAllCategories(),
+		queryFn: () => fetchMainCategories(),
 		retry: false
 	})
 
 	if (isError) {
-		return <h3>Помилка</h3>
+		return <h3>Стався крінж</h3>
 	}
 
 	if (isLoading) {
@@ -27,8 +27,8 @@ export default function Home() {
 
 	return (
 		<div className="flex flex-col gap-8">
-			<div className="grid grid-cols-4 gap-4">
-				{categories?.map((category, index) => (
+			<div className="flex flex-col">
+				{mainCategories.map((category, index) => (
 					<StyledLink key={index} href={`category/${category.id}`}>
 						{category.name}
 					</StyledLink>
