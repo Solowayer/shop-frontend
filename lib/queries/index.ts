@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const fetchCheckAuth = async () => {
 	try {
-		const res = await axios.get(`${process.env.api}/user-auth/check-auth`, { withCredentials: true })
+		const res = await axios.get(`${process.env.api}/auth/check-auth`, { withCredentials: true })
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')

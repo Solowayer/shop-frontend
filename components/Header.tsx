@@ -11,20 +11,22 @@ import Spinner from '@/ui/Spinner'
 import { useAuthStore } from '@/store/authStore'
 import { useStore } from '@/store/use-store-hook'
 import { useCartStore } from '@/store/cartStore'
+import { useEffect } from 'react'
 
 export default function Header() {
 	const isAuth = useStore(useAuthStore, state => state.isAuth)
 	const cartItemsQuantity = useStore(useCartStore, state => state.cartItemsQuantity)
 	const { setIsAuth } = useAuthStore()
 
-	const { isLoading } = useQuery({
+	const { data, isLoading, isSuccess } = useQuery({
 		queryKey: ['check-auth'],
 		queryFn: fetchCheckAuth,
-		onSuccess: data => {
-			setIsAuth(data)
-		},
 		retry: false
 	})
+
+	useEffect(() => {
+		setIsAuth(data)
+	}, [data, setIsAuth])
 
 	return (
 		<>

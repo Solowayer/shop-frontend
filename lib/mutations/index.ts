@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const login = async (data: UserLogin) => {
 	try {
-		await axios.post(`${process.env.api}/user-auth/login`, data, {
+		await axios.post(`${process.env.api}/auth/login`, data, {
 			withCredentials: true
 		})
 	} catch (error) {
@@ -12,7 +12,7 @@ export const login = async (data: UserLogin) => {
 
 export const logout = async (data: void) => {
 	try {
-		await axios.post(`${process.env.api}/user-auth/logout`, data, {
+		await axios.post(`${process.env.api}/auth/logout`, data, {
 			withCredentials: true
 		})
 	} catch (error) {
