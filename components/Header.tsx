@@ -25,8 +25,10 @@ export default function Header() {
 	})
 
 	useEffect(() => {
-		setIsAuth(data)
-	}, [data, setIsAuth])
+		if (isSuccess) {
+			setIsAuth(data)
+		}
+	}, [data, isSuccess, setIsAuth])
 
 	return (
 		<>
@@ -35,7 +37,7 @@ export default function Header() {
 					<Link href="/" className="font-bold text-2xl">
 						SHOP
 					</Link>
-					<ButtonLink variant="secondary" href="/">
+					<ButtonLink variant="secondary" href="/seller">
 						Продавати на Shop
 					</ButtonLink>
 				</div>

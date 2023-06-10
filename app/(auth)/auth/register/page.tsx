@@ -1,6 +1,6 @@
 'use client'
 
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema } from '@/lib/validation/authorizationSchema'
@@ -9,9 +9,22 @@ import { useRouter } from 'next/navigation'
 import Button from '@/ui/Button'
 import { ButtonLink } from '@/ui/ButtonLink'
 import { Input } from '@/ui/Input'
+import { useMutation } from '@tanstack/react-query'
+import { loginUser, registerUser } from '@/lib/mutations'
+import { useEffect } from 'react'
+import { useAuthStore } from '@/store/authStore'
 
 export default function Register() {
-	// const router = useRouter()
+	const router = useRouter()
+	const { setIsAuth } = useAuthStore()
+
+	const logMutation = useMutation({
+		mutationFn: loginUser
+	})
+
+	const regMutation = useMutation({
+		mutationFn: registerUser
+	})
 
 	const {
 		register,
@@ -28,15 +41,23 @@ export default function Register() {
 	})
 
 	const onSubmit: SubmitHandler<UserRegister> = async data => {
-		try {
-			const response = await axios.post(`${process.env.api}/user-auth/register`, data)
-			console.log(response)
+		const { email, password } = data
 
-			// router.push('/')
+		try {
+			await regMutation.mutateAsync({ ...data })
+			await logMutation.mutateAsync({ email, password })
+			console.log({ ...data })
 		} catch (error) {
 			console.log(error)
 		}
 	}
+
+	useEffect(() => {
+		if (regMutation.isSuccess && logMutation.isSuccess) {
+			setIsAuth(true)
+			router.push('/')
+		}
+	}, [logMutation.isSuccess, regMutation.isSuccess, router, setIsAuth])
 
 	return (
 		<>
@@ -57,6 +78,9 @@ export default function Register() {
 				<Input id="password" type="password" label="Пароль" {...register('password')} />
 				{errors.password?.message && <p className="text-red-500">{errors.password?.message}</p>}
 				<Button type="submit">Зареєструватись</Button>
+				{regMutation.isError && <span className="text-red-500">{(regMutation.error as any)?.message}</span>}
+				{regMutation.isLoading && <span>Loading...</span>}
+				{regMutation.isSuccess && <span>Done</span>}
 			</form>
 			<p>Вже є аккаунт?</p>
 			<ButtonLink variant="secondary" href="auth/login" fullWidth disabled={isSubmitting}>

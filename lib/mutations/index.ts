@@ -1,12 +1,20 @@
 import axios from 'axios'
 
-export const login = async (data: UserLogin) => {
+export const loginUser = async (data: UserLogin) => {
 	try {
 		await axios.post(`${process.env.api}/auth/login`, data, {
 			withCredentials: true
 		})
 	} catch (error) {
 		console.log(error)
+	}
+}
+
+export const registerUser = async (data: UserRegister) => {
+	try {
+		await axios.post(`${process.env.api}/auth/register`, data, { withCredentials: true })
+	} catch (error: any) {
+		throw new Error(error?.response?.data?.message)
 	}
 }
 

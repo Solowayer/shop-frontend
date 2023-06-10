@@ -10,19 +10,18 @@ import { Input } from '@/components/ui/Input'
 import { useRouter } from 'next/navigation'
 
 import { useMutation } from '@tanstack/react-query'
-import { login } from '@/lib/mutations'
+import { loginUser } from '@/lib/mutations'
 
 import { useAuthStore } from '@/store/authStore'
+import { useEffect } from 'react'
 
 export default function Login() {
+	const router = useRouter()
 	const { setIsAuth } = useAuthStore()
 
-	const mutation = useMutation({
-		mutationFn: login,
-		onSuccess: () => setIsAuth(true)
+	const logMutation = useMutation({
+		mutationFn: loginUser
 	})
-
-	const router = useRouter()
 
 	const {
 		register,
@@ -38,13 +37,19 @@ export default function Login() {
 
 	const onSubmit: SubmitHandler<UserLogin> = async data => {
 		try {
-			mutation.mutate({ ...data })
-			router.push('/')
+			logMutation.mutate({ ...data })
 			console.log({ ...data })
 		} catch (error) {
 			console.log(error)
 		}
 	}
+
+	useEffect(() => {
+		if (logMutation.isSuccess) {
+			setIsAuth(true)
+			router.push('/')
+		}
+	}, [logMutation.isSuccess, router, setIsAuth])
 
 	return (
 		<>
@@ -56,9 +61,9 @@ export default function Login() {
 				<Input label="Пароль" type="password" id="password" {...register('password')} disabled={isSubmitting} />
 				{errors.password?.message && <p className="text-red-500">{errors.password?.message}</p>}
 				<Button type="submit">Увійти</Button>
-				{mutation.isError && <div>Something wrong</div>}
-				{mutation.isLoading && <div>Loading...</div>}
-				{mutation.isSuccess && <div>Done</div>}
+				{logMutation.isError && <div>Something wrong</div>}
+				{logMutation.isLoading && <div>Loading...</div>}
+				{logMutation.isSuccess && <div>Done</div>}
 			</form>
 			<p>Ще немає аккаунту?</p>
 			<ButtonLink variant="secondary" href="/auth/register" fullWidth>
