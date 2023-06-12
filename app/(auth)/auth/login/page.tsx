@@ -60,7 +60,9 @@ export default function Login() {
 				{errors.email?.message && <p className="text-red-500">{errors.email?.message}</p>}
 				<Input label="Пароль" type="password" id="password" {...register('password')} disabled={isSubmitting} />
 				{errors.password?.message && <p className="text-red-500">{errors.password?.message}</p>}
-				<Button type="submit">Увійти</Button>
+				<Button type="submit" disabled={isSubmitting}>
+					Увійти
+				</Button>
 				{logMutation.isError && <div>Something wrong</div>}
 				{logMutation.isLoading && <div>Loading...</div>}
 				{logMutation.isSuccess && <div>Done</div>}

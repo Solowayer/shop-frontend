@@ -9,7 +9,7 @@ export interface ButtonProps extends ComponentProps<'button'> {
 	onClick?: () => void
 }
 
-const primary = ['text-black', 'bg-[#ffd814]', 'hover:bg-[#eec90f]', 'active:bg-[#c0a108]'].join(' ')
+const primary = ['text-white', 'bg-black', 'hover:bg-zinc-800', 'active:bg-zinc-600'].join(' ')
 
 const secondary = [
 	'text-black',

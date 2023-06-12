@@ -31,6 +31,15 @@ type UserLogin = {
 	password: string
 }
 
+type SellerRegister = {
+	name: string
+	adress: string
+	email: string
+	description?: string
+	phoneNumber: string
+	pib: string
+}
+
 type User = {
 	username: string
 	email: string

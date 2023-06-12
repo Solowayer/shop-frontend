@@ -18,6 +18,14 @@ export const registerUser = async (data: UserRegister) => {
 	}
 }
 
+export const registerSeller = async (data: SellerRegister) => {
+	try {
+		await axios.post(`${process.env.api}/seller/register`, data, { withCredentials: true })
+	} catch (error: any) {
+		throw new Error(error?.response?.data?.message)
+	}
+}
+
 export const logout = async (data: void) => {
 	try {
 		await axios.post(`${process.env.api}/auth/logout`, data, {

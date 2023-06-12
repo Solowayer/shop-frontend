@@ -9,6 +9,15 @@ export const fetchCheckAuth = async () => {
 	}
 }
 
+export const fetchCheckSeller = async () => {
+	try {
+		const res = await axios.get(`${process.env.api}/seller/check-seller`, { withCredentials: true })
+		return res.data
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
+}
+
 export const fetchCartData = async (): Promise<Cart> => {
 	try {
 		const res = await axios.get(`${process.env.api}/cart`, { withCredentials: true })
