@@ -10,8 +10,10 @@ import { registerSeller } from '@/lib/mutations'
 import { useMutation } from '@tanstack/react-query'
 import { useSellerStore } from '@/store/sellerStore'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function SellerRegister() {
+	const router = useRouter()
 	const { setIsSeller } = useSellerStore()
 
 	const sellerMutation = useMutation({
@@ -45,13 +47,14 @@ export default function SellerRegister() {
 	useEffect(() => {
 		if (sellerMutation.isSuccess) {
 			setIsSeller(true)
+			router.push('/seller/dashboard')
 		}
-	}, [sellerMutation.isSuccess, setIsSeller])
+	}, [router, sellerMutation.isSuccess, setIsSeller])
 
 	return (
 		<div className="flex flex-col">
 			<div className="flex w-full gap-8 bg-blue-600 px-10 pb-10">
-				<div className="flex flex-col w-full gap-4">
+				<div className="flex flex-col w-full gap-4 max-w-[1500px] m-auto">
 					<div className="flex w-full items-center justify-between h-[80px]">
 						<Link href="/" className="text-2xl font-bold text-white">
 							SHOP

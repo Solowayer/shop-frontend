@@ -1,15 +1,6 @@
 import axios from 'axios'
 
-export const loginUser = async (data: UserLogin) => {
-	try {
-		await axios.post(`${process.env.api}/auth/login`, data, {
-			withCredentials: true
-		})
-	} catch (error) {
-		console.log(error)
-	}
-}
-
+// USER
 export const registerUser = async (data: UserRegister) => {
 	try {
 		await axios.post(`${process.env.api}/auth/register`, data, { withCredentials: true })
@@ -18,11 +9,13 @@ export const registerUser = async (data: UserRegister) => {
 	}
 }
 
-export const registerSeller = async (data: SellerRegister) => {
+export const loginUser = async (data: UserLogin) => {
 	try {
-		await axios.post(`${process.env.api}/seller/register`, data, { withCredentials: true })
-	} catch (error: any) {
-		throw new Error(error?.response?.data?.message)
+		await axios.post(`${process.env.api}/auth/login`, data, {
+			withCredentials: true
+		})
+	} catch (error) {
+		console.log(error)
 	}
 }
 
@@ -36,6 +29,16 @@ export const logout = async (data: void) => {
 	}
 }
 
+// SELLER
+export const registerSeller = async (data: SellerRegister) => {
+	try {
+		await axios.post(`${process.env.api}/seller/register`, data, { withCredentials: true })
+	} catch (error: any) {
+		throw new Error(error?.response?.data?.message)
+	}
+}
+
+// CART
 export const addtoCart = async (data: AddToCart) => {
 	try {
 		await axios.post(`${process.env.api}/cart/add`, data, {
@@ -59,6 +62,17 @@ export const deleteCart = async () => {
 export const deleteCartItem = async (id: number) => {
 	try {
 		await axios.delete(`${process.env.api}/cart/${id}`, {
+			withCredentials: true
+		})
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+// PRODUCT
+export const createProduct = async (data: CreateProduct) => {
+	try {
+		await axios.post(`${process.env.api}/products/create`, data, {
 			withCredentials: true
 		})
 	} catch (error) {

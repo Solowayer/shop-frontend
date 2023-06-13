@@ -40,6 +40,16 @@ type SellerRegister = {
 	pib: string
 }
 
+type CreateProduct = {
+	slug: string
+	name: string
+	images?: string[]
+	description?: string
+	price: string
+	categoryId?: string
+	published: boolean
+}
+
 type User = {
 	username: string
 	email: string
