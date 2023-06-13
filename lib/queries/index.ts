@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const fetchCheckAuth = async () => {
+export const fetchCheckAuth = async (): Promise<boolean> => {
 	try {
 		const res = await axios.get(`${process.env.api}/auth/check-auth`, { withCredentials: true })
 		return res.data
@@ -9,9 +9,18 @@ export const fetchCheckAuth = async () => {
 	}
 }
 
-export const fetchCheckSeller = async () => {
+export const fetchCheckSeller = async (): Promise<boolean> => {
 	try {
 		const res = await axios.get(`${process.env.api}/seller/check-seller`, { withCredentials: true })
+		return res.data
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
+}
+
+export const fetchSellerProducts = async (): Promise<Product[]> => {
+	try {
+		const res = await axios.get(`${process.env.api}/seller/products`, { withCredentials: true })
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')
@@ -28,9 +37,21 @@ export const fetchCartData = async (): Promise<Cart> => {
 	}
 }
 
+// CATEGORIES
+export async function fetchAllCategories(): Promise<Category[]> {
+	try {
+		const res = await axios.get(`${process.env.api}/categories`, {
+			withCredentials: true
+		})
+		return res.data
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
+}
+
 export const fetchMainCategories = async (): Promise<Category[]> => {
 	try {
-		const res = await axios.get(`${process.env.api}/categories`, { params: { next: 'revalidate=5' } })
+		const res = await axios.get(`${process.env.api}/categories/main`, { params: { next: 'revalidate=5' } })
 		console.log(res)
 		return res.data
 	} catch (error) {

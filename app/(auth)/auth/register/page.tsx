@@ -1,6 +1,5 @@
 'use client'
 
-import axios, { AxiosError } from 'axios'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema } from '@/lib/validation/authorizationSchema'

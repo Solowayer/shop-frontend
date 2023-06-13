@@ -10,9 +10,9 @@ type Category = {
 type Product = {
 	id: number
 	slug: string
-	images: string[]
+	images?: string[]
 	name: string
-	description: string
+	description?: string
 	price: number
 	rating: number
 }
@@ -45,8 +45,8 @@ type CreateProduct = {
 	name: string
 	images?: string[]
 	description?: string
-	price: string
-	categoryId?: string
+	price: number
+	categoryId: number | null
 	published: boolean
 }
 

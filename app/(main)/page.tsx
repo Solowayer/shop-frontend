@@ -12,13 +12,13 @@ export default function Home() {
 		isError,
 		isLoading
 	} = useQuery({
-		queryKey: ['categories'],
-		queryFn: () => fetchMainCategories(),
+		queryKey: ['main-categories'],
+		queryFn: fetchMainCategories,
 		retry: false
 	})
 
 	if (isError) {
-		return <h3>Стався крінж</h3>
+		return <h3>Помилка</h3>
 	}
 
 	if (isLoading) {
