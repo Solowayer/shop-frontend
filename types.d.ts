@@ -7,16 +7,6 @@ type Category = {
 	products: Product[]
 }
 
-type Product = {
-	id: number
-	slug: string
-	images?: string[]
-	name: string
-	description?: string
-	price: number
-	rating: number
-}
-
 type ProductSortOption = 'price_asc' | 'price_desc' | 'rating'
 
 type UserRegister = {
@@ -40,15 +30,29 @@ type SellerRegister = {
 	pib: string
 }
 
+type Product = {
+	id: number
+	slug: string
+	images?: string[]
+	name: string
+	description?: string
+	price: number
+	categoryId: number
+	rating: number
+	published: boolean
+}
+
 type CreateProduct = {
 	slug: string
 	name: string
 	images?: string[]
-	description?: string
+	description?: string | null
 	price: number
 	categoryId: number | null
 	published: boolean
 }
+
+type EditProduct = Partial<CreateProduct>
 
 type User = {
 	username: string

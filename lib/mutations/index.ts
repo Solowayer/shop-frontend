@@ -79,3 +79,23 @@ export const createProduct = async (data: CreateProduct) => {
 		console.log(error)
 	}
 }
+
+export const editProduct = async (id: number, data: EditProduct) => {
+	try {
+		await axios.patch(`${process.env.api}/products/p${id}`, data, {
+			withCredentials: true
+		})
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+export const deleteProduct = async (id: number) => {
+	try {
+		await axios.delete(`${process.env.api}/products/p${id}`, {
+			withCredentials: true
+		})
+	} catch (error) {
+		console.log(error)
+	}
+}

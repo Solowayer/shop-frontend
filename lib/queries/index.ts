@@ -77,6 +77,7 @@ export async function fetchCategoryBySlug(slug: string): Promise<Category> {
 	}
 }
 
+// PRODUCTS
 export const fetchAllProducts = async (sort?: string, min_price?: number, max_price?: number): Promise<Product[]> => {
 	try {
 		const res = await axios.get(`${process.env.api}/products`, {
