@@ -9,19 +9,20 @@ export default async function Category({ params }: { params: { id: number } }) {
 	const breadcrumbs = await getCategoryBreadcrumbs(category)
 	const products = await fetchProductsByCategoryId(params.id)
 
+	const filteredChildren = category.childrens.filter(childCategory => childCategory.parentId === category.id)
+
 	return (
 		<div className="flex flex-col gap-4">
 			<CategoryBreadcrumbs breadcrumbs={breadcrumbs} />
 			<h3 className="font-bold text-3xl">{category.name}</h3>
 			<>{category.isMain ? 'ГОЛОВНА КАТЕГОРІЯ' : 'ПІДКАТЕГОРІЯ'}</>
 			<div className="flex flex-col">
-				{category.childrens
-					? category.childrens.map(category => (
-							<StyledLink key={category.id} href={`category/${category.id}`}>
-								{category.name}
-							</StyledLink>
-					  ))
-					: 'Немає категорій'}
+				{filteredChildren.length > 0 &&
+					filteredChildren.map(childCategory => (
+						<StyledLink key={childCategory.id} href={`category/${childCategory.id}`}>
+							{childCategory.name}
+						</StyledLink>
+					))}
 			</div>
 			<div className="grid grid-cols-4 gap-4">
 				{products.map(product => (

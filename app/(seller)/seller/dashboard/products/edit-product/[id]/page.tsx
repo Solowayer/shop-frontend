@@ -16,50 +16,53 @@ import { useEffect } from 'react'
 export default function SellerEditProduct({ params }: { params: { id: number } }) {
 	const { product, setProduct } = useProductStore()
 
-	const productMutation = useMutation({
-		mutationFn: (data: EditProduct) => editProduct(params.id, data)
-	})
-
 	const {
 		data: productData,
 		isError: isProductError,
-		isLoading: isProductLoading
+		isLoading: isProductLoading,
+		isSuccess: isProductSuccess
 	} = useQuery({
 		queryKey: ['product', params.id],
 		queryFn: () => fetchProductById(params.id),
 		retry: false
 	})
 
+	const {
+		handleSubmit,
+		register,
+		getValues,
+		setValue,
+		formState: { errors, isSubmitting }
+	} = useForm<EditProduct>({
+		resolver: zodResolver(editProductSchema)
+	})
+
 	useEffect(() => {
-		if (productData) {
-			setProduct(productData) // Оновлення значення стану product
+		if (isProductSuccess) {
+			setProduct(productData)
 		}
-	}, [productData, setProduct])
+		if (product) {
+			setValue('slug', product.slug)
+			setValue('name', product.name)
+			setValue('description', product.description)
+			setValue('price', product.price)
+			setValue('categoryId', product.categoryId)
+			setValue('published', product.published)
+		}
+	}, [isProductSuccess, product, productData, setProduct, setValue])
 
 	const {
 		data: categories,
 		isLoading: isCategoriesLoading,
 		isError: isCategoriesError
-	} = useQuery({ queryKey: ['all-categories'], queryFn: () => fetchAllCategories(), retry: false })
+	} = useQuery({ queryKey: ['all-categories'], queryFn: fetchAllCategories, retry: false })
 
-	console.log(productData)
-
-	const {
-		register,
-		handleSubmit,
-		getValues,
-		formState: { errors, isSubmitting }
-	} = useForm<EditProduct>({
-		defaultValues: {
-			slug: product?.slug,
-			name: product?.name,
-			description: product?.description,
-			price: product?.price,
-			categoryId: product?.categoryId,
-			published: product?.published
-		},
-		resolver: zodResolver(editProductSchema)
+	const productMutation = useMutation({
+		mutationFn: (data: EditProduct) => editProduct(params.id, data)
 	})
+
+	console.log('productData:', productData)
+	console.log('product:', product)
 
 	const onSubmit: SubmitHandler<EditProduct> = async data => {
 		try {

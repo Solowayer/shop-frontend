@@ -96,6 +96,6 @@ export const deleteProduct = async (id: number) => {
 			withCredentials: true
 		})
 	} catch (error) {
-		console.log(error)
+		throw new Error('Delete error')
 	}
 }

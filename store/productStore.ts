@@ -3,7 +3,7 @@ import { devtools, persist } from 'zustand/middleware'
 
 type ProductState = {
 	product: Product | null
-	setProduct: (product: Product) => void
+	setProduct: (product: Product | null) => void
 }
 
 export const useProductStore = create<ProductState>()(

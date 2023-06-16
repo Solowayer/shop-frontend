@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Star } from '../icons'
 import Link from 'next/link'
 
-interface ProductProps extends Omit<Product, 'id' | 'slug' | 'description'> {
+interface ProductProps extends Omit<Product, 'id' | 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string
 }
 
@@ -12,7 +12,7 @@ export default function ProductCard({ href, images, name, price, rating }: Produ
 		<div className="flex flex-col min-w-[240px] border-2 rounded hover:border-zinc-300 overflow-hidden">
 			<Link href={href}>
 				<div className="relative h-[272px] w-full">
-					{images.length > 0 ? (
+					{images && images.length > 0 ? (
 						<Image src={images[0]} alt={'Product photo'} fill sizes="400px" className="p-4 object-contain" />
 					) : (
 						<Image src="/../public/no-product-photo.png" alt={'Product photo'} className="object-contain" fill />
