@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { fetchAllCategories, fetchProductById } from '@/lib/queries'
 import { editProduct } from '@/lib/mutations'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -10,21 +11,20 @@ import Button from '@/components/ui/Button'
 import { Textarea } from '@/ui/Textarea'
 import { Input } from '@/ui/Input'
 import Spinner from '@/components/ui/Spinner'
-import { useProductStore } from '@/store/productStore'
-import { useEffect } from 'react'
 
 export default function SellerEditProduct({ params }: { params: { id: number } }) {
-	const { product, setProduct } = useProductStore()
-
 	const {
 		data: productData,
 		isError: isProductError,
-		isLoading: isProductLoading,
-		isSuccess: isProductSuccess
+		isLoading: isProductLoading
 	} = useQuery({
 		queryKey: ['product', params.id],
 		queryFn: () => fetchProductById(params.id),
 		retry: false
+	})
+
+	const productMutation = useMutation({
+		mutationFn: (data: EditProduct) => editProduct(params.id, data)
 	})
 
 	const {
@@ -32,24 +32,22 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		register,
 		getValues,
 		setValue,
-		formState: { errors, isSubmitting }
+		reset,
+		formState: { errors, isSubmitting, isDirty, isSubmitSuccessful }
 	} = useForm<EditProduct>({
 		resolver: zodResolver(editProductSchema)
 	})
 
 	useEffect(() => {
-		if (isProductSuccess) {
-			setProduct(productData)
+		if (productData) {
+			setValue('slug', productData.slug)
+			setValue('name', productData.name)
+			setValue('description', productData.description)
+			setValue('price', productData.price)
+			setValue('categoryId', productData.categoryId)
+			setValue('published', productData.published)
 		}
-		if (product) {
-			setValue('slug', product.slug)
-			setValue('name', product.name)
-			setValue('description', product.description)
-			setValue('price', product.price)
-			setValue('categoryId', product.categoryId)
-			setValue('published', product.published)
-		}
-	}, [isProductSuccess, product, productData, setProduct, setValue])
+	}, [productData, setValue])
 
 	const {
 		data: categories,
@@ -57,17 +55,13 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		isError: isCategoriesError
 	} = useQuery({ queryKey: ['all-categories'], queryFn: fetchAllCategories, retry: false })
 
-	const productMutation = useMutation({
-		mutationFn: (data: EditProduct) => editProduct(params.id, data)
-	})
-
 	console.log('productData:', productData)
-	console.log('product:', product)
 
 	const onSubmit: SubmitHandler<EditProduct> = async data => {
 		try {
 			productMutation.mutate({ ...data })
 			console.log({ ...data })
+			reset(data)
 		} catch (error) {
 			console.log(error)
 		}
@@ -116,7 +110,7 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 							{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
 							{productMutation.isLoading && <span>Loading...</span>}
 							{productMutation.isSuccess && <span>Зміни застосовано</span>}
-							<Button type="submit" disabled={isSubmitting}>
+							<Button type="submit" disabled={isSubmitting || !isDirty}>
 								Внести зміни
 							</Button>
 						</div>

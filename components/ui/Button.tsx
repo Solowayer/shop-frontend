@@ -24,18 +24,21 @@ const buttonStyles = [
 	'inline-flex max-h-[40px] items-center justify-center',
 	'gap-2',
 	'font-medium',
-	'disabled:bg-button-disabled',
-	'disabled:text-content-muted',
-	'disabled:hover:cursor-not-allowed',
 	'py-2 px-4',
-	'rounded'
+	'rounded',
+	'disabled:bg-gray-200',
+	'disabled:text-gray-400',
+	'disabled:hover:!cursor-not-allowed',
+	'disabled:hover:!bg-gray-200',
+	'disabled:hover:!text-gray-400'
 ].join(' ')
 
-export default function Button({ fullWidth, children, variant = 'primary', onClick }: ButtonProps) {
+export default function Button({ fullWidth, children, variant = 'primary', onClick, ...props }: ButtonProps) {
 	return (
 		<button
 			className={`${fullWidth ? `w-full` : ''} ${variant === 'primary' ? primary : secondary}  ${buttonStyles} `}
 			onClick={onClick}
+			{...props}
 		>
 			{children}
 		</button>

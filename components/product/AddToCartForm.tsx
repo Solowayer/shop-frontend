@@ -8,15 +8,16 @@ import { useCartStore } from '@/store/cartStore'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addToCartSchema } from '@/lib/validation/cartSchema'
 import { Input } from '@/ui/Input'
+import { useAuthStore } from '@/store/authStore'
 
 export default function AddToCartForm({ productId }: { productId: number }) {
+	const { isAuth } = useAuthStore()
+
 	const { setCartItemsQuantity, cartItemsQuantity } = useCartStore()
 
 	const mutation = useMutation({
 		mutationFn: addtoCart
 	})
-
-	const { isError } = mutation
 
 	const {
 		register,
@@ -32,25 +33,23 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 
 	const onSubmit: SubmitHandler<AddToCart> = data => {
 		const quantityValue = parseInt(data.quantity, 10)
-		mutation.mutate(
-			{ ...data },
-			{
-				onSuccess: () => {
-					setCartItemsQuantity(cartItemsQuantity + quantityValue)
-					console.log({ ...data })
-				},
-				onError: error => {
-					console.log(error)
-				}
-			}
-		)
+		mutation.mutate({ ...data })
+
+		if (mutation.isSuccess && isAuth) {
+			setCartItemsQuantity(cartItemsQuantity + quantityValue)
+			console.log({ ...data })
+		}
+
+		if (mutation.isError) {
+			throw new Error()
+		}
 	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
 			<hr />
 			<Input label="Виберіть кількість:" id="quantity" type="number" min={0} {...register('quantity')} />
-			{isError && <span className="text-red-500">Увійдіть, щоб додавати товари в корзину</span>}
+			{!isAuth && <span className="text-red-500">Увійдіть, щоб додавати товари в корзину</span>}
 			{errors.quantity && <span className="text-red-500">Помилка</span>}
 			<Button type="submit" fullWidth disabled={isSubmitting}>
 				{isSubmitting ? 'Додається...' : 'Додати в корзину'}
