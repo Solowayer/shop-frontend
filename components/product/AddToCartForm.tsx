@@ -8,12 +8,12 @@ import { useCartStore } from '@/store/cartStore'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addToCartSchema } from '@/lib/validation/cartSchema'
 import { Input } from '@/ui/Input'
+import { useStore } from '@/store/use-store-hook'
 import { useAuthStore } from '@/store/authStore'
 
 export default function AddToCartForm({ productId }: { productId: number }) {
-	const { isAuth } = useAuthStore()
-
 	const { setCartItemsQuantity, cartItemsQuantity } = useCartStore()
+	const isAuth = useStore(useAuthStore, state => state.isAuth)
 
 	const mutation = useMutation({
 		mutationFn: addtoCart
@@ -25,35 +25,39 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 		formState: { errors, isSubmitting }
 	} = useForm<AddToCart>({
 		defaultValues: {
-			quantity: '1',
+			quantity: 1,
 			productId: productId
 		},
 		resolver: zodResolver(addToCartSchema)
 	})
 
 	const onSubmit: SubmitHandler<AddToCart> = data => {
-		const quantityValue = parseInt(data.quantity, 10)
 		mutation.mutate({ ...data })
-
-		if (mutation.isSuccess && isAuth) {
+		const quantityValue = data.quantity
+		if (isAuth) {
 			setCartItemsQuantity(cartItemsQuantity + quantityValue)
-			console.log({ ...data })
 		}
+	}
 
-		if (mutation.isError) {
-			throw new Error()
-		}
+	if (mutation.isError) {
+		throw new Error('Failed to load')
 	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
 			<hr />
-			<Input label="Виберіть кількість:" id="quantity" type="number" min={0} {...register('quantity')} />
-			{!isAuth && <span className="text-red-500">Увійдіть, щоб додавати товари в корзину</span>}
+			<Input
+				label="Виберіть кількість:"
+				id="quantity"
+				type="number"
+				min={1}
+				{...register('quantity', { valueAsNumber: true })}
+			/>
 			{errors.quantity && <span className="text-red-500">Помилка</span>}
 			<Button type="submit" fullWidth disabled={isSubmitting}>
 				{isSubmitting ? 'Додається...' : 'Додати в корзину'}
 			</Button>
+			{!isAuth && mutation.isSuccess && <span className="text-red-500">Увійдіть, щоб додавати товари в корзину</span>}
 		</form>
 	)
 }

@@ -10,8 +10,11 @@ import { createProductSchema } from '@/lib/validation/productSchema'
 import { fetchAllCategories } from '@/lib/queries'
 import { Textarea } from '@/ui/Textarea'
 import Spinner from '@/components/ui/Spinner'
+import { useRouter } from 'next/navigation'
 
 export default function SellerCreateProduct() {
+	const router = useRouter()
+
 	const productMutation = useMutation({
 		mutationFn: createProduct
 	})
@@ -49,6 +52,7 @@ export default function SellerCreateProduct() {
 		try {
 			await productMutation.mutateAsync({ ...data })
 			console.log({ ...data })
+			router.push('seller/dashboard/products')
 		} catch (error) {
 			console.log(error)
 		}

@@ -2,8 +2,8 @@
 
 import { ButtonLink } from '@/components/ui/ButtonLink'
 import { fetchSellerProducts } from '@/lib/queries'
-import React from 'react'
-import { useQuery } from '@tanstack/react-query'
+import React, { useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import Spinner from '@/components/ui/Spinner'
 import { Delete } from '@/components/icons'
 import Button from '@/components/ui/Button'
@@ -22,6 +22,21 @@ export default function SellerProducts() {
 		queryFn: () => fetchSellerProducts(),
 		retry: false
 	})
+
+	const [deletedProductId, setDeletedProductId] = useState<number | null>(null)
+
+	const deleteProductMutation = useMutation({
+		mutationFn: deleteProduct
+	})
+
+	const deleteOneProduct = async (productId: number) => {
+		try {
+			await deleteProductMutation.mutateAsync(productId)
+			setDeletedProductId(productId)
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	if (isError) {
 		return <h3>Помилка</h3>
@@ -54,7 +69,11 @@ export default function SellerProducts() {
 								<tr key={product.id}>
 									<TD>
 										<div className="text-sm text-gray-900">
-											<StyledLink href={`product/${product.slug}`}>{product.name}</StyledLink>
+											{deleteProductMutation.isSuccess && deletedProductId === product.id ? (
+												'Цей товар видалено'
+											) : (
+												<StyledLink href={`product/${product.slug}`}>{product.name}</StyledLink>
+											)}
 										</div>
 									</TD>
 									<TD>
@@ -68,7 +87,7 @@ export default function SellerProducts() {
 											<ButtonLink href={`seller/dashboard/products/edit-product/${product.id}`} variant="secondary">
 												Змінити
 											</ButtonLink>
-											<Button variant="secondary" onClick={() => deleteProduct(product.id)}>
+											<Button variant="secondary" onClick={() => deleteOneProduct(product.id)}>
 												<Delete />
 											</Button>
 										</div>

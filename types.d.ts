@@ -77,6 +77,6 @@ type CartItem = {
 type CartItems = CartItem[]
 
 type AddToCart = {
-	quantity: string
+	quantity: number
 	productId: number
 }
