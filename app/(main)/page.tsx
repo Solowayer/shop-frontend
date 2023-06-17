@@ -5,6 +5,7 @@ import { fetchMainCategories } from '@/lib/queries'
 import { useQuery } from '@tanstack/react-query'
 
 import StyledLink from '@/components/ui/StyledLink'
+import Link from 'next/link'
 
 export default function Home() {
 	const {
@@ -27,11 +28,11 @@ export default function Home() {
 
 	return (
 		<div className="flex flex-col gap-8">
-			<div className="flex flex-col">
+			<div className="flex gap-2">
 				{mainCategories.map((category, index) => (
-					<StyledLink key={index} href={`category/${category.id}`}>
-						{category.name}
-					</StyledLink>
+					<Link key={index} href={`category/${category.id}`}>
+						<div className="bg-zinc-100 py-2 px-4 rounded-full hover:bg-zinc-200">{category.name}</div>
+					</Link>
 				))}
 			</div>
 		</div>

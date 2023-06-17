@@ -18,7 +18,7 @@ export default function DashboardNav() {
 	const pathname = usePathname()
 
 	return (
-		<div className="w-[280px] flex flex-col px-6 py-6 border-r h-full gap-1">
+		<div className="w-[280px] px-6 py-6 border-r h-full gap-1">
 			{navItems.map((item, index) => (
 				<Link key={index} href={item.href}>
 					<div

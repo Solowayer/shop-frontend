@@ -80,3 +80,8 @@ type AddToCart = {
 	quantity: number
 	productId: number
 }
+
+type UploadImageData = {
+	key: string
+	images: File[]
+}

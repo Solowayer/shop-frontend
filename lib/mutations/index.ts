@@ -99,3 +99,18 @@ export const deleteProduct = async (id: number) => {
 		throw new Error('Delete error')
 	}
 }
+
+// FILES
+export const uploadImages = async (data: UploadImageData): Promise<string[]> => {
+	try {
+		const response = await axios.post(`${process.env.api}/upload/image`, data, {
+			headers: { 'Content-Type': 'multipart/form-data' },
+			withCredentials: true
+		})
+
+		const { imageUrls } = response.data
+		return imageUrls
+	} catch (error) {
+		throw new Error('Failed to load images')
+	}
+}
