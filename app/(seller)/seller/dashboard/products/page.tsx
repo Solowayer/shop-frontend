@@ -23,8 +23,6 @@ export default function SellerProducts() {
 		retry: false
 	})
 
-	const [deletedProductId, setDeletedProductId] = useState<number | null>(null)
-
 	const deleteProductMutation = useMutation({
 		mutationFn: deleteProduct
 	})
@@ -32,7 +30,6 @@ export default function SellerProducts() {
 	const deleteOneProduct = async (productId: number) => {
 		try {
 			await deleteProductMutation.mutateAsync(productId)
-			setDeletedProductId(productId)
 		} catch (error) {
 			console.log(error)
 		}
@@ -69,11 +66,7 @@ export default function SellerProducts() {
 								<tr key={product.id}>
 									<TD>
 										<div className="text-sm text-gray-900">
-											{deleteProductMutation.isSuccess && deletedProductId === product.id ? (
-												'Цей товар видалено'
-											) : (
-												<StyledLink href={`product/${product.slug}`}>{product.name}</StyledLink>
-											)}
+											<StyledLink href={`product/${product.slug}`}>{product.name}</StyledLink>
 										</div>
 									</TD>
 									<TD>

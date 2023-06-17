@@ -20,11 +20,11 @@ const nextConfig = {
 			{
 				protocol: 'https',
 				hostname: 'content2.rozetka.com.ua'
+			},
+			{
+				protocol: 'http',
+				hostname: 'localhost'
 			}
-			// {
-			// 	protocol: 'https',
-			// 	hostname: 'content3.rozetka.com.ua'
-			// }
 		]
 	}
 }
