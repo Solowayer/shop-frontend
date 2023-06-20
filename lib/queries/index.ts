@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+// AUTH
 export const fetchCheckAuth = async (): Promise<boolean> => {
 	try {
 		const res = await axios.get(`${process.env.api}/auth/check-auth`, { withCredentials: true })
@@ -9,6 +10,7 @@ export const fetchCheckAuth = async (): Promise<boolean> => {
 	}
 }
 
+// SELLER
 export const fetchCheckSeller = async (): Promise<boolean> => {
 	try {
 		const res = await axios.get(`${process.env.api}/seller/check-seller`, { withCredentials: true })
@@ -27,6 +29,7 @@ export const fetchSellerProducts = async (): Promise<Product[]> => {
 	}
 }
 
+// CART
 export const fetchCartData = async (): Promise<Cart> => {
 	try {
 		const res = await axios.get(`${process.env.api}/cart`, { withCredentials: true })
@@ -61,7 +64,7 @@ export const fetchMainCategories = async (): Promise<Category[]> => {
 
 export async function fetchCategoryById(id: number): Promise<Category> {
 	try {
-		const res = await axios.get(`${process.env.api}/categories/${id}`, { params: { next: 'revalidate=5' } })
+		const res = await axios.get(`${process.env.api}/categories/c/${id}`, { params: { next: 'revalidate=5' } })
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')
@@ -98,7 +101,7 @@ export const fetchAllProducts = async (sort?: string, min_price?: number, max_pr
 
 export async function fetchProductsByCategoryId(categoryId: number): Promise<Product[]> {
 	try {
-		const res = await axios.get(`${process.env.api}/products/c${categoryId}`)
+		const res = await axios.get(`${process.env.api}/products/c/${categoryId}`)
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')
@@ -107,7 +110,7 @@ export async function fetchProductsByCategoryId(categoryId: number): Promise<Pro
 
 export async function fetchProductById(id: number): Promise<Product> {
 	try {
-		const res = await axios.get(`${process.env.api}/products/p${id}`)
+		const res = await axios.get(`${process.env.api}/products/p/${id}`)
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')

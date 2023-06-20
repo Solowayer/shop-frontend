@@ -82,7 +82,7 @@ export const createProduct = async (data: CreateProduct) => {
 
 export const editProduct = async (id: number, data: EditProduct) => {
 	try {
-		await axios.patch(`${process.env.api}/products/p${id}`, data, {
+		await axios.patch(`${process.env.api}/products/p/${id}`, data, {
 			withCredentials: true
 		})
 	} catch (error) {
@@ -92,7 +92,7 @@ export const editProduct = async (id: number, data: EditProduct) => {
 
 export const deleteProduct = async (id: number) => {
 	try {
-		await axios.delete(`${process.env.api}/products/p${id}`, {
+		await axios.delete(`${process.env.api}/products/p/${id}`, {
 			withCredentials: true
 		})
 	} catch (error) {
@@ -103,7 +103,12 @@ export const deleteProduct = async (id: number) => {
 // FILES
 export const uploadImages = async (data: UploadImageData): Promise<string[]> => {
 	try {
-		const response = await axios.post(`${process.env.api}/upload/image`, data, {
+		const formData = new FormData()
+		for (let i = 0; i < data.images.length; i++) {
+			formData.append(data.key, data.images[i])
+		}
+
+		const response = await axios.post(`${process.env.api}/upload/image`, formData, {
 			headers: { 'Content-Type': 'multipart/form-data' },
 			withCredentials: true
 		})
@@ -112,5 +117,16 @@ export const uploadImages = async (data: UploadImageData): Promise<string[]> => 
 		return imageUrls
 	} catch (error) {
 		throw new Error('Failed to load images')
+	}
+}
+
+export const deleteImage = async (imageName: string) => {
+	try {
+		const response = await axios.delete(`${process.env.api}/upload/image/${imageName}`, {
+			withCredentials: true
+		})
+		console.log(response.data)
+	} catch (error) {
+		throw new Error('Failed to delete images')
 	}
 }

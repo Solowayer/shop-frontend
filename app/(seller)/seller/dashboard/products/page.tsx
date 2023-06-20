@@ -43,7 +43,7 @@ export default function SellerProducts() {
 		return <Spinner />
 	}
 
-	console.log(products)
+	// console.log(products)
 
 	return (
 		<div className="flex flex-col w-full gap-6">
