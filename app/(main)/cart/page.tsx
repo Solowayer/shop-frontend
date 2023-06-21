@@ -9,21 +9,24 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import StyledLink from '@/components/ui/StyledLink'
 import { deleteCart } from '@/lib/mutations'
 import { useAuthStore } from '@/store/authStore'
+import { useEffect } from 'react'
 
 export default function Cart() {
-	const { cartItemsQuantity, cartItems, cartTotalAmountPrice, setCartItemCreate, setCartDelete } = useCartStore()
+	const { totalQuantity, cartItems, totalAmount, setCart, setCartDelete } = useCartStore()
 	const { isAuth } = useAuthStore()
 
-	const { data, isLoading, isError } = useQuery({
+	const { data, isLoading, isError, isSuccess } = useQuery({
 		queryKey: ['cart'],
 		queryFn: fetchCartData,
-		retry: false,
-		onSuccess: data => {
-			console.log(data)
-			const quantity = data ? data.cartItems.reduce((total, item) => total + item.quantity, 0) : 0
-			setCartItemCreate(quantity, data.cartItems, data.totalAmount)
-		}
+		retry: false
 	})
+
+	useEffect(() => {
+		if (isSuccess) {
+			console.log(data)
+			setCart(data.cartItems, data.totalQuantity, data.totalAmount)
+		}
+	}, [data, isSuccess, setCart])
 
 	const mutation = useMutation({
 		mutationFn: deleteCart
@@ -68,8 +71,8 @@ export default function Cart() {
 					<CartItemList cartItems={cartItems} />
 					<div className="flex flex-col w-[400px] gap-4">
 						<div className="flex justify-between">
-							<span>Всього товарів ({data ? cartItemsQuantity : 0}):</span>
-							<span className="text-lg font-bold">{data ? cartTotalAmountPrice : 0} ₴</span>
+							<span>Всього товарів ({data ? totalQuantity : 0}):</span>
+							<span className="text-lg font-bold">{data ? totalAmount : 0} ₴</span>
 						</div>
 						<Button>Оформити замовлення</Button>
 						<Button variant="secondary" onClick={() => handleDeleteCart()}>

@@ -12,7 +12,7 @@ import { useStore } from '@/store/use-store-hook'
 import { useAuthStore } from '@/store/authStore'
 
 export default function AddToCartForm({ productId }: { productId: number }) {
-	const { setCartItemsQuantity, cartItemsQuantity } = useCartStore()
+	const { setTotalQuantity, totalQuantity } = useCartStore()
 	const isAuth = useStore(useAuthStore, state => state.isAuth)
 
 	const mutation = useMutation({
@@ -33,9 +33,8 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 
 	const onSubmit: SubmitHandler<AddToCart> = data => {
 		mutation.mutate({ ...data })
-		const quantityValue = data.quantity
 		if (isAuth) {
-			setCartItemsQuantity(cartItemsQuantity + quantityValue)
+			setTotalQuantity(totalQuantity + data.quantity)
 		}
 	}
 

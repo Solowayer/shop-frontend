@@ -17,7 +17,7 @@ import { useSellerStore } from '@/store/sellerStore'
 export default function Header() {
 	const isAuth = useStore(useAuthStore, state => state.isAuth)
 	const isSeller = useStore(useSellerStore, state => state.isSeller)
-	const cartItemsQuantity = useStore(useCartStore, state => state.cartItemsQuantity)
+	const totalQuantity = useStore(useCartStore, state => state.totalQuantity)
 	const { setIsAuth } = useAuthStore()
 	const { setIsSeller } = useSellerStore()
 
@@ -84,9 +84,9 @@ export default function Header() {
 					)}
 					<ButtonLink variant="secondary" href="/cart">
 						<Cart />
-						{isAuth && cartItemsQuantity && cartItemsQuantity > 0 ? (
+						{isAuth && totalQuantity && totalQuantity > 0 ? (
 							<span className="absolute py-1 px-2 left-10 bottom-6 bg-red-500 text-white rounded-lg text-sm">
-								{cartItemsQuantity}
+								{totalQuantity}
 							</span>
 						) : null}
 					</ButtonLink>

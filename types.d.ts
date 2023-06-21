@@ -62,6 +62,7 @@ type User = {
 
 type Cart = {
 	totalAmount: number
+	totalQuantity: number
 	cartItems: CartItem[]
 }
 

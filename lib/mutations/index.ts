@@ -120,7 +120,8 @@ export const uploadImages = async (data: UploadImageData): Promise<string[]> => 
 	}
 }
 
-export const deleteImage = async (imageName: string) => {
+export const deleteImage = async (imageUrl: string) => {
+	const imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1)
 	try {
 		const response = await axios.delete(`${process.env.api}/upload/image/${imageName}`, {
 			withCredentials: true

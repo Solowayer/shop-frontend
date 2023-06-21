@@ -6,18 +6,18 @@ export default function Product({ product }: { product: Product }) {
 	return (
 		<div className="flex gap-10">
 			{product.images && product.images.length > 0 && (
-				<div className="flex flex-col gap-4 overflow-hidden">
-					<div className="relative flex w-[400px] h-[400px] border rounded">
+				<div className="flex flex-col gap-4 overflow-hidden w-[400px]">
+					<div className="relative flex h-[400px] border rounded">
 						<Image src={product.images[0]} alt={''} fill className="object-contain p-4" />
 					</div>
-					<div className="flex gap-2 h-[80px]">
+					<div className="flex gap-2 h-[100px] overflow-x-auto">
 						{product.images.map((image, index) => (
 							<Image
 								key={index}
 								src={image}
 								alt={''}
-								width={80}
-								height={80}
+								width={100}
+								height={100}
 								className="border rounded p-2 object-contain"
 							/>
 						))}

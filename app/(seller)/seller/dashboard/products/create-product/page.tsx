@@ -2,7 +2,7 @@
 
 import Button from '@/components/ui/Button'
 import { Input } from '@/ui/Input'
-import { createProduct, uploadImages } from '@/lib/mutations'
+import { createProduct, uploadImages, deleteImage } from '@/lib/mutations'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -12,7 +12,7 @@ import { Textarea } from '@/ui/Textarea'
 import Spinner from '@/components/ui/Spinner'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft } from '@/components/icons'
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent } from 'react'
 import Image from 'next/image'
 import { useProductStore } from '@/store/productStore'
 import { useStore } from '@/store/use-store-hook'
@@ -66,13 +66,18 @@ export default function SellerCreateProduct() {
 		mutationFn: uploadImages,
 		onSuccess: data => {
 			if (productImages) {
-				setProductImages([...productImages, ...data])
-				setValue('images', { ...productImages })
+				const updatedImages = [...productImages, ...data]
+				console.log('imagesData:', data)
+				console.log('productImages:', productImages)
+				setProductImages(updatedImages)
+				console.log('productImages:', productImages)
+				setValue('images', updatedImages)
+				console.log()
 			}
 		}
 	})
 
-	const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
 		console.log(files)
 
@@ -83,19 +88,27 @@ export default function SellerCreateProduct() {
 					key: 'image',
 					images
 				}
-				imagesMutation.mutate(uploadData)
+				await imagesMutation.mutateAsync(uploadData)
 			} catch (error) {
 				console.log(error)
 			}
 		}
 	}
 
+	const handleImageDelete = async (imageUrl: string) => {
+		console.log('Image to delete:', imageUrl)
+
+		productImages && productImages.length > 0 && productImages.filter(image => image === imageUrl)
+
+		return await deleteImage(imageUrl)
+	}
+
 	const onSubmit: SubmitHandler<CreateProduct> = async data => {
 		try {
-			await productMutation.mutateAsync({ ...data })
-			console.log({ ...data })
+			await productMutation.mutateAsync({ ...data, images: productImages })
+			console.log('productData:', { ...data })
 		} catch (error) {
-			console.log(error)
+			throw new Error('Failed to add product')
 		}
 	}
 
@@ -125,17 +138,19 @@ export default function SellerCreateProduct() {
 								<input type="file" id="images" disabled={isSubmitting} onChange={handleImageChange} multiple />
 							</label>
 							{imagesMutation.isError && <span className="text-red-500">Помилка</span>}
+							{errors.images?.message && <span className="text-red-500">{errors.images?.message}</span>}
 							<div className="flex gap-4 overflow-auto">
 								{productImages &&
 									productImages.length > 0 &&
-									productImages.map((image, index) => (
+									productImages.map((imageUrl, index) => (
 										<div key={index}>
 											<Image
-												src={image}
+												src={imageUrl}
 												alt={`Image ${index + 1}`}
 												width={120}
 												height={120}
 												className="object-contain min-w-[120px] max-h-[120px]"
+												onClick={() => handleImageDelete(imageUrl)}
 											/>
 										</div>
 									))}
