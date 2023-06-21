@@ -48,7 +48,8 @@ export default function Header() {
 		if (sellerSuccess) {
 			setIsSeller(dataIsSeller)
 		}
-	}, [dataIsAuth, authSuccess, setIsAuth, sellerSuccess, setIsSeller, dataIsSeller])
+		console.log('totalQuantity in header:', totalQuantity)
+	}, [dataIsAuth, authSuccess, setIsAuth, sellerSuccess, setIsSeller, dataIsSeller, totalQuantity])
 
 	return (
 		<>

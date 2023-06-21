@@ -23,8 +23,8 @@ export default function Cart() {
 
 	useEffect(() => {
 		if (isSuccess) {
-			console.log(data)
-			setCart(data.cartItems, data.totalQuantity, data.totalAmount)
+			console.log('cartData:', data)
+			data && setCart(data.cartItems, data.totalQuantity, data.totalAmount)
 		}
 	}, [data, isSuccess, setCart])
 

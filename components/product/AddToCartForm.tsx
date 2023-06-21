@@ -10,6 +10,7 @@ import { addToCartSchema } from '@/lib/validation/cartSchema'
 import { Input } from '@/ui/Input'
 import { useStore } from '@/store/use-store-hook'
 import { useAuthStore } from '@/store/authStore'
+import { useEffect } from 'react'
 
 export default function AddToCartForm({ productId }: { productId: number }) {
 	const { setTotalQuantity, totalQuantity } = useCartStore()
@@ -34,13 +35,19 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 	const onSubmit: SubmitHandler<AddToCart> = data => {
 		mutation.mutate({ ...data })
 		if (isAuth) {
-			setTotalQuantity(totalQuantity + data.quantity)
+			const quantityValue = data.quantity
+			setTotalQuantity(totalQuantity + quantityValue)
+			console.log('totalQuantity:', totalQuantity)
 		}
 	}
 
 	if (mutation.isError) {
 		throw new Error('Failed to load')
 	}
+
+	useEffect(() => {
+		console.log('inititalized totalQuantity:', totalQuantity)
+	}, [totalQuantity])
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
