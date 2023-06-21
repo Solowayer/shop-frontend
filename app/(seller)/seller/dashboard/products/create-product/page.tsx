@@ -19,7 +19,7 @@ import { useStore } from '@/store/use-store-hook'
 
 export default function SellerCreateProduct() {
 	const productImages = useStore(useProductStore, state => state.productImages)
-	const { setProductImages } = useProductStore()
+	const { setProductImages, setProductImageDelete } = useProductStore()
 
 	const router = useRouter()
 
@@ -98,7 +98,7 @@ export default function SellerCreateProduct() {
 	const handleImageDelete = async (imageUrl: string) => {
 		console.log('Image to delete:', imageUrl)
 
-		productImages && productImages.length > 0 && productImages.filter(image => image === imageUrl)
+		setProductImageDelete(imageUrl)
 
 		return await deleteImage(imageUrl)
 	}
@@ -135,7 +135,7 @@ export default function SellerCreateProduct() {
 						<div className="flex flex-col gap-4 p-6 border">
 							<label htmlFor="images" className="flex flex-col gap-2">
 								Фото товару
-								<input type="file" id="images" disabled={isSubmitting} onChange={handleImageChange} multiple />
+								<input type="file" id="images" disabled={isSubmitting} max={10} onChange={handleImageChange} multiple />
 							</label>
 							{imagesMutation.isError && <span className="text-red-500">Помилка</span>}
 							{errors.images?.message && <span className="text-red-500">{errors.images?.message}</span>}

@@ -5,8 +5,8 @@ type CartState = {
 	cartItems: CartItems
 	totalQuantity: number
 	totalAmount: number
-	setTotalQuantity: (value: number) => void
 	setCartItems: (value: CartItems) => void
+	setTotalQuantity: (value: number) => void
 	setTotalAmount: (value: number) => void
 	setCart: (cartItems: CartItems, totalQuantity: number, totalAmount: number) => void
 	setCartDelete: () => void
@@ -19,8 +19,8 @@ export const useCartStore = create<CartState>()(
 			cartItems: [],
 			totalQuantity: 0,
 			totalAmount: 0,
-			setTotalQuantity: value => set(() => ({ totalQuantity: Math.max(value, 0) })),
 			setCartItems: value => set(() => ({ cartItems: value })),
+			setTotalQuantity: value => set(() => ({ totalQuantity: Math.max(value, 0) })),
 			setTotalAmount: value => set(() => ({ totalAmount: value })),
 			setCart: (cartItems, totalQuantity, totalAmount) =>
 				set(() => ({
