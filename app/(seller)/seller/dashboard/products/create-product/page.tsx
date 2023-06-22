@@ -2,7 +2,7 @@
 
 import Button from '@/components/ui/Button'
 import { Input } from '@/ui/Input'
-import { createProduct, uploadImages, deleteImage } from '@/lib/mutations'
+import { createProduct } from '@/lib/mutations'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -12,14 +12,13 @@ import { Textarea } from '@/ui/Textarea'
 import Spinner from '@/components/ui/Spinner'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft } from '@/components/icons'
-import { ChangeEvent } from 'react'
-import Image from 'next/image'
 import { useProductStore } from '@/store/productStore'
 import { useStore } from '@/store/use-store-hook'
+import ProductImages from '@/components/seller/create-product/ProductImages'
 
 export default function SellerCreateProduct() {
 	const productImages = useStore(useProductStore, state => state.productImages)
-	const { setProductImages, setProductImageDelete } = useProductStore()
+	const { setProductImages } = useProductStore()
 
 	const router = useRouter()
 
@@ -48,60 +47,19 @@ export default function SellerCreateProduct() {
 		handleSubmit,
 		getValues,
 		setValue,
-		formState: { errors, isSubmitting }
+		formState: { errors, isSubmitting, isDirty }
 	} = useForm<CreateProduct>({
 		defaultValues: {
 			slug: '',
 			name: '',
 			images: [],
 			description: '',
-			price: 0,
+			price: 1,
 			categoryId: categoryIds[0],
 			published: true
 		},
 		resolver: zodResolver(createProductSchema)
 	})
-
-	const imagesMutation = useMutation({
-		mutationFn: uploadImages,
-		onSuccess: data => {
-			if (productImages) {
-				const updatedImages = [...productImages, ...data]
-				console.log('imagesData:', data)
-				console.log('productImages:', productImages)
-				setProductImages(updatedImages)
-				console.log('productImages:', productImages)
-				setValue('images', updatedImages)
-				console.log()
-			}
-		}
-	})
-
-	const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
-		const files = event.target.files
-		console.log(files)
-
-		if (files) {
-			const images = Array.from(files)
-			try {
-				const uploadData: UploadImageData = {
-					key: 'image',
-					images
-				}
-				await imagesMutation.mutateAsync(uploadData)
-			} catch (error) {
-				console.log(error)
-			}
-		}
-	}
-
-	const handleImageDelete = async (imageUrl: string) => {
-		console.log('Image to delete:', imageUrl)
-
-		setProductImageDelete(imageUrl)
-
-		return await deleteImage(imageUrl)
-	}
 
 	const onSubmit: SubmitHandler<CreateProduct> = async data => {
 		try {
@@ -123,46 +81,27 @@ export default function SellerCreateProduct() {
 				</div>
 				<form className="flex items-start bg-white gap-4" onSubmit={handleSubmit(onSubmit)}>
 					<div className="w-[50%] flex flex-col gap-4">
+						{/* 1 */}
 						<div className="flex flex-col gap-4 p-6 border">
 							<Input {...register('slug')} label="Slug (ідентифікатор)" type="text" id="slug" disabled={isSubmitting} />
 							{errors.slug?.message && <span className="text-red-500">{errors.slug?.message}</span>}
 
-							<Input {...register('name')} label="Назва товару" type="text" id="name" disabled={isSubmitting} />
+							<Input {...register('name')} label="Назва" type="text" id="name" disabled={isSubmitting} />
 							{errors.name?.message && <span className="text-red-500">{errors.name?.message}</span>}
 
-							<Textarea label="Опис товару" {...register('description')} id="desc" />
+							<Textarea label="Опис" {...register('description')} id="desc" />
 						</div>
-						<div className="flex flex-col gap-4 p-6 border">
-							<label htmlFor="images" className="flex flex-col gap-2">
-								Фото товару
-								<input type="file" id="images" disabled={isSubmitting} max={10} onChange={handleImageChange} multiple />
-							</label>
-							{imagesMutation.isError && <span className="text-red-500">Помилка</span>}
-							{errors.images?.message && <span className="text-red-500">{errors.images?.message}</span>}
-							<div className="flex gap-4 overflow-auto">
-								{productImages &&
-									productImages.length > 0 &&
-									productImages.map((imageUrl, index) => (
-										<div key={index}>
-											<Image
-												src={imageUrl}
-												alt={`Image ${index + 1}`}
-												width={120}
-												height={120}
-												className="object-contain min-w-[120px] max-h-[120px]"
-												onClick={() => handleImageDelete(imageUrl)}
-											/>
-										</div>
-									))}
-							</div>
-						</div>
+						{/* 2 */}
+						<ProductImages isSubmitting={isSubmitting} setValue={setValue} errors={errors} />
 					</div>
+					{/* 3 */}
 					<div className="flex w-[50%] flex-col gap-4 p-6 border">
 						<Input
 							{...register('price', { valueAsNumber: true })}
 							label="Ціна"
 							type="number"
 							id="price"
+							min={1}
 							disabled={isSubmitting}
 						/>
 						{errors.price?.message && !Number.isNaN(getValues('price')) && (
@@ -184,7 +123,7 @@ export default function SellerCreateProduct() {
 						{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
 						{productMutation.isLoading && <span>Loading...</span>}
 						{productMutation.isSuccess && <span>Товар створено</span>}
-						<Button type="submit" disabled={isSubmitting}>
+						<Button type="submit" disabled={isSubmitting || !isDirty}>
 							Додати товар
 						</Button>
 					</div>

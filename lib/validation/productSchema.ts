@@ -20,6 +20,7 @@ export const createProductSchema: ZodType<CreateProduct> = z.object({
 export const editProductSchema: ZodType<EditProduct> = z.object({
 	slug: z.string().min(1, { message: 'Вкажіть slug' }).optional(),
 	name: z.string().min(1, { message: 'Вкажіть назву товару' }).optional(),
+	images: z.string().array().max(10, { message: 'Максимум 10 фото' }).optional(),
 	description: z
 		.string()
 		.transform(description => {

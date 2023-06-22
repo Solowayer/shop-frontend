@@ -2,7 +2,6 @@
 
 import { ButtonLink } from '@/components/ui/ButtonLink'
 import { fetchSellerProducts } from '@/lib/queries'
-import React, { useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Spinner from '@/components/ui/Spinner'
 import { Delete } from '@/components/icons'
@@ -43,7 +42,7 @@ export default function SellerProducts() {
 		return <Spinner />
 	}
 
-	// console.log(products)
+	console.log('Seller products:', products)
 
 	return (
 		<div className="flex flex-col w-full gap-6">

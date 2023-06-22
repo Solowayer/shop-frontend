@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { fetchAllCategories, fetchProductById } from '@/lib/queries'
 import { editProduct } from '@/lib/mutations'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -11,8 +11,14 @@ import Button from '@/components/ui/Button'
 import { Textarea } from '@/ui/Textarea'
 import { Input } from '@/ui/Input'
 import Spinner from '@/components/ui/Spinner'
+import { useProductStore } from '@/store/productStore'
+import { useStore } from '@/store/use-store-hook'
+import ProductImages from '@/components/seller/create-product/ProductImages'
 
 export default function SellerEditProduct({ params }: { params: { id: number } }) {
+	const productImages = useStore(useProductStore, state => state.productImages)
+	const { setProductImages } = useProductStore()
+
 	const {
 		data: productData,
 		isError: isProductError,
@@ -33,7 +39,7 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		getValues,
 		setValue,
 		reset,
-		formState: { errors, isSubmitting, isDirty, isSubmitSuccessful }
+		formState: { errors, isSubmitting, isDirty }
 	} = useForm<EditProduct>({
 		resolver: zodResolver(editProductSchema)
 	})
@@ -42,12 +48,17 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		if (productData) {
 			setValue('slug', productData.slug)
 			setValue('name', productData.name)
+			setValue('images', productData.images)
 			setValue('description', productData.description)
 			setValue('price', productData.price)
 			setValue('categoryId', productData.categoryId)
 			setValue('published', productData.published)
+
+			console.log('productData.images:', productData.images)
+
+			productData.images && setProductImages(productData.images)
 		}
-	}, [productData, setValue])
+	}, [productData, setProductImages, setValue])
 
 	const {
 		data: categories,
@@ -59,11 +70,11 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 
 	const onSubmit: SubmitHandler<EditProduct> = async data => {
 		try {
-			productMutation.mutate({ ...data })
+			productMutation.mutate({ ...data, images: productImages })
 			console.log({ ...data })
 			reset(data)
 		} catch (error) {
-			console.log(error)
+			throw new Error('Failed to edit product')
 		}
 	}
 
@@ -74,46 +85,50 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 			) : isProductError ? (
 				<div>Помилка</div>
 			) : (
-				<form className="flex bg-white flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-					<div className="flex gap-10 items-start">
-						<div className="flex flex-col gap-4 flex-grow p-6 border">
+				<form className="flex items-start bg-white gap-4" onSubmit={handleSubmit(onSubmit)}>
+					<div className="w-[50%] flex flex-col gap-4">
+						{/* 1 */}
+						<div className="flex flex-col gap-4 p-6 border">
 							<Input {...register('slug')} label="Slug (ідентифікатор)" type="text" id="slug" disabled={isSubmitting} />
 							{errors.slug?.message && <p className="text-red-500">{errors.slug?.message}</p>}
 							<Input {...register('name')} label="Назва товару" type="text" id="name" disabled={isSubmitting} />
 							{errors.name?.message && <p className="text-red-500">{errors.name?.message}</p>}
 							<Textarea label="Опис товару" {...register('description')} id="desc" />
 						</div>
-						<div className="flex flex-col gap-4 flex-grow p-6 border">
-							<Input
-								{...register('price', { valueAsNumber: true })}
-								label="Ціна"
-								type="number"
-								id="price"
-								disabled={isSubmitting}
-							/>
-							{errors.price?.message && !Number.isNaN(getValues('price')) && (
-								<p className="text-red-500">{errors.price?.message}</p>
-							)}
-							{isCategoriesLoading ? (
-								<Spinner />
-							) : isCategoriesError ? (
-								<div>Помилка</div>
-							) : (
-								<select {...register('categoryId', { valueAsNumber: true })} className="w-full border rounded">
-									{categories.map(category => (
-										<option key={category.id} value={category.id}>
-											{category.name}
-										</option>
-									))}
-								</select>
-							)}
-							{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
-							{productMutation.isLoading && <span>Loading...</span>}
-							{productMutation.isSuccess && <span>Зміни застосовано</span>}
-							<Button type="submit" disabled={isSubmitting || !isDirty}>
-								Внести зміни
-							</Button>
-						</div>
+						{/* 2 */}
+						<ProductImages isSubmitting={isSubmitting} setValue={setValue} errors={errors} />
+					</div>
+					{/* 3 */}
+					<div className="flex w-[50%] flex-col gap-4 p-6 border">
+						<Input
+							{...register('price', { valueAsNumber: true })}
+							label="Ціна"
+							type="number"
+							id="price"
+							disabled={isSubmitting}
+						/>
+						{errors.price?.message && !Number.isNaN(getValues('price')) && (
+							<p className="text-red-500">{errors.price?.message}</p>
+						)}
+						{isCategoriesLoading ? (
+							<Spinner />
+						) : isCategoriesError ? (
+							<div>Помилка</div>
+						) : (
+							<select {...register('categoryId', { valueAsNumber: true })} className="w-full border rounded">
+								{categories.map(category => (
+									<option key={category.id} value={category.id}>
+										{category.name}
+									</option>
+								))}
+							</select>
+						)}
+						{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
+						{productMutation.isLoading && <span>Loading...</span>}
+						{productMutation.isSuccess && <span>Зміни застосовано</span>}
+						<Button type="submit" disabled={isSubmitting || !isDirty}>
+							Внести зміни
+						</Button>
 					</div>
 				</form>
 			)}

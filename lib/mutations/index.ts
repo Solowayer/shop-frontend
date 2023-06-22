@@ -116,6 +116,7 @@ export const uploadImages = async (data: UploadImageData): Promise<string[]> => 
 		const { imageUrls } = response.data
 		return imageUrls
 	} catch (error) {
+		console.log(error)
 		throw new Error('Failed to load images')
 	}
 }
