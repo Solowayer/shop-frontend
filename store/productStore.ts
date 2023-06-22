@@ -5,8 +5,8 @@ type ProductState = {
 	product: Product | null
 	setProduct: (product: Product | null) => void
 	productImages: string[]
-	setProductImages: (imageUrls: string[]) => void
-	setProductImageDelete: (imageUrl: string) => void
+	setProductImages: (images: string[]) => void
+	setProductImageDelete: (image: string) => void
 }
 
 export const useProductStore = create<ProductState>()(
@@ -15,10 +15,10 @@ export const useProductStore = create<ProductState>()(
 			product: null,
 			setProduct: product => set(() => ({ product })),
 			productImages: [],
-			setProductImages: imageUrls => set(() => ({ productImages: imageUrls })),
-			setProductImageDelete: imageUrl =>
+			setProductImages: images => set(() => ({ productImages: images })),
+			setProductImageDelete: image =>
 				set((state: ProductState) => ({
-					productImages: state.productImages.filter(productImage => productImage !== imageUrl)
+					productImages: state.productImages.filter(productImage => productImage !== image)
 				}))
 		})),
 		{ name: 'product', version: 1 }
