@@ -15,21 +15,31 @@ import { ChevronLeft } from '@/components/icons'
 import { useProductStore } from '@/store/productStore'
 import { useStore } from '@/store/use-store-hook'
 import Image from 'next/image'
-import React, { ChangeEvent, useEffect } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Delete } from '@/components/icons'
-import { deleteImage, uploadImages } from '@/lib/mutations'
+import { uploadImages } from '@/lib/mutations'
 
 export default function SellerCreateProduct() {
+	const productImageUrls = useStore(useProductStore, state => state.productImageUrls)
 	const productImages = useStore(useProductStore, state => state.productImages)
-	const { setProductImages, setProductImageDelete } = useProductStore()
+	const { setProductImageUrls, setProductImages, setProductImageDelete } = useProductStore()
+	const [isUploadError, setIsUploadError] = useState<boolean>(false)
 
 	const router = useRouter()
 
 	const productMutation = useMutation({
 		mutationFn: createProduct,
 		onSuccess: () => {
+			setProductImageUrls([])
 			setProductImages([])
 			router.push('seller/dashboard/products')
+		}
+	})
+
+	const imagesMutation = useMutation({
+		mutationFn: uploadImages,
+		onError: () => {
+			throw new Error('Something went wrong')
 		}
 	})
 
@@ -39,7 +49,7 @@ export default function SellerCreateProduct() {
 		isError: isCategoriesError
 	} = useQuery({
 		queryKey: ['all-categories'],
-		queryFn: () => fetchAllCategories(),
+		queryFn: fetchAllCategories,
 		retry: false
 	})
 
@@ -49,8 +59,7 @@ export default function SellerCreateProduct() {
 		register,
 		handleSubmit,
 		getValues,
-		setValue,
-		formState: { errors, isSubmitting, isDirty }
+		formState: { errors, isSubmitting }
 	} = useForm<CreateProduct>({
 		defaultValues: {
 			slug: '',
@@ -66,30 +75,19 @@ export default function SellerCreateProduct() {
 
 	const onSubmit: SubmitHandler<CreateProduct> = async data => {
 		try {
-			// await productMutation.mutateAsync({ ...data, images: productImages })
-			console.log('productData:', { ...data })
+			if (productImages) {
+				const uploadData: UploadImageData = {
+					key: 'image',
+					images: productImages
+				}
+				const imageUrls = await imagesMutation.mutateAsync(uploadData)
+				await productMutation.mutateAsync({ ...data, images: imageUrls })
+			}
+			console.log('productData:', productMutation.data)
 		} catch (error) {
-			throw new Error('Failed to add product')
+			console.log(error)
 		}
 	}
-
-	const imagesMutation = useMutation({
-		mutationFn: uploadImages,
-		onSuccess: data => {
-			if (productImages) {
-				const updatedImages = [...productImages, ...data]
-				console.log('imagesData:', data)
-				console.log('productImages:', productImages)
-				setProductImages(updatedImages)
-				console.log('productImages:', productImages)
-				setValue('images', updatedImages, { shouldDirty: true })
-				console.log()
-			}
-		},
-		onError: () => {
-			throw new Error('Bruh')
-		}
-	})
 
 	const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
@@ -97,16 +95,23 @@ export default function SellerCreateProduct() {
 
 		if (files) {
 			const images = Array.from(files)
+			if (images.length > 10) {
+				setIsUploadError(true)
+				return
+			}
+			setIsUploadError(false)
+			productImages && setProductImages([...productImages, ...images])
 			const imageBlobUrls = images.map(image => URL.createObjectURL(image))
-			productImages && setProductImages([...productImages, ...imageBlobUrls])
+			productImageUrls && setProductImageUrls([...productImageUrls, ...imageBlobUrls])
 
-			event.target.value = '' // Щоб можна було двічі підряд додати одне і те ж зображення
+			event.target.value = ''
 		}
 	}
 
 	useEffect(() => {
+		console.log('Product imageUrls:', productImageUrls)
 		console.log('Product images:', productImages)
-	}, [productImages])
+	}, [productImageUrls, productImages])
 
 	return (
 		<div className="w-full">
@@ -156,19 +161,22 @@ export default function SellerCreateProduct() {
 									<input
 										type="file"
 										id="images"
-										disabled={isSubmitting}
+										disabled={isSubmitting || (productImages && productImages.length >= 10)}
 										onChange={handleImageChange}
 										multiple
 										className="absolute inset-0 w-full h-full opacity-0 cursor-pointer pointer-events-auto"
 									/>
 								</label>
 							</div>
-							{/* {imagesMutation.isError && <span className="text-red-500">Помилка</span>} */}
-							<span>{productImages ? productImages.length : 0}/10</span>
-							{productImages && productImages.length > 0 && (
+							{isUploadError || (productImages && productImages.length > 10) ? (
+								<p className="text-red-500">Максимум 10 зображень</p>
+							) : null}
+							{imagesMutation.isError && <span className="text-red-500">Помилка</span>}
+							<span>{productImageUrls ? productImageUrls.length : 0}/10</span>
+							{productImageUrls && productImageUrls.length > 0 && (
 								<div className="flex flex-col gap-4">
 									<div className="flex overflow-hidden overflow-x-auto gap-2">
-										{productImages.map((image, index) => (
+										{productImageUrls.map((image, index) => (
 											<div
 												key={index}
 												className="relative flex justify-between rounded border items-start gap-2 p-2 min-w-[160px]"
@@ -182,7 +190,7 @@ export default function SellerCreateProduct() {
 												/>
 												<div
 													className="inline-flex rounded p-1 hover:bg-zinc-200 cursor-pointer"
-													onClick={() => setProductImageDelete(image)}
+													onClick={() => setProductImageDelete(index)}
 												>
 													<Delete />
 												</div>
@@ -212,7 +220,7 @@ export default function SellerCreateProduct() {
 						{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
 						{productMutation.isLoading && <span>Loading...</span>}
 						{productMutation.isSuccess && <span>Товар створено</span>}
-						<Button type="submit" disabled={isSubmitting || !isDirty}>
+						<Button type="submit" disabled={isSubmitting}>
 							Додати товар
 						</Button>
 					</div>

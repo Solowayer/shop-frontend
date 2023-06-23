@@ -56,7 +56,7 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 
 			console.log('productData.images:', productData.images)
 
-			productData.images && setProductImages(productData.images)
+			productData.images && setProductImageUrls(productData.images)
 		}
 	}, [productData, setProductImages, setValue])
 
