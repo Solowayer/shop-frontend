@@ -7,7 +7,7 @@ interface ImageProps {
 	width?: string
 }
 
-export default function Artwork({ src, alt, height, width }: ImageProps) {
+export function Artwork({ src, alt, height, width }: ImageProps) {
 	return (
 		<div className={`relative h-[${height}] w-[${width}]`}>
 			<Image src={src} alt={alt} fill />

@@ -33,7 +33,7 @@ const buttonStyles = [
 	'disabled:hover:!text-gray-400'
 ].join(' ')
 
-export default function Button({ fullWidth, children, variant = 'primary', onClick, ...props }: ButtonProps) {
+export function Button({ fullWidth, children, variant = 'primary', onClick, ...props }: ButtonProps) {
 	return (
 		<button
 			className={`${fullWidth ? `w-full` : ''} ${variant === 'primary' ? primary : secondary}  ${buttonStyles} `}

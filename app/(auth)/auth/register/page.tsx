@@ -5,9 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema } from '@/lib/validation/authorizationSchema'
 import { useRouter } from 'next/navigation'
 
-import Button from '@/ui/Button'
-import { ButtonLink } from '@/ui/ButtonLink'
-import { Input } from '@/ui/Input'
+import { Button, ButtonLink, Input } from '@/components/ui'
+
 import { useMutation } from '@tanstack/react-query'
 import { loginUser, registerUser } from '@/lib/mutations'
 import { useEffect } from 'react'

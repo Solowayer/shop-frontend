@@ -1,12 +1,10 @@
 'use client'
 
 import CartItemList from '@/components/cart/CartItemList'
-import Button from '@/components/ui/Button'
-import Spinner from '@/components/ui/Spinner'
+import { StyledLink, Spinner, Button } from '@/components/ui'
 import { fetchCartData } from '@/lib/queries'
 import { useCartStore } from '@/store/cartStore'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import StyledLink from '@/components/ui/StyledLink'
 import { deleteCart } from '@/lib/mutations'
 import { useAuthStore } from '@/store/authStore'
 import { useEffect } from 'react'

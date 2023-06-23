@@ -1,12 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { Input } from '@/ui/Input'
+import { Spinner, ButtonLink, Input } from '@/components/ui'
 import { Cart, Person, Search } from './icons'
-import { ButtonLink } from '@/ui/ButtonLink'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCheckAuth, fetchCheckSeller } from '@/lib/queries'
-import Spinner from '@/ui/Spinner'
 
 import { useAuthStore } from '@/store/authStore'
 import { useStore } from '@/store/use-store-hook'

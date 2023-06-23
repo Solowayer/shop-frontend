@@ -2,11 +2,10 @@
 
 import React from 'react'
 import Image from 'next/image'
-import Button from '@/ui/Button'
 import { useMutation } from '@tanstack/react-query'
 import { deleteCartItem } from '@/lib/mutations'
 import { useCartStore } from '@/store/cartStore'
-import Spinner from '@/ui/Spinner'
+import { Spinner, Button } from '@/components/ui'
 import Link from 'next/link'
 
 export default function CartItem({ id, image, name, price, quantity, productId }: CartItem) {

@@ -1,10 +1,9 @@
 'use client'
 
-import Spinner from '@/ui/Spinner'
+import { Spinner } from '@/components/ui'
 import { fetchMainCategories } from '@/lib/queries'
 import { useQuery } from '@tanstack/react-query'
 
-import StyledLink from '@/components/ui/StyledLink'
 import Link from 'next/link'
 
 export default function Home() {

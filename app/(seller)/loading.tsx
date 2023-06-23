@@ -1,6 +1,10 @@
 import React from 'react'
-import Spinner from '@/ui/Spinner'
+import { Spinner } from '@/components/ui'
 
 export default function Loading() {
-	return <Spinner />
+	return (
+		<div className="p-6">
+			<Spinner />
+		</div>
+	)
 }
