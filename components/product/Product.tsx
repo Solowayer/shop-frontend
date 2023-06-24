@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import AddToCartForm from './AddToCartForm'
+import { Star } from '../icons'
 
 export default function Product({ product }: { product: Product }) {
 	return (
@@ -27,6 +28,10 @@ export default function Product({ product }: { product: Product }) {
 			<div className="flex flex-1 gap-8 items-start justify-between">
 				<div className="w-full flex flex-col gap-4">
 					<span className="font-medium text-2xl">{product.name}</span>
+					<span className="flex items-center gap-1 text-yellow-600">
+						{product.rating}
+						<Star />
+					</span>
 					<span className="font-bold">Про товар:</span>
 					<span className="text-md text-zinc-600">{product.description ?? 'Опис відсутній'}</span>
 				</div>

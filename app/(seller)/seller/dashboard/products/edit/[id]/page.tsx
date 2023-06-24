@@ -1,32 +1,28 @@
 'use client'
 
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { createProduct, uploadImages } from '@/lib/mutations'
+import { editProduct, uploadImages } from '@/lib/mutations'
 import { fetchAllCategories, fetchProductById } from '@/lib/queries'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createProductSchema } from '@/lib/validation/productSchema'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useProductStore } from '@/store/productStore'
-import { useStore } from '@/store/use-store-hook'
 import Image from 'next/image'
 import { Spinner, Button, Input, Textarea } from '@/components/ui'
 import { ChevronLeft, Delete } from '@/components/icons'
 import { useRouter } from 'next/navigation'
 
-export default function SellerCreateProduct({ params }: { params: { id: number } }) {
-	const productImageUrls = useStore(useProductStore, state => state.productImageUrls)
-	const productImages = useStore(useProductStore, state => state.productImages)
-	const { setProductImageUrls, setProductImages, setProductImageDelete } = useProductStore()
+export default function SellerEditProduct({ params }: { params: { id: number } }) {
+	const [productImages, setProductImages] = useState<File[]>([])
 	const [isUploadError, setIsUploadError] = useState<boolean>(false)
-	const [initialState, setInitialState] = useState<Product | null>(null)
 
 	const router = useRouter()
 
 	const {
 		data: productData,
-		isError: isProductError,
-		isLoading: isProductLoading
+		// isError: isProductError,
+		// isLoading: isProductLoading,
+		isSuccess: isProductSuccess
 	} = useQuery({
 		queryKey: ['product', params.id],
 		queryFn: () => fetchProductById(params.id),
@@ -34,12 +30,7 @@ export default function SellerCreateProduct({ params }: { params: { id: number }
 	})
 
 	const productMutation = useMutation({
-		mutationFn: createProduct,
-		onSuccess: () => {
-			setProductImageUrls([])
-			setProductImages([])
-			router.push('seller/dashboard/products')
-		}
+		mutationFn: (data: EditProduct) => editProduct(params.id, data)
 	})
 
 	const imagesMutation = useMutation({
@@ -64,14 +55,14 @@ export default function SellerCreateProduct({ params }: { params: { id: number }
 		handleSubmit,
 		getValues,
 		setValue,
+		reset,
 		formState: { errors, isSubmitting, isDirty }
-	} = useForm<CreateProduct>({
+	} = useForm<EditProduct>({
 		resolver: zodResolver(createProductSchema)
 	})
 
 	useEffect(() => {
-		if (productData) {
-			setInitialState(productData)
+		if (isProductSuccess) {
 			setValue('slug', productData.slug)
 			setValue('name', productData.name)
 			setValue('images', productData.images)
@@ -81,23 +72,25 @@ export default function SellerCreateProduct({ params }: { params: { id: number }
 			setValue('published', productData.published)
 
 			console.log('productData.images:', productData.images)
-			console.log('Initial state:', initialState)
-
-			// productData.images && setProductImageUrls(productData.images)
 		}
-	}, [initialState, productData, setProductImages, setValue])
+	}, [isProductSuccess, productData, setValue])
 
-	const onSubmit: SubmitHandler<CreateProduct> = async data => {
+	const onSubmit: SubmitHandler<EditProduct> = async data => {
 		try {
-			if (productImages) {
+			if (productImages && productImages.length > 0) {
 				const uploadData: UploadImageData = {
 					key: 'image',
 					images: productImages
 				}
-				const imageUrls = await imagesMutation.mutateAsync(uploadData)
-				await productMutation.mutateAsync({ ...data, images: imageUrls })
+				const images = await imagesMutation.mutateAsync(uploadData)
+				await productMutation.mutateAsync({ ...data, images })
+			} else {
+				await productMutation.mutateAsync({ ...data })
 			}
-			console.log('productData:', productMutation.data)
+
+			reset(data)
+
+			console.log('data:', data)
 		} catch (error) {
 			console.log(error)
 		}
@@ -109,23 +102,19 @@ export default function SellerCreateProduct({ params }: { params: { id: number }
 
 		if (files) {
 			const images = Array.from(files)
-			if (images.length > 10) {
-				setIsUploadError(true)
-				return
-			}
-			setIsUploadError(false)
-			productImages && setProductImages([...productImages, ...images])
-			const imageBlobUrls = images.map(image => URL.createObjectURL(image))
-			productImageUrls && setProductImageUrls([...productImageUrls, ...imageBlobUrls])
+			const totalImages = [...productImages, ...images]
+			const trimmedImages = totalImages.length > 10 ? totalImages.slice(0, 10) : totalImages
+			setIsUploadError(totalImages.length > 10)
+			setProductImages(trimmedImages)
 
 			event.target.value = ''
 		}
 	}
 
-	useEffect(() => {
-		console.log('Product imageUrls:', productImageUrls)
-		console.log('Product images:', productImages)
-	}, [productImageUrls, productImages])
+	const handleImageDelete = (image: File) => {
+		const filteredProductImages = productImages.filter(productImage => productImage.lastModified !== image.lastModified)
+		setProductImages(filteredProductImages)
+	}
 
 	return (
 		<div className="w-full">
@@ -186,33 +175,31 @@ export default function SellerCreateProduct({ params }: { params: { id: number }
 								<p className="text-red-500">Максимум 10 зображень</p>
 							) : null}
 							{imagesMutation.isError && <span className="text-red-500">Помилка</span>}
-							<span>{productImageUrls ? productImageUrls.length : 0}/10</span>
-							{productImageUrls && productImageUrls.length > 0 && (
-								<div className="flex flex-col gap-4">
-									<div className="flex overflow-hidden overflow-x-auto gap-2">
-										{productImageUrls.map((image, index) => (
+							<span>{productImages ? productImages.length : 0}/10</span>
+							<div className="flex flex-col gap-4">
+								<div className="flex overflow-hidden overflow-x-auto gap-2">
+									{productImages.map((image, index) => (
+										<div
+											key={index}
+											className="relative flex justify-between rounded border items-start gap-2 p-2 min-w-[160px]"
+										>
+											<Image
+												src={URL.createObjectURL(image)}
+												alt={`Image ${index + 1}`}
+												width={100}
+												height={100}
+												className="object-contain h-[160px] p-1"
+											/>
 											<div
-												key={index}
-												className="relative flex justify-between rounded border items-start gap-2 p-2 min-w-[160px]"
+												className="inline-flex rounded p-1 hover:bg-zinc-200 cursor-pointer"
+												onClick={() => handleImageDelete(image)}
 											>
-												<Image
-													src={image}
-													alt={`Image ${index + 1}`}
-													width={100}
-													height={100}
-													className="object-contain h-[160px] p-1"
-												/>
-												<div
-													className="inline-flex rounded p-1 hover:bg-zinc-200 cursor-pointer"
-													onClick={() => setProductImageDelete(index)}
-												>
-													<Delete />
-												</div>
+												<Delete />
 											</div>
-										))}
-									</div>
+										</div>
+									))}
 								</div>
-							)}
+							</div>
 							{errors.images?.message && <span className="text-red-500">{errors.images?.message}</span>}
 						</div>
 					</div>
@@ -237,7 +224,7 @@ export default function SellerCreateProduct({ params }: { params: { id: number }
 						<Button type="submit" disabled={isSubmitting || !isDirty}>
 							Внести зміни
 						</Button>
-						<Button type="submit" disabled={isSubmitting || !isDirty}>
+						<Button disabled={isSubmitting || !isDirty} onClick={() => reset()}>
 							Відмінити зміни
 						</Button>
 					</div>

@@ -42,17 +42,7 @@ type Product = {
 	published: boolean
 }
 
-type CreateProduct = {
-	slug: string
-	name: string
-	images?: string[]
-	description?: string | null
-	price: number
-	categoryId: number | null
-	published: boolean
-}
-
-type EditProduct = Partial<CreateProduct>
+type EditProduct = Partial<Product>
 
 type User = {
 	username: string
