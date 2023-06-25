@@ -50,7 +50,7 @@ export default function SellerCreateProduct() {
 		handleSubmit,
 		getValues,
 		formState: { errors, isSubmitting }
-	} = useForm<Product>({
+	} = useForm<CreateProduct>({
 		defaultValues: {
 			slug: '',
 			name: '',
@@ -63,7 +63,7 @@ export default function SellerCreateProduct() {
 		resolver: zodResolver(createProductSchema)
 	})
 
-	const onSubmit: SubmitHandler<Product> = async data => {
+	const onSubmit: SubmitHandler<CreateProduct> = async data => {
 		try {
 			if (productImages && productImages.length > 0) {
 				const uploadData: UploadImageData = {
@@ -97,7 +97,7 @@ export default function SellerCreateProduct() {
 	}
 
 	const handleImageDelete = (image: File) => {
-		const filteredProductImages = productImages.filter(productImage => productImage.lastModified !== image.lastModified)
+		const filteredProductImages = productImages.filter(productImage => productImage.name !== image.name)
 		setProductImages(filteredProductImages)
 	}
 

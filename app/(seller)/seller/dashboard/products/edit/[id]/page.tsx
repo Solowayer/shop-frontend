@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { editProduct, uploadImages } from '@/lib/mutations'
+import { editProduct, uploadImages, deleteImage } from '@/lib/mutations'
 import { fetchAllCategories, fetchProductById } from '@/lib/queries'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createProductSchema } from '@/lib/validation/productSchema'
@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 
 export default function SellerEditProduct({ params }: { params: { id: number } }) {
 	const [productImages, setProductImages] = useState<File[]>([])
+	const [serverProductImages, setServerProductImages] = useState<string[] | undefined>([])
 	const [isUploadError, setIsUploadError] = useState<boolean>(false)
 
 	const router = useRouter()
@@ -54,26 +55,22 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		register,
 		handleSubmit,
 		getValues,
-		setValue,
 		reset,
+		setValue,
 		formState: { errors, isSubmitting, isDirty }
 	} = useForm<EditProduct>({
 		resolver: zodResolver(createProductSchema)
 	})
 
 	useEffect(() => {
-		if (isProductSuccess) {
-			setValue('slug', productData.slug)
-			setValue('name', productData.name)
-			setValue('images', productData.images)
-			setValue('description', productData.description)
-			setValue('price', productData.price)
-			setValue('categoryId', productData.categoryId)
-			setValue('published', productData.published)
-
-			console.log('productData.images:', productData.images)
+		if (productData) {
+			reset(productData)
 		}
-	}, [isProductSuccess, productData, setValue])
+		if (isProductSuccess) {
+			setServerProductImages(productData.images)
+		}
+		console.log('productData:', productData)
+	}, [isProductSuccess, productData, reset])
 
 	const onSubmit: SubmitHandler<EditProduct> = async data => {
 		try {
@@ -87,6 +84,8 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 			} else {
 				await productMutation.mutateAsync({ ...data })
 			}
+
+			await productMutation.mutateAsync({ images: serverProductImages })
 
 			reset(data)
 
@@ -112,8 +111,17 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 	}
 
 	const handleImageDelete = (image: File) => {
-		const filteredProductImages = productImages.filter(productImage => productImage.lastModified !== image.lastModified)
+		const filteredProductImages = productImages.filter(productImage => productImage.name !== image.name)
 		setProductImages(filteredProductImages)
+	}
+
+	const handleServerImageDelete = async (imageUrl: string) => {
+		console.log('Image to delete:', imageUrl)
+
+		const updated = serverProductImages?.filter(image => image !== imageUrl)
+		setServerProductImages(updated)
+
+		console.log('serverProductImages:', serverProductImages)
 	}
 
 	return (
@@ -198,6 +206,27 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 											</div>
 										</div>
 									))}
+									{serverProductImages &&
+										serverProductImages.map((image, index) => (
+											<div
+												key={index}
+												className="relative flex justify-between rounded border items-start gap-2 p-2 min-w-[160px]"
+											>
+												<Image
+													src={image}
+													alt={`Image ${index + 1}`}
+													width={100}
+													height={100}
+													className="object-contain h-[160px] p-1"
+												/>
+												<div
+													className="inline-flex rounded p-1 hover:bg-zinc-200 cursor-pointer"
+													onClick={() => handleServerImageDelete(image)}
+												>
+													<Delete />
+												</div>
+											</div>
+										))}
 								</div>
 							</div>
 							{errors.images?.message && <span className="text-red-500">{errors.images?.message}</span>}
@@ -219,8 +248,8 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 							</select>
 						)}
 						{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
-						{productMutation.isLoading && <span>Loading...</span>}
-						{productMutation.isSuccess && <span>Зміни застосовано</span>}
+						{productMutation.isLoading && !isDirty && <span>Loading...</span>}
+						{productMutation.isSuccess && !isDirty && <span>Зміни застосовано</span>}
 						<Button type="submit" disabled={isSubmitting || !isDirty}>
 							Внести зміни
 						</Button>

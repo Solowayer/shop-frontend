@@ -42,6 +42,8 @@ type Product = {
 	published: boolean
 }
 
+type CreateProduct = Omit<Product, 'id' | 'rating'>
+
 type EditProduct = Partial<Product>
 
 type User = {
