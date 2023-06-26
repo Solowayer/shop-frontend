@@ -56,11 +56,12 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		handleSubmit,
 		getValues,
 		reset,
-		setValue,
 		formState: { errors, isSubmitting, isDirty }
 	} = useForm<EditProduct>({
 		resolver: zodResolver(createProductSchema)
 	})
+
+	const [isFormChanged, setIsFormChanged] = useState<boolean>(isDirty)
 
 	useEffect(() => {
 		if (productData) {
@@ -80,13 +81,13 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 					images: productImages
 				}
 				const images = await imagesMutation.mutateAsync(uploadData)
-				await productMutation.mutateAsync({ ...data, images })
+				const updatedImages = serverProductImages ? [...serverProductImages, ...images] : images
+				await productMutation.mutateAsync({ ...data, images: updatedImages })
 			} else {
-				await productMutation.mutateAsync({ ...data })
+				await productMutation.mutateAsync({ ...data, images: serverProductImages })
 			}
 
-			await productMutation.mutateAsync({ images: serverProductImages })
-
+			setIsFormChanged(false)
 			reset(data)
 
 			console.log('data:', data)
@@ -99,20 +100,25 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		const files = event.target.files
 		console.log('Files:', files)
 
-		if (files) {
+		if (files && serverProductImages) {
 			const images = Array.from(files)
 			const totalImages = [...productImages, ...images]
-			const trimmedImages = totalImages.length > 10 ? totalImages.slice(0, 10) : totalImages
-			setIsUploadError(totalImages.length > 10)
+
+			const maxImages = 10 - serverProductImages.length
+
+			const trimmedImages = totalImages.length > maxImages ? totalImages.slice(0, 10) : totalImages
+			setIsUploadError(totalImages.length > maxImages)
 			setProductImages(trimmedImages)
+			setIsFormChanged(true)
 
 			event.target.value = ''
 		}
 	}
 
 	const handleImageDelete = (image: File) => {
-		const filteredProductImages = productImages.filter(productImage => productImage.name !== image.name)
+		const filteredProductImages = productImages.filter(productImage => productImage !== image)
 		setProductImages(filteredProductImages)
+		setIsFormChanged(false)
 	}
 
 	const handleServerImageDelete = async (imageUrl: string) => {
@@ -120,8 +126,17 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 
 		const updated = serverProductImages?.filter(image => image !== imageUrl)
 		setServerProductImages(updated)
+		setIsFormChanged(true)
 
 		console.log('serverProductImages:', serverProductImages)
+	}
+
+	const undoChanges = () => {
+		reset()
+
+		setServerProductImages(productData?.images)
+		setProductImages([])
+		setIsFormChanged(false)
 	}
 
 	return (
@@ -179,11 +194,14 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 									/>
 								</label>
 							</div>
-							{isUploadError || (productImages && productImages.length > 10) ? (
+							{isUploadError ||
+							(productImages && serverProductImages && productImages.length + serverProductImages.length > 10) ? (
 								<p className="text-red-500">Максимум 10 зображень</p>
 							) : null}
 							{imagesMutation.isError && <span className="text-red-500">Помилка</span>}
-							<span>{productImages ? productImages.length : 0}/10</span>
+							<span>
+								{productImages && serverProductImages ? productImages.length + serverProductImages.length : 0}/10
+							</span>
 							<div className="flex flex-col gap-4">
 								<div className="flex overflow-hidden overflow-x-auto gap-2">
 									{productImages.map((image, index) => (
@@ -199,6 +217,7 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 												className="object-contain h-[160px] p-1"
 											/>
 											<div
+												{...register('images')}
 												className="inline-flex rounded p-1 hover:bg-zinc-200 cursor-pointer"
 												onClick={() => handleImageDelete(image)}
 											>
@@ -248,12 +267,12 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 							</select>
 						)}
 						{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
-						{productMutation.isLoading && !isDirty && <span>Loading...</span>}
-						{productMutation.isSuccess && !isDirty && <span>Зміни застосовано</span>}
-						<Button type="submit" disabled={isSubmitting || !isDirty}>
+						{productMutation.isLoading && <span>Loading...</span>}
+						{productMutation.isSuccess && !isFormChanged && <span>Зміни застосовано</span>}
+						<Button type="submit" disabled={isSubmitting || !isFormChanged}>
 							Внести зміни
 						</Button>
-						<Button disabled={isSubmitting || !isDirty} onClick={() => reset()}>
+						<Button disabled={isSubmitting || !isFormChanged} onClick={() => undoChanges()}>
 							Відмінити зміни
 						</Button>
 					</div>

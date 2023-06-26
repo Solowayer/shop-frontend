@@ -71,6 +71,7 @@ export default function SellerCreateProduct() {
 					images: productImages
 				}
 				const images = await imagesMutation.mutateAsync(uploadData)
+				console.log('images:', images)
 				await productMutation.mutateAsync({ ...data, images })
 			} else {
 				await productMutation.mutateAsync({ ...data })
@@ -97,7 +98,7 @@ export default function SellerCreateProduct() {
 	}
 
 	const handleImageDelete = (image: File) => {
-		const filteredProductImages = productImages.filter(productImage => productImage.name !== image.name)
+		const filteredProductImages = productImages.filter(productImage => productImage !== image)
 		setProductImages(filteredProductImages)
 	}
 
