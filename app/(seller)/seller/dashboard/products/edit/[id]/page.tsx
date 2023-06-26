@@ -217,7 +217,6 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 												className="object-contain h-[160px] p-1"
 											/>
 											<div
-												{...register('images')}
 												className="inline-flex rounded p-1 hover:bg-zinc-200 cursor-pointer"
 												onClick={() => handleImageDelete(image)}
 											>
@@ -229,17 +228,11 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 										serverProductImages.map((image, index) => (
 											<div
 												key={index}
-												className="relative flex justify-between rounded border items-start gap-2 p-2 min-w-[160px]"
+												className="relative flex justify-between rounded border items-start p-2 min-w-[160px] h-[160px]"
 											>
-												<Image
-													src={image}
-													alt={`Image ${index + 1}`}
-													width={100}
-													height={100}
-													className="object-contain h-[160px] p-1"
-												/>
+												<Image src={image} alt={`Image ${index + 1}`} fill className="object-cover p-2" />
 												<div
-													className="inline-flex rounded p-1 hover:bg-zinc-200 cursor-pointer"
+													className="absolute right-2 inline-flex rounded-full p-2 bg-black text-white cursor-pointer"
 													onClick={() => handleServerImageDelete(image)}
 												>
 													<Delete />

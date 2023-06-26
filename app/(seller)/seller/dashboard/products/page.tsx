@@ -8,6 +8,7 @@ import { Delete } from '@/components/icons'
 import { TD } from '@/components/ui/table/Td'
 import { TH } from '@/components/ui/table/Th'
 import { deleteProduct } from '@/lib/mutations'
+import Image from 'next/image'
 
 export default function SellerProducts() {
 	const {
@@ -42,6 +43,11 @@ export default function SellerProducts() {
 
 	console.log('Seller products:', products)
 
+	window.addEventListener('beforeunload', function (e) {
+		e.preventDefault()
+		e.returnValue = ''
+	})
+
 	return (
 		<div className="flex flex-col w-full gap-6">
 			<div className="flex items-center justify-between">
@@ -62,7 +68,17 @@ export default function SellerProducts() {
 							products.map(product => (
 								<tr key={product.id}>
 									<TD>
-										<div className="text-sm text-gray-900">
+										<div className="flex gap-4 items-center text-sm text-gray-900">
+											{product.images && (
+												<div className="relative min-w-[64px] h-[64px]">
+													<Image
+														src={product.images[0]}
+														alt={'Product image'}
+														fill
+														className="object-contain border rounded p-1"
+													/>
+												</div>
+											)}
 											<StyledLink href={`product/${product.slug}`}>{product.name}</StyledLink>
 										</div>
 									</TD>
