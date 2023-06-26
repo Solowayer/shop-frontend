@@ -108,7 +108,7 @@ export const uploadImages = async (data: UploadImageData): Promise<string[]> => 
 			formData.append(data.key, data.images[i])
 		}
 
-		const response = await axios.post(`${process.env.api}/upload/image`, formData, {
+		const response = await axios.post<{ imageUrls: string[] }>(`${process.env.api}/upload/image`, formData, {
 			headers: { 'Content-Type': 'multipart/form-data' },
 			withCredentials: true
 		})

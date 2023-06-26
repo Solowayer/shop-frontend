@@ -43,11 +43,6 @@ export default function SellerProducts() {
 
 	console.log('Seller products:', products)
 
-	window.addEventListener('beforeunload', function (e) {
-		e.preventDefault()
-		e.returnValue = ''
-	})
-
 	return (
 		<div className="flex flex-col w-full gap-6">
 			<div className="flex items-center justify-between">
@@ -69,7 +64,7 @@ export default function SellerProducts() {
 								<tr key={product.id}>
 									<TD>
 										<div className="flex gap-4 items-center text-sm text-gray-900">
-											{product.images && (
+											{product.images && product.images.length > 0 && (
 												<div className="relative min-w-[64px] h-[64px]">
 													<Image
 														src={product.images[0]}

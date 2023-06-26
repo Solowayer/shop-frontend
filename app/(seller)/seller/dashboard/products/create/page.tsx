@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { createProduct, uploadImages } from '@/lib/mutations'
+import { createProduct, deleteImage, uploadImages } from '@/lib/mutations'
 import { fetchAllCategories } from '@/lib/queries'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createProductSchema } from '@/lib/validation/productSchema'
@@ -13,8 +13,7 @@ import { ChevronLeft, Delete } from '@/components/icons'
 import { useRouter } from 'next/navigation'
 
 export default function SellerCreateProduct() {
-	const [productImages, setProductImages] = useState<File[]>([])
-	const [isUploadError, setIsUploadError] = useState<boolean>(false)
+	const [productImages, setProductImages] = useState<string[]>([])
 
 	const router = useRouter()
 
@@ -28,9 +27,19 @@ export default function SellerCreateProduct() {
 
 	const imagesMutation = useMutation({
 		mutationFn: uploadImages,
+		onSuccess: data => {
+			if (productImages) {
+				const updatedImages = [...productImages, ...data]
+				setProductImages(updatedImages)
+			}
+		},
 		onError: () => {
 			throw new Error('Something went wrong')
 		}
+	})
+
+	const imageDeleteMutation = useMutation({
+		mutationFn: (imageUrl: string) => deleteImage(imageUrl)
 	})
 
 	const {
@@ -65,18 +74,7 @@ export default function SellerCreateProduct() {
 
 	const onSubmit: SubmitHandler<CreateProduct> = async data => {
 		try {
-			if (productImages && productImages.length > 0) {
-				const uploadData: UploadImageData = {
-					key: 'image',
-					images: productImages
-				}
-				const images = await imagesMutation.mutateAsync(uploadData)
-				console.log('images:', images)
-				await productMutation.mutateAsync({ ...data, images })
-			} else {
-				await productMutation.mutateAsync({ ...data })
-			}
-			console.log('productData:', productMutation.data)
+			await productMutation.mutateAsync({ ...data, images: productImages })
 		} catch (error) {
 			console.log(error)
 		}
@@ -84,22 +82,29 @@ export default function SellerCreateProduct() {
 
 	const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
-		console.log('Files:', files)
 
 		if (files) {
 			const images = Array.from(files)
-			const totalImages = [...productImages, ...images]
-			const trimmedImages = totalImages.length > 10 ? totalImages.slice(0, 10) : totalImages
-			setIsUploadError(totalImages.length > 10)
-			setProductImages(trimmedImages)
+			const trimmedImages = images.length > 10 ? images.slice(0, 10) : images
+			try {
+				const uploadData: UploadImageData = {
+					key: 'image',
+					images: trimmedImages
+				}
+				await imagesMutation.mutateAsync(uploadData)
+			} catch (error) {
+				console.log(error)
+			}
 
 			event.target.value = ''
 		}
 	}
 
-	const handleImageDelete = (image: File) => {
-		const filteredProductImages = productImages.filter(productImage => productImage !== image)
-		setProductImages(filteredProductImages)
+	const handleImageDelete = async (imageUrl: string) => {
+		console.log('Image to delete:', imageUrl)
+		const filteredImages = productImages.filter(image => image !== imageUrl)
+		setProductImages(filteredImages)
+		await imageDeleteMutation.mutateAsync(imageUrl)
 	}
 
 	useEffect(() => {
@@ -141,47 +146,46 @@ export default function SellerCreateProduct() {
 						</div>
 						{/* 2 */}
 						<div className="flex flex-col gap-4 p-6 border">
-							<span className="font-medium">Фото</span>
-							<div className="relative border-2 border-dashed border-blue-200 flex w-full items-center justify-center h-[140px] rounded hover:bg-blue-50">
-								<label htmlFor="images">
-									<div className="flex flex-col items-center gap-1">
-										<span className="font-medium text-blue-500">Додати фото товару</span>
-										<span className="text-xs text-center text-blue-500">
-											Формати: JPG, PNG, GIF.
-											<br /> Максимальний розмір: 2 MB.
-										</span>
-									</div>
-									<input
-										type="file"
-										id="images"
-										disabled={isSubmitting || (productImages && productImages.length >= 10)}
-										onChange={handleImageChange}
-										multiple
-										className="absolute inset-0 w-full h-full opacity-0 cursor-pointer pointer-events-auto"
-									/>
-								</label>
+							<div className="w-full flex font-medium items-center justify-between gap-2">
+								<span>Фото</span>
+								<span>{productImages ? productImages.length : 0}/10</span>
 							</div>
-							{isUploadError || (productImages && productImages.length > 10) ? (
-								<p className="text-red-500">Максимум 10 зображень</p>
-							) : null}
+							{productImages && productImages.length >= 10 ? null : (
+								<>
+									<div className="relative border-2 border-dashed border-blue-200 flex w-full items-center justify-center h-[140px] rounded hover:bg-blue-50">
+										<label htmlFor="images">
+											<div className="flex flex-col items-center gap-1">
+												<span className="font-medium text-blue-500">Додати фото товару</span>
+												<span className="text-xs text-center text-blue-500">
+													Формати: JPG, PNG, GIF, WEBP.
+													<br /> Максимальний розмір: 2 MB.
+												</span>
+											</div>
+											<input
+												type="file"
+												id="images"
+												disabled={isSubmitting}
+												onChange={handleImageChange}
+												multiple
+												className="absolute inset-0 w-full h-full opacity-0 cursor-pointer pointer-events-auto"
+											/>
+										</label>
+									</div>
+								</>
+							)}
+
 							{imagesMutation.isError && <span className="text-red-500">Помилка</span>}
-							<span>{productImages ? productImages.length : 0}/10</span>
+
 							<div className="flex flex-col gap-4">
 								<div className="flex overflow-hidden overflow-x-auto gap-2">
 									{productImages.map((image, index) => (
 										<div
 											key={index}
-											className="relative flex justify-between rounded border items-start gap-2 p-2 min-w-[160px]"
+											className="relative flex justify-between rounded border items-start p-2 min-w-[160px] h-[160px]"
 										>
-											<Image
-												src={URL.createObjectURL(image)}
-												alt={`Image ${index + 1}`}
-												width={100}
-												height={100}
-												className="object-contain h-[160px] p-1"
-											/>
+											<Image src={image} alt={`Image ${index + 1}`} fill className="object-cover p-2" />
 											<div
-												className="inline-flex rounded p-1 hover:bg-zinc-200 cursor-pointer"
+												className="absolute right-2 inline-flex rounded-full p-2 bg-black text-white cursor-pointer"
 												onClick={() => handleImageDelete(image)}
 											>
 												<Delete />
