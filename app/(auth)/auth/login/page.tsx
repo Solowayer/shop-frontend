@@ -66,7 +66,7 @@ export default function Login() {
 				{logMutation.isSuccess && <div>Done</div>}
 			</form>
 			<p>Ще немає аккаунту?</p>
-			<ButtonLink variant="secondary" href="/auth/register" fullWidth>
+			<ButtonLink intent="secondary" href="/auth/register" fullWidth>
 				Зареєструватись
 			</ButtonLink>
 		</>

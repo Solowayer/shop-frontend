@@ -63,14 +63,14 @@ export default function Header() {
 				<div className="flex items-center gap-4">
 					<Input placeholder="Шукати..." icon={<Search />} />
 					{isAuth && (
-						<ButtonLink variant="secondary" href={isSeller ? '/seller/dashboard' : '/seller/register'}>
+						<ButtonLink intent="secondary" href={isSeller ? '/seller/dashboard' : '/seller/register'}>
 							Кабінет продавця
 						</ButtonLink>
 					)}
 					{authLoading ? (
 						<Spinner />
 					) : (
-						<ButtonLink variant={isAuth ? 'secondary' : 'primary'} href={isAuth ? '/account' : '/auth/login'}>
+						<ButtonLink intent={isAuth ? 'secondary' : 'primary'} href={isAuth ? '/account' : '/auth/login'}>
 							{isAuth ? (
 								'Мій аккаунт'
 							) : (
@@ -81,7 +81,7 @@ export default function Header() {
 							)}
 						</ButtonLink>
 					)}
-					<ButtonLink variant="secondary" href="/cart">
+					<ButtonLink intent="secondary" href="/cart">
 						<Cart />
 						{isAuth && totalQuantity && totalQuantity > 0 ? (
 							<span className="absolute py-1 px-2 left-10 bottom-6 bg-red-500 text-white rounded-lg text-sm">

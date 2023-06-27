@@ -73,8 +73,6 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		resolver: zodResolver(createProductSchema)
 	})
 
-	const [isFormChanged, setIsFormChanged] = useState<boolean>(isDirty)
-
 	useEffect(() => {
 		if (productData) {
 			reset(productData)
@@ -129,14 +127,13 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		reset()
 
 		setProductImages([])
-		setIsFormChanged(false)
 	}
 
 	return (
 		<div className="w-full">
 			<div className="flex flex-col gap-4">
 				<div>
-					<Button variant="secondary" onClick={() => router.back()}>
+					<Button intent="secondary" onClick={() => router.back()}>
 						<ChevronLeft />
 						Назад
 					</Button>
@@ -235,7 +232,7 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 						)}
 						{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
 						{editProductMutation.isLoading && <span>Loading...</span>}
-						{editProductMutation.isSuccess && !isFormChanged && <span>Зміни застосовано</span>}
+						{editProductMutation.isSuccess && <span>Зміни застосовано</span>}
 						<Button type="submit" disabled={isSubmitting || !isDirty}>
 							Внести зміни
 						</Button>
@@ -244,6 +241,7 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 						</Button>
 					</div>
 				</form>
+				N
 			</div>
 		</div>
 	)

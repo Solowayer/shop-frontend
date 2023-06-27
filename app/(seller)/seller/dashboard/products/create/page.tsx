@@ -8,7 +8,7 @@ import { createProductSchema } from '@/lib/validation/productSchema'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
-import { Spinner, Button, Input, Textarea } from '@/components/ui'
+import { Spinner, Button, Input, Textarea, Notification } from '@/components/ui'
 import { ChevronLeft, Delete } from '@/components/icons'
 import { useRouter } from 'next/navigation'
 
@@ -58,7 +58,7 @@ export default function SellerCreateProduct() {
 		register,
 		handleSubmit,
 		getValues,
-		formState: { errors, isSubmitting }
+		formState: { errors, isSubmitting, isDirty }
 	} = useForm<CreateProduct>({
 		defaultValues: {
 			slug: '',
@@ -115,7 +115,7 @@ export default function SellerCreateProduct() {
 		<div className="w-full">
 			<div className="flex flex-col gap-4">
 				<div>
-					<Button variant="secondary" onClick={() => router.back()}>
+					<Button intent="secondary" onClick={() => router.back()}>
 						<ChevronLeft />
 						Назад
 					</Button>
@@ -215,11 +215,12 @@ export default function SellerCreateProduct() {
 						{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
 						{productMutation.isLoading && <span>Loading...</span>}
 						{productMutation.isSuccess && <span>Товар створено</span>}
-						<Button type="submit" disabled={isSubmitting}>
+						<Button type="submit" disabled={isSubmitting || !isDirty}>
 							Додати товар
 						</Button>
 					</div>
 				</form>
+				N
 			</div>
 		</div>
 	)

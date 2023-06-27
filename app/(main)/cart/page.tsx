@@ -73,7 +73,7 @@ export default function Cart() {
 							<span className="text-lg font-bold">{data ? totalAmount : 0} ₴</span>
 						</div>
 						<Button>Оформити замовлення</Button>
-						<Button variant="secondary" onClick={() => handleDeleteCart()}>
+						<Button intent="secondary" onClick={() => handleDeleteCart()}>
 							Очистити корзину
 						</Button>
 					</div>

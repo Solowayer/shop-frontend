@@ -30,7 +30,7 @@ export default function AccountExit() {
 
 	return (
 		<div>
-			<Button variant="secondary" onClick={handleLogout}>
+			<Button intent="secondary" onClick={handleLogout}>
 				Вийти
 			</Button>
 		</div>

@@ -49,7 +49,7 @@ export default function CartItem({ id, image, name, price, quantity, productId }
 				</div>
 				<div className="flex items-center justify-between">
 					<span>{quantity}</span>
-					<Button variant="secondary" onClick={() => handleDeleteCartItem()}>
+					<Button intent="secondary" onClick={() => handleDeleteCartItem()}>
 						Видалити
 					</Button>
 				</div>
