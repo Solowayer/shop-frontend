@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function DashbordLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="w-screen h-screen min-w-full overflow-x-hidden">
+		<>
 			<DashboardHeader />
 			<div className="flex h-[calc(100%-80px)]">
 				<DashboardNav />
@@ -12,6 +12,6 @@ export default function DashbordLayout({ children }: { children: React.ReactNode
 					<div className="max-w-[900px] mx-auto p-6">{children}</div>
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }
