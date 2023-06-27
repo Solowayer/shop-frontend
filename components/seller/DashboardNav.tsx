@@ -11,8 +11,8 @@ export default function DashboardNav() {
 	}
 
 	const navItems: NavItemsType[] = [
-		{ href: 'seller/dashboard', title: 'Дашборд' },
-		{ href: 'seller/dashboard/products', title: 'Всі товари' }
+		{ href: 'dashboard', title: 'Дашборд' },
+		{ href: 'dashboard/products', title: 'Всі товари' }
 	]
 
 	const pathname = usePathname()
@@ -20,10 +20,10 @@ export default function DashboardNav() {
 	return (
 		<div className="min-w-[280px] px-6 py-6 border-r h-full gap-1">
 			{navItems.map((item, index) => (
-				<Link key={index} href={item.href}>
+				<Link key={index} href={`/seller/${item.href}`}>
 					<div
 						className={`py-2 px-4 rounded w-full hover:bg-zinc-200 ${
-							pathname === `/${item.href}` ? 'bg-zinc-200 font-medium' : ''
+							pathname === `/seller/${item.href}` ? 'bg-zinc-200 font-medium' : ''
 						}`}
 					>
 						{item.title}

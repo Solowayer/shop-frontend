@@ -81,7 +81,7 @@ export default function Register() {
 				{regMutation.isSuccess && <span>Done</span>}
 			</form>
 			<p>Вже є аккаунт?</p>
-			<ButtonLink intent="secondary" href="auth/login" fullWidth disabled={isSubmitting}>
+			<ButtonLink intent="secondary" href="/auth/login" fullWidth disabled={isSubmitting}>
 				Увійти
 			</ButtonLink>
 		</>

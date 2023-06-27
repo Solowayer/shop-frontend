@@ -3,6 +3,7 @@ import React, { ComponentProps } from 'react'
 
 export const buttonStyles = cva(
 	[
+		'relative',
 		'flex items-center',
 		'font-medium',
 		'focus:outline-none',

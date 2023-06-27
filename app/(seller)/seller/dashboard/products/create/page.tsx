@@ -21,7 +21,7 @@ export default function SellerCreateProduct() {
 		mutationFn: createProduct,
 		onSuccess: () => {
 			setProductImages([])
-			router.push('seller/dashboard/products')
+			router.push('/seller/dashboard/products')
 		}
 	})
 

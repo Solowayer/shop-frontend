@@ -44,7 +44,7 @@ export default function SellerProducts() {
 		<div className="flex flex-col w-full gap-6">
 			<div className="flex items-center justify-between">
 				<h3 className="text-2xl font-bold">Всі товари</h3>
-				<ButtonLink href="seller/dashboard/products/create">Додати товар</ButtonLink>
+				<ButtonLink href="/seller/dashboard/products/create">Додати товар</ButtonLink>
 			</div>
 			{products.length > 0 ? (
 				<table className="min-w-full divide-y divide-gray-200">
@@ -71,7 +71,7 @@ export default function SellerProducts() {
 													/>
 												</div>
 											)}
-											<StyledLink href={`product/${product.slug}`}>{product.name}</StyledLink>
+											<StyledLink href={`/product/${product.slug}`}>{product.name}</StyledLink>
 										</div>
 									</TD>
 									<TD>
@@ -82,7 +82,7 @@ export default function SellerProducts() {
 									</TD>
 									<TD>
 										<div className="flex gap-2">
-											<ButtonLink href={`seller/dashboard/products/edit/${product.id}`} intent="secondary">
+											<ButtonLink href={`/seller/dashboard/products/edit/${product.id}`} intent="secondary">
 												Змінити
 											</ButtonLink>
 											<Button intent="secondary" onClick={() => deleteOneProduct(product.id)}>

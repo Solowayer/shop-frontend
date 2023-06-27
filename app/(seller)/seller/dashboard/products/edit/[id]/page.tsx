@@ -241,7 +241,6 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 						</Button>
 					</div>
 				</form>
-				N
 			</div>
 		</div>
 	)
