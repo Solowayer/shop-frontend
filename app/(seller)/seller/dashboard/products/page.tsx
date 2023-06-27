@@ -1,12 +1,9 @@
 'use client'
 
-import { ButtonLink } from '@/components/ui/ButtonLink'
+import { ButtonLink, Spinner, Button, StyledLink, TD, TH } from '@/ui'
 import { fetchSellerProducts } from '@/lib/queries'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Spinner, Button, StyledLink } from '@/components/ui'
 import { Delete } from '@/components/icons'
-import { TD } from '@/components/ui/table/Td'
-import { TH } from '@/components/ui/table/Th'
 import { deleteProduct } from '@/lib/mutations'
 import Image from 'next/image'
 
@@ -85,10 +82,10 @@ export default function SellerProducts() {
 									</TD>
 									<TD>
 										<div className="flex gap-2">
-											<ButtonLink href={`seller/dashboard/products/edit/${product.id}`} variant="secondary">
+											<ButtonLink href={`seller/dashboard/products/edit/${product.id}`} intent="secondary">
 												Змінити
 											</ButtonLink>
-											<Button variant="secondary" onClick={() => deleteOneProduct(product.id)}>
+											<Button intent="secondary" onClick={() => deleteOneProduct(product.id)}>
 												<Delete />
 											</Button>
 										</div>

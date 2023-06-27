@@ -1,7 +1,7 @@
 'use client'
 
 import CartItemList from '@/components/cart/CartItemList'
-import { StyledLink, Spinner, Button } from '@/components/ui'
+import { StyledLink, Spinner, Button } from '@/ui'
 import { fetchCartData } from '@/lib/queries'
 import { useCartStore } from '@/store/cartStore'
 import { useMutation, useQuery } from '@tanstack/react-query'

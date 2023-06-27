@@ -1,6 +1,6 @@
 import ProductCard from '@/components/product/ProductCard'
 import CategoryBreadcrumbs from '@/components/category/CategoryBreadcrumbs'
-import { StyledLink } from '@/components/ui'
+import { StyledLink } from '@/ui'
 import { fetchCategoryById, fetchProductsByCategoryId } from '@/lib/queries'
 import { getCategoryBreadcrumbs } from '@/lib/getCategoryBreadcrumbs'
 

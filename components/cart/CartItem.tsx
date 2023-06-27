@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'
 import { deleteCartItem } from '@/lib/mutations'
 import { useCartStore } from '@/store/cartStore'
-import { Spinner, Button } from '@/components/ui'
+import { Spinner, Button } from '@/ui'
 import Link from 'next/link'
 
 export default function CartItem({ id, image, name, price, quantity, productId }: CartItem) {

@@ -8,7 +8,7 @@ import { createProductSchema } from '@/lib/validation/productSchema'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
-import { Spinner, Button, Input, Textarea, Notification } from '@/components/ui'
+import { Spinner, Button, Input, Textarea, Notification } from '@/ui'
 import { ChevronLeft, Delete } from '@/components/icons'
 import { useRouter } from 'next/navigation'
 
@@ -220,7 +220,6 @@ export default function SellerCreateProduct() {
 						</Button>
 					</div>
 				</form>
-				N
 			</div>
 		</div>
 	)

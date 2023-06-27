@@ -6,3 +6,5 @@ export { Spinner } from './Spinner'
 export { StyledLink } from './StyledLink'
 export { Textarea } from './Textarea'
 export { Notification } from './Notification'
+
+export * from './table'
