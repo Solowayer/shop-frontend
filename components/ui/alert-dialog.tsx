@@ -49,13 +49,17 @@ AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayNam
 const AlertDialogAction = React.forwardRef<
 	React.ElementRef<typeof AlertDialogPrimitive.Action>,
 	React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
->(({ ...props }, ref) => <AlertDialogPrimitive.Action ref={ref} {...props} />)
+>(({ ...props }, ref) => (
+	<AlertDialogPrimitive.Action ref={ref} {...props} className={buttonStyles({ intent: 'danger' })} />
+))
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 
 const AlertDialogCancel = React.forwardRef<
 	React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
 	React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
->(({ ...props }, ref) => <AlertDialogPrimitive.Cancel ref={ref} {...props} />)
+>(({ ...props }, ref) => (
+	<AlertDialogPrimitive.Cancel ref={ref} {...props} className={buttonStyles({ intent: 'secondary' })} />
+))
 AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName
 
 export {

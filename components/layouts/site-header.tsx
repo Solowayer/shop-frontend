@@ -12,7 +12,7 @@ import { useCartStore } from '@/store/cartStore'
 import { useEffect } from 'react'
 import { useSellerStore } from '@/store/sellerStore'
 
-export default function Header() {
+export default function SiteHeader() {
 	const isAuth = useStore(useAuthStore, state => state.isAuth)
 	const isSeller = useStore(useSellerStore, state => state.isSeller)
 	const totalQuantity = useStore(useCartStore, state => state.totalQuantity)

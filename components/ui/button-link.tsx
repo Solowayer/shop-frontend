@@ -13,7 +13,7 @@ export interface Props extends ButtonLinkProps {
 
 export function ButtonLink({ href, ...props }: Props) {
 	return (
-		<Link href={href} className="inline-flex">
+		<Link href={href} className="inline-flex" tabIndex={-1}>
 			<Button
 				fullWidth={props.fullWidth}
 				intent={props.intent}

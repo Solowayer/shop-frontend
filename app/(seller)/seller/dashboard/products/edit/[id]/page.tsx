@@ -134,8 +134,7 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 
 	const undoChanges = () => {
 		reset()
-
-		setProductImages([])
+		// setProductImages([])
 	}
 
 	return (
@@ -223,16 +222,8 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 														При видаленні це зображення не можна буде відновити.
 													</AlertDialogDescription>
 													<div className="flex gap-4 justify-end">
-														<AlertDialogCancel>
-															<Button intent="secondary" shape="round">
-																Залишити
-															</Button>
-														</AlertDialogCancel>
-														<AlertDialogAction>
-															<Button intent="danger" shape="round" onClick={() => handleImageDelete(image)}>
-																Видалити
-															</Button>
-														</AlertDialogAction>
+														<AlertDialogCancel>Залишити</AlertDialogCancel>
+														<AlertDialogAction onClick={() => handleImageDelete(image)}>Видалити</AlertDialogAction>
 													</div>
 												</AlertDialogContent>
 											</AlertDialog>
