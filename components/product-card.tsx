@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import { Star } from '../icons'
+import { Star } from './icons'
 import Link from 'next/link'
 
 interface ProductProps extends Omit<Product, 'id' | 'slug' | 'description' | 'categoryId' | 'published'> {

@@ -1,8 +1,8 @@
-import ProductCard from '@/components/product/ProductCard'
-import CategoryBreadcrumbs from '@/components/category/CategoryBreadcrumbs'
-import { StyledLink } from '@/ui'
+import ProductCard from '@/components/product-card'
+import CategoryBreadcrumbs from '@/components/category-breadcrumbs'
+import { StyledLink } from '@/components/ui'
 import { fetchCategoryById, fetchProductsByCategoryId } from '@/lib/queries'
-import { getCategoryBreadcrumbs } from '@/lib/getCategoryBreadcrumbs'
+import { getCategoryBreadcrumbs } from '@/lib/utils/getCategoryBreadcrumbs'
 
 export default async function Category({ params }: { params: { id: number } }) {
 	const category = await fetchCategoryById(params.id)

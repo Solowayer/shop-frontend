@@ -1,4 +1,4 @@
-import AccountCard from '@/components/account/AccountCard'
+import AccountCard from '@/components/account-card'
 
 const accountCards = [
 	{ href: '/', title: 'Мій профіль', subtitle: 'Моя особиста інформація' },

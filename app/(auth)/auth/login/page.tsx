@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema } from '@/lib/validation/authorizationSchema'
 
-import { Button, ButtonLink, Input } from '@/ui'
+import { Button, ButtonLink, Input } from '@/components/ui'
 import { useRouter } from 'next/navigation'
 
 import { useMutation } from '@tanstack/react-query'

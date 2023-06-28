@@ -1,7 +1,7 @@
 import React from 'react'
-import CartItem from './CartItem'
+import CartItem from './cart-item'
 
-export default function CartItemList({ cartItems }: { cartItems: CartItem[] }) {
+export default function CartItems({ cartItems }: { cartItems: CartItem[] }) {
 	return (
 		<div className="flex flex-col gap-8 w-full">
 			{cartItems.map((cartItem, index) => (

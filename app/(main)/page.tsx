@@ -1,6 +1,6 @@
 'use client'
 
-import { Spinner } from '@/ui'
+import { Spinner } from '@/components/ui'
 import { fetchMainCategories } from '@/lib/queries'
 import { useQuery } from '@tanstack/react-query'
 

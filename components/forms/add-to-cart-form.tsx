@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { addtoCart } from '@/lib/mutations'
-import { Button, Input } from '@/ui'
+import { Button, Input } from '@/components/ui'
 import { useCartStore } from '@/store/cartStore'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addToCartSchema } from '@/lib/validation/cartSchema'

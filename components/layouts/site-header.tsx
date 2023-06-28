@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { Spinner, ButtonLink, Input } from '@/ui'
-import { Cart, Person, Search } from './icons'
+import { Spinner, ButtonLink, Input } from '@/components/ui'
+import { Cart, Person, Search } from '../icons'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCheckAuth, fetchCheckSeller } from '@/lib/queries'
 

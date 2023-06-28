@@ -1,5 +1,5 @@
 import { fetchProductBySlug } from '@/lib/queries'
-import Product from '@/components/product/Product'
+import Product from '@/components/product'
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
 	const product: Product = await fetchProductBySlug(params.slug)

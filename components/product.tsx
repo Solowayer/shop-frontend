@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
-import AddToCartForm from './AddToCartForm'
-import { Star } from '../icons'
+import AddToCartForm from './forms/add-to-cart-form'
+import { Star } from './icons'
 
 export default function Product({ product }: { product: Product }) {
 	return (

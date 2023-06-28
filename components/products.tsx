@@ -1,7 +1,7 @@
 import React from 'react'
-import ProductCard from './ProductCard'
+import ProductCard from './product-card'
 
-export default function ProductsList({ products }: { products: Product[] }) {
+export default function ProductList({ products }: { products: Product[] }) {
 	return (
 		<div className="grid grid-cols-4 gap-4">
 			{products.map(product => (

@@ -1,4 +1,4 @@
-import { fetchCategoryById } from './queries'
+import { fetchCategoryById } from '../queries'
 
 export async function getCategoryBreadcrumbs(category: Category, breadcrumbs: Category[] = []): Promise<Category[]> {
 	breadcrumbs.unshift(category)

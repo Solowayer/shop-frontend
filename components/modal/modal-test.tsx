@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import { ReactPortal } from '../ReactPortal'
 
 export function Modal({
 	children,
@@ -30,10 +29,8 @@ export function Modal({
 	if (!isOpen) return null
 
 	return (
-		<ReactPortal wrapperId="portal-modal">
-			<div className="absolute z-10 w-full h-full bg-blend-overlay">
-				<div>{children}</div>
-			</div>
-		</ReactPortal>
+		<div className="absolute z-10 w-full h-full bg-zinc-100 bg-opacity-50 flex items-center justify-center">
+			<div className="bg-white p-6 drop-shadow-lg rounded">{children}</div>
+		</div>
 	)
 }

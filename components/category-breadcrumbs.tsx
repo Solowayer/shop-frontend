@@ -1,4 +1,4 @@
-import { StyledLink } from '@/ui'
+import { StyledLink } from '@/components/ui'
 
 export default function CategoryBreadcrumbs({ breadcrumbs }: { breadcrumbs: Category[] }) {
 	return (
