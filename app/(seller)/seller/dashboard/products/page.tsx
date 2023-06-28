@@ -1,6 +1,6 @@
 'use client'
 
-import { ButtonLink, Spinner, Button, StyledLink, TD, TH } from '@/ui'
+import { ButtonLink, Spinner, Button, StyledLink, TD, TH } from '@/components/ui'
 import { fetchSellerProducts } from '@/lib/queries'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Delete } from '@/components/icons'
