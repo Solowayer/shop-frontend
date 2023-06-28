@@ -4,12 +4,12 @@ import React, { ComponentProps } from 'react'
 export const buttonStyles = cva(
 	[
 		'relative',
-		'flex items-center',
+		'inline-flex items-center',
 		'font-medium',
-		'focus:outline-none',
-		'focus:ring-2',
-		'focus:ring-offset-2',
-		'focus:ring-blue-300',
+		'focus-visible:outline-none',
+		'focus-visible:ring-2',
+		'focus-visible:ring-offset-2',
+		'focus-visible:ring-blue-300',
 		'disabled:bg-gray-200',
 		'disabled:text-gray-400',
 		'disabled:hover:cursor-not-allowed'
@@ -18,7 +18,8 @@ export const buttonStyles = cva(
 		variants: {
 			intent: {
 				primary: 'bg-black text-white hover:bg-zinc-800 active:bg-zinc-600',
-				secondary: 'bg-transparent text-black hover:bg-zinc-100 active:bg-zinc-200 border border-zinc-300'
+				secondary: 'bg-transparent text-black hover:bg-zinc-100 active:bg-zinc-200 border border-zinc-300',
+				danger: 'text-white bg-red-500 hover:bg-red-600 active:bg-red-700'
 			},
 			align: {
 				start: 'justify-start',

@@ -1,6 +1,7 @@
 'use client'
 
-import { Spinner } from '@/components/ui'
+// import { AlertDialog } from '@/components/modal/alert-dialog'
+import { Button, Spinner } from '@/components/ui'
 import { fetchMainCategories } from '@/lib/queries'
 import { useQuery } from '@tanstack/react-query'
 

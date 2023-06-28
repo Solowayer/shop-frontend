@@ -9,6 +9,15 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { Spinner, Button, Input, Textarea } from '@/components/ui'
+import {
+	AlertDialog,
+	AlertDialogTrigger,
+	AlertDialogContent,
+	AlertDialogTitle,
+	AlertDialogDescription,
+	AlertDialogAction,
+	AlertDialogCancel
+} from '@/components/ui/alert-dialog'
 import { ChevronLeft, Delete } from '@/components/icons'
 import { useRouter } from 'next/navigation'
 
@@ -202,12 +211,31 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 											className="relative flex justify-between rounded border items-start p-2 min-w-[160px] h-[160px]"
 										>
 											<Image src={image} alt={`Image ${index + 1}`} fill className="object-cover p-2" />
-											<div
-												className="absolute right-2 inline-flex rounded-full p-2 bg-black text-white cursor-pointer"
-												onClick={() => handleImageDelete(image)}
-											>
-												<Delete />
-											</div>
+											<AlertDialog>
+												<AlertDialogTrigger asChild>
+													<div className="absolute right-2 inline-flex rounded-full p-2 bg-black text-white cursor-pointer">
+														<Delete />
+													</div>
+												</AlertDialogTrigger>
+												<AlertDialogContent>
+													<AlertDialogTitle>Видалити зображення?</AlertDialogTitle>
+													<AlertDialogDescription>
+														При видаленні це зображення не можна буде відновити.
+													</AlertDialogDescription>
+													<div className="flex gap-4 justify-end">
+														<AlertDialogCancel>
+															<Button intent="secondary" shape="round">
+																Залишити
+															</Button>
+														</AlertDialogCancel>
+														<AlertDialogAction>
+															<Button intent="danger" shape="round" onClick={() => handleImageDelete(image)}>
+																Видалити
+															</Button>
+														</AlertDialogAction>
+													</div>
+												</AlertDialogContent>
+											</AlertDialog>
 										</div>
 									))}
 								</div>

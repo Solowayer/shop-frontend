@@ -1,6 +1,7 @@
 import ProductCard from '@/components/product-card'
 import CategoryBreadcrumbs from '@/components/category-breadcrumbs'
 import { StyledLink } from '@/components/ui'
+import Products from '@/components/products'
 import { fetchCategoryById, fetchProductsByCategoryId } from '@/lib/queries'
 import { getCategoryBreadcrumbs } from '@/lib/utils/getCategoryBreadcrumbs'
 
@@ -24,18 +25,7 @@ export default async function Category({ params }: { params: { id: number } }) {
 						</StyledLink>
 					))}
 			</div>
-			<div className="grid grid-cols-4 gap-4">
-				{products.map(product => (
-					<ProductCard
-						key={product.id}
-						href={`/product/${product.slug}`}
-						images={product.images}
-						name={product.name}
-						price={product.price}
-						rating={product.rating}
-					/>
-				))}
-			</div>
+			<Products products={products} />
 		</div>
 	)
 }
