@@ -9,7 +9,7 @@ interface ProductProps extends Omit<Product, 'id' | 'slug' | 'description' | 'ca
 
 export default function ProductCard({ href, images, name, price, rating }: ProductProps) {
 	return (
-		<div className="flex flex-col min-w-[240px] border-2 rounded hover:border-zinc-300 overflow-hidden">
+		<div className="flex flex-col min-w-[240px] border-2 rounded hover:border-zinc-300 overflow-hidden bg-white">
 			<Link href={href}>
 				<div className="relative h-[272px] w-full">
 					{images && images.length > 0 ? (

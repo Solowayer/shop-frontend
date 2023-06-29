@@ -10,7 +10,7 @@ export default async function Category({ params }: { params: { id: number } }) {
 	const breadcrumbs = await getCategoryBreadcrumbs(category)
 	const products = await fetchProductsByCategoryId(params.id)
 
-	const filteredChildren = category.childrens.filter(childCategory => childCategory.parentId === category.id)
+	const filteredChildren = category.children.filter(childCategory => childCategory.parentId === category.id)
 
 	return (
 		<div className="flex flex-col gap-4">

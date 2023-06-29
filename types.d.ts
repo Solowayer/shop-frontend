@@ -3,7 +3,7 @@ type Category = {
 	name: string
 	isMain: boolean
 	parentId: number
-	childrens: Category[]
+	children: Category[]
 	products: Product[]
 }
 

@@ -81,14 +81,21 @@ export async function fetchCategoryBySlug(slug: string): Promise<Category> {
 }
 
 // PRODUCTS
-export const fetchAllProducts = async (sort?: string, min_price?: number, max_price?: number): Promise<Product[]> => {
+export const fetchAllProducts = async (
+	sort?: 'rating' | 'low-price' | 'high-price' | 'newest' | 'oldest',
+	min_price?: number,
+	max_price?: number,
+	page?: number,
+	limit?: number
+): Promise<{ products: Product[]; length: number }> => {
 	try {
 		const res = await axios.get(`${process.env.api}/products`, {
 			params: {
-				next: 'revalidate=5',
 				sort,
 				min_price,
-				max_price
+				max_price,
+				page,
+				limit
 			}
 		})
 		console.log(res.data)
