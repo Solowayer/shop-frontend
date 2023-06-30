@@ -46,7 +46,7 @@ export default function SiteHeader() {
 		if (sellerSuccess) {
 			setIsSeller(dataIsSeller)
 		}
-		console.log('totalQuantity in header:', totalQuantity)
+		// console.log('totalQuantity in header:', totalQuantity)
 	}, [dataIsAuth, authSuccess, setIsAuth, sellerSuccess, setIsSeller, dataIsSeller, totalQuantity])
 
 	return (

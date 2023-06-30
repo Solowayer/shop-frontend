@@ -7,7 +7,7 @@ type Category = {
 	products: Product[]
 }
 
-type ProductSortOption = 'price_asc' | 'price_desc' | 'rating'
+type ProductSortOptions = 'rating' | 'low-price' | 'high-price' | 'newest' | 'oldest'
 
 type UserRegister = {
 	username: string

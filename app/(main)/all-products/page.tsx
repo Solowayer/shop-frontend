@@ -3,27 +3,32 @@
 import React, { useEffect, useState } from 'react'
 import Products from '@/components/products'
 import { fetchAllProducts } from '@/lib/queries'
-import { Button } from '@/components/ui'
+import { Button, Spinner } from '@/components/ui'
 import { ChevronLeft, ChevronRight } from '@/components/icons'
+import { useQuery } from '@tanstack/react-query'
 
-export default async function Page() {
+export default function Page() {
+	const perPage = 8
 	const [products, setProducts] = useState<Product[]>([])
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
+	const [length, setLength] = useState<number>(1)
+
+	const pages = Array.from({ length: totalPages }, (_, index) => index + 1)
+
+	const { data, isLoading, isError, isSuccess } = useQuery({
+		queryKey: ['all-products', 'newest', undefined, undefined, undefined, currentPage, perPage],
+		queryFn: () => fetchAllProducts('newest', undefined, undefined, undefined, currentPage, perPage),
+		retry: false
+	})
 
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const result = await fetchAllProducts('rating', undefined, undefined, currentPage, 8)
-				setProducts(result.products)
-				setTotalPages(Math.ceil(result.length / 8))
-			} catch (error) {
-				console.log(error)
-			}
+		if (isSuccess && data) {
+			setProducts(data.products)
+			setLength(data.length)
+			setTotalPages(Math.ceil(data.length / perPage))
 		}
-
-		fetchData()
-	}, [currentPage])
+	}, [data, isSuccess])
 
 	const handlePrevPage = () => {
 		if (currentPage > 1) {
@@ -37,14 +42,33 @@ export default async function Page() {
 		}
 	}
 
+	if (isError) {
+		return <h3>Помилка</h3>
+	}
+
+	if (isLoading) {
+		return <Spinner width="full" />
+	}
+
 	return (
 		<div className="flex flex-col gap-8">
-			<h3 className="font-bold text-3xl">Всі товари</h3>
+			<h3 className="font-bold text-3xl">Всі товари - {length}</h3>
 			<Products products={products} />
 			<div className="w-full items-center justify-between flex gap-4">
 				<Button shape="circle" onClick={handlePrevPage} disabled={currentPage <= 1}>
 					<ChevronLeft />
 				</Button>
+				<div className="flex gap-2">
+					{pages.map((_, index) => (
+						<Button
+							key={index}
+							intent={`${currentPage === index + 1 ? 'primary' : 'secondary'}`}
+							onClick={() => setCurrentPage(index + 1)}
+						>
+							{index + 1}
+						</Button>
+					))}
+				</div>
 				<Button shape="circle" onClick={handleNextPage} disabled={currentPage >= totalPages}>
 					<ChevronRight />
 				</Button>

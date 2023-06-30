@@ -2,13 +2,13 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
 type SortFilterState = {
-	sortProducts: ProductSortOption
+	sortProducts: ProductSortOptions
 	minPrice?: number
 	maxPrice?: number
 	isClearButton: boolean
 	setMinPrice: (value?: number) => void
 	setMaxPrice: (value?: number) => void
-	setSortProducts: (value: ProductSortOption) => void
+	setSortProducts: (value: ProductSortOptions) => void
 	setDeleteFilters: () => void
 	setClearButton: (value: boolean) => void
 }

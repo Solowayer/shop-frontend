@@ -82,9 +82,10 @@ export async function fetchCategoryBySlug(slug: string): Promise<Category> {
 
 // PRODUCTS
 export const fetchAllProducts = async (
-	sort?: 'rating' | 'low-price' | 'high-price' | 'newest' | 'oldest',
+	sort?: ProductSortOptions,
 	min_price?: number,
 	max_price?: number,
+	searchTerm?: string,
 	page?: number,
 	limit?: number
 ): Promise<{ products: Product[]; length: number }> => {
@@ -94,6 +95,7 @@ export const fetchAllProducts = async (
 				sort,
 				min_price,
 				max_price,
+				searchTerm,
 				page,
 				limit
 			}

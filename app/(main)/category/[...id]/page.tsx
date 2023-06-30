@@ -1,4 +1,3 @@
-import ProductCard from '@/components/product-card'
 import CategoryBreadcrumbs from '@/components/category-breadcrumbs'
 import { StyledLink } from '@/components/ui'
 import Products from '@/components/products'
@@ -12,6 +11,8 @@ export default async function Category({ params }: { params: { id: number } }) {
 
 	const filteredChildren = category.children.filter(childCategory => childCategory.parentId === category.id)
 
+	console.log('category:', category)
+
 	return (
 		<div className="flex flex-col gap-4">
 			<CategoryBreadcrumbs breadcrumbs={breadcrumbs} />
@@ -20,7 +21,7 @@ export default async function Category({ params }: { params: { id: number } }) {
 			<div className="flex flex-col">
 				{filteredChildren.length > 0 &&
 					filteredChildren.map(childCategory => (
-						<StyledLink key={childCategory.id} href={`category/${childCategory.id}`}>
+						<StyledLink key={childCategory.id} href={`/category/${childCategory.id}`}>
 							{childCategory.name}
 						</StyledLink>
 					))}
