@@ -3,7 +3,9 @@
 import React from 'react'
 import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'
-import { deleteCartItem } from '@/lib/mutations'
+
+import CartService from '@/services/cart.service'
+
 import { useCartStore } from '@/store/cartStore'
 import { Spinner, Button } from '@/components/ui'
 import Link from 'next/link'
@@ -12,7 +14,7 @@ export default function CartItem({ id, image, name, price, quantity, productId }
 	const { cartItems, setCartItems, setCartItemDelete } = useCartStore()
 
 	const mutation = useMutation({
-		mutationFn: deleteCartItem
+		mutationFn: CartService.deleteCartItem
 	})
 
 	const { isLoading } = mutation
