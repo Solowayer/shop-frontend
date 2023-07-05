@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { Spinner, ButtonLink, Input } from '@/components/ui'
 import { Cart, Person, Search } from '../icons'
 import { useQuery } from '@tanstack/react-query'
-import { fetchCheckSeller } from '@/lib/queries'
 
-import AuthService from '@/services/auth/auth.service'
+import SellerService from '@/services/seller.service'
+import AuthService from '@/services/auth.service'
 
 import { useAuthStore } from '@/store/authStore'
 import { useStore } from '@/store/use-store-hook'
@@ -39,7 +39,7 @@ export default function SiteHeader() {
 		isError: isSellerError
 	} = useQuery({
 		queryKey: ['check-seller'],
-		queryFn: fetchCheckSeller,
+		queryFn: SellerService.check,
 		retry: false
 	})
 

@@ -1,11 +1,10 @@
 'use client'
 
 import { ButtonLink, Spinner, Button, StyledLink, TD, TH } from '@/components/ui'
-import { fetchSellerProducts } from '@/lib/queries'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Delete } from '@/components/icons'
-import { deleteProduct } from '@/lib/mutations'
 import Image from 'next/image'
+import ProductService from '@/services/product.service'
 
 export default function SellerProducts() {
 	const {
@@ -14,12 +13,12 @@ export default function SellerProducts() {
 		isLoading
 	} = useQuery({
 		queryKey: ['seller-products'],
-		queryFn: () => fetchSellerProducts(),
+		queryFn: ProductService.getBySeller,
 		retry: false
 	})
 
 	const deleteProductMutation = useMutation({
-		mutationFn: deleteProduct
+		mutationFn: ProductService.delete
 	})
 
 	const deleteOneProduct = async (productId: number) => {

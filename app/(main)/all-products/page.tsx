@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Products from '@/components/products'
-import { fetchAllProducts } from '@/lib/queries'
+import ProductService from '@/services/product.service'
 import { Button, Spinner } from '@/components/ui'
 import { ChevronLeft, ChevronRight } from '@/components/icons'
 import { useQuery } from '@tanstack/react-query'
@@ -18,7 +18,15 @@ export default function Page() {
 
 	const { data, isError, isLoading, isSuccess } = useQuery({
 		queryKey: ['all-products', 'newest', undefined, undefined, undefined, currentPage, perPage],
-		queryFn: () => fetchAllProducts('newest', undefined, undefined, undefined, currentPage, perPage),
+		queryFn: () =>
+			ProductService.getAll({
+				sort: 'low-price',
+				min_price: undefined,
+				max_price: undefined,
+				searchTerm: undefined,
+				page: currentPage,
+				limit: perPage
+			}),
 		retry: false
 	})
 

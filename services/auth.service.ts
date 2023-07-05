@@ -1,8 +1,8 @@
-import instance from '../api'
+import instance from './api'
 
 const AUTH = '/auth'
 
-class Auth {
+class AuthServ {
 	async checkAuth(): Promise<boolean> {
 		try {
 			const res = await instance.get(`${AUTH}/check-auth`)
@@ -12,7 +12,7 @@ class Auth {
 		}
 	}
 
-	async register(data: UserRegister) {
+	async register(data: Register) {
 		try {
 			await instance.post(`${AUTH}/register`, data)
 		} catch (error: any) {
@@ -20,7 +20,7 @@ class Auth {
 		}
 	}
 
-	async login(data: UserLogin) {
+	async login(data: Login) {
 		try {
 			await instance.post(`${AUTH}/login`, data)
 		} catch (error: any) {
@@ -37,5 +37,5 @@ class Auth {
 	}
 }
 
-const AuthService = new Auth()
+const AuthService = new AuthServ()
 export default AuthService

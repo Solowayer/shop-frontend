@@ -1,8 +1,11 @@
 'use client'
 
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { editProduct, uploadImages, deleteImage } from '@/lib/mutations'
-import { fetchAllCategories, fetchProductById } from '@/lib/queries'
+
+import ProductService from '@/services/product.service'
+import CategoryService from '@/services/category.service'
+import UploadService from '@/services/upload.service'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createProductSchema } from '@/lib/validation/productSchema'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -33,16 +36,16 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		isSuccess: isProductSuccess
 	} = useQuery({
 		queryKey: ['product', params.id],
-		queryFn: () => fetchProductById(params.id),
+		queryFn: () => ProductService.getById(params.id),
 		retry: false
 	})
 
 	const editProductMutation = useMutation({
-		mutationFn: (data: EditProduct) => editProduct(params.id, data)
+		mutationFn: (data: EditProduct) => ProductService.update(params.id, data)
 	})
 
 	const imagesMutation = useMutation({
-		mutationFn: uploadImages,
+		mutationFn: UploadService.uploadImages,
 		onSuccess: async data => {
 			if (productImages) {
 				const updatedImages = [...productImages, ...data]
@@ -56,7 +59,7 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 	})
 
 	const imageDeleteMutation = useMutation({
-		mutationFn: (imageUrl: string) => deleteImage(imageUrl),
+		mutationFn: (imageUrl: string) => UploadService.deleteImage(imageUrl),
 		onSuccess: async () => {
 			await editProductMutation.mutateAsync({ images: productImages })
 		}
@@ -68,7 +71,7 @@ export default function SellerEditProduct({ params }: { params: { id: number } }
 		isError: isCategoriesError
 	} = useQuery({
 		queryKey: ['all-categories'],
-		queryFn: fetchAllCategories,
+		queryFn: CategoryService.getAll,
 		retry: false
 	})
 

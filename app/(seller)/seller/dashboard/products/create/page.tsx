@@ -1,8 +1,11 @@
 'use client'
 
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { createProduct, deleteImage, uploadImages } from '@/lib/mutations'
-import { fetchAllCategories } from '@/lib/queries'
+
+import ProductService from '@/services/product.service'
+import CategoryService from '@/services/category.service'
+import UploadService from '@/services/upload.service'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createProductSchema } from '@/lib/validation/productSchema'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -18,7 +21,7 @@ export default function SellerCreateProduct() {
 	const router = useRouter()
 
 	const productMutation = useMutation({
-		mutationFn: createProduct,
+		mutationFn: ProductService.create,
 		onSuccess: () => {
 			setProductImages([])
 			router.push('/seller/dashboard/products')
@@ -26,7 +29,7 @@ export default function SellerCreateProduct() {
 	})
 
 	const imagesMutation = useMutation({
-		mutationFn: uploadImages,
+		mutationFn: UploadService.uploadImages,
 		onSuccess: data => {
 			if (productImages) {
 				const updatedImages = [...productImages, ...data]
@@ -39,7 +42,7 @@ export default function SellerCreateProduct() {
 	})
 
 	const imageDeleteMutation = useMutation({
-		mutationFn: (imageUrl: string) => deleteImage(imageUrl)
+		mutationFn: (imageUrl: string) => UploadService.deleteImage(imageUrl)
 	})
 
 	const {
@@ -48,7 +51,7 @@ export default function SellerCreateProduct() {
 		isError: isCategoriesError
 	} = useQuery({
 		queryKey: ['all-categories'],
-		queryFn: fetchAllCategories,
+		queryFn: CategoryService.getAll,
 		retry: false
 	})
 

@@ -5,11 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema } from '@/lib/validation/authorizationSchema'
 
 import { Button, ButtonLink, Input } from '@/components/ui'
-import { useRouter } from 'next/navigation'
 
 import { useMutation } from '@tanstack/react-query'
 
-import AuthService from '@/services/auth/auth.service'
+import AuthService from '@/services/auth.service'
 
 import { useAuthStore } from '@/store/authStore'
 import { useEffect } from 'react'
@@ -26,7 +25,7 @@ export default function Login() {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting }
-	} = useForm<UserLogin>({
+	} = useForm<Login>({
 		defaultValues: {
 			email: '',
 			password: ''
@@ -34,7 +33,7 @@ export default function Login() {
 		resolver: zodResolver(loginSchema)
 	})
 
-	const onSubmit: SubmitHandler<UserLogin> = async data => {
+	const onSubmit: SubmitHandler<Login> = async data => {
 		try {
 			logMutation.mutate({ ...data })
 			console.log({ ...data })

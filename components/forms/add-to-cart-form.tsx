@@ -2,7 +2,9 @@
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
-import { addtoCart } from '@/lib/mutations'
+
+import CartService from '@/services/cart.service'
+
 import { Button, Input } from '@/components/ui'
 import { useCartStore } from '@/store/cartStore'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,14 +18,14 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 	const isAuth = useStore(useAuthStore, state => state.isAuth)
 
 	const mutation = useMutation({
-		mutationFn: addtoCart
+		mutationFn: CartService.addCartItem
 	})
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting }
-	} = useForm<AddToCart>({
+	} = useForm<AddCartItem>({
 		defaultValues: {
 			quantity: 1,
 			productId: productId
@@ -31,7 +33,7 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 		resolver: zodResolver(addToCartSchema)
 	})
 
-	const onSubmit: SubmitHandler<AddToCart> = data => {
+	const onSubmit: SubmitHandler<AddCartItem> = data => {
 		mutation.mutate({ ...data })
 		if (isAuth) {
 			const quantityValue = data.quantity

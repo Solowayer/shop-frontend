@@ -2,10 +2,9 @@
 
 import CartItemList from '@/components/cart-items'
 import { StyledLink, Spinner, Button } from '@/components/ui'
-import { fetchCartData } from '@/lib/queries'
+import CartService from '@/services/cart.service'
 import { useCartStore } from '@/store/cartStore'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { deleteCart } from '@/lib/mutations'
 import { useAuthStore } from '@/store/authStore'
 import { useEffect } from 'react'
 
@@ -15,7 +14,7 @@ export default function Cart() {
 
 	const { data, isLoading, isError, isSuccess } = useQuery({
 		queryKey: ['cart'],
-		queryFn: fetchCartData,
+		queryFn: CartService.get,
 		retry: false
 	})
 
@@ -27,7 +26,7 @@ export default function Cart() {
 	}, [data, isSuccess, setCart])
 
 	const mutation = useMutation({
-		mutationFn: deleteCart
+		mutationFn: CartService.delete
 	})
 
 	const handleDeleteCart = async () => {

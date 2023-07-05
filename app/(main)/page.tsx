@@ -1,8 +1,7 @@
 'use client'
 
-// import { AlertDialog } from '@/components/modal/alert-dialog'
-import { Button, Spinner } from '@/components/ui'
-import { fetchMainCategories } from '@/lib/queries'
+import { Spinner } from '@/components/ui'
+import CategoryService from '@/services/category.service'
 import { useQuery } from '@tanstack/react-query'
 
 import Link from 'next/link'
@@ -14,7 +13,7 @@ export default function Home() {
 		isLoading
 	} = useQuery({
 		queryKey: ['main-categories'],
-		queryFn: fetchMainCategories,
+		queryFn: CategoryService.getMain,
 		retry: false
 	})
 

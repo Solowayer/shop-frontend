@@ -6,7 +6,7 @@ import { Button } from '@/components/ui'
 import { useRouter } from 'next/navigation'
 
 import { useMutation } from '@tanstack/react-query'
-import AuthService from '@/services/auth/auth.service'
+import AuthService from '@/services/auth.service'
 import { useAuthStore } from '@/store/authStore'
 
 export default function AccountExit() {

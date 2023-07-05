@@ -5,17 +5,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useEffect } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Button, Input } from '@/components/ui'
-import { registerSeller } from '@/lib/mutations'
 import { useMutation } from '@tanstack/react-query'
 import { useSellerStore } from '@/store/sellerStore'
 import Link from 'next/link'
 import { useSellerRedirect } from '@/lib/hooks/useSellerRedirect'
+import SellerService from '@/services/seller.service'
 
 export default function SellerRegister() {
 	const { setIsSeller } = useSellerStore()
 
 	const sellerMutation = useMutation({
-		mutationFn: registerSeller
+		mutationFn: SellerService.register
 	})
 
 	const {

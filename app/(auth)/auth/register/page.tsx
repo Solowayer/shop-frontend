@@ -3,17 +3,16 @@
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema } from '@/lib/validation/authorizationSchema'
-import { useRouter } from 'next/navigation'
 
 import { Button, ButtonLink, Input } from '@/components/ui'
 
 import { useMutation } from '@tanstack/react-query'
-import AuthService from '@/services/auth/auth.service'
+import AuthService from '@/services/auth.service'
 import { useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
+import { useAuthRedirect } from '@/lib/hooks/useAuthRedirect'
 
 export default function Register() {
-	const router = useRouter()
 	const { setIsAuth } = useAuthStore()
 
 	const logMutation = useMutation({
@@ -28,7 +27,7 @@ export default function Register() {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting }
-	} = useForm<UserRegister>({
+	} = useForm<Register>({
 		defaultValues: {
 			username: '',
 			email: '',
@@ -38,7 +37,7 @@ export default function Register() {
 		resolver: zodResolver(registerSchema)
 	})
 
-	const onSubmit: SubmitHandler<UserRegister> = async data => {
+	const onSubmit: SubmitHandler<Register> = async data => {
 		const { email, password } = data
 
 		try {
@@ -53,9 +52,10 @@ export default function Register() {
 	useEffect(() => {
 		if (regMutation.isSuccess && logMutation.isSuccess) {
 			setIsAuth(true)
-			router.push('/')
 		}
-	}, [logMutation.isSuccess, regMutation.isSuccess, router, setIsAuth])
+	}, [logMutation.isSuccess, regMutation.isSuccess, setIsAuth])
+
+	useAuthRedirect()
 
 	return (
 		<>

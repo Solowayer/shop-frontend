@@ -1,12 +1,15 @@
 import CategoryBreadcrumbs from '@/components/category-breadcrumbs'
 import { StyledLink } from '@/components/ui'
 import Products from '@/components/products'
-import { fetchCategoryBreadcrumbs, fetchCategoryById, fetchProductsByCategoryId } from '@/lib/queries'
+
+import CategoryService from '@/services/category.service'
+
+import ProductService from '@/services/product.service'
 
 export default async function Category({ params }: { params: { id: number } }) {
-	const category = await fetchCategoryById(params.id)
-	const breadcrumbs = await fetchCategoryBreadcrumbs(params.id)
-	const products = await fetchProductsByCategoryId(params.id)
+	const category = await CategoryService.getById(params.id)
+	const breadcrumbs = await CategoryService.getBreadcrumbs(params.id)
+	const products = await ProductService.getByCategoryId(params.id)
 
 	const childrenWithSameParent = category.children.filter(childCategory => childCategory.parentId === category.id)
 
