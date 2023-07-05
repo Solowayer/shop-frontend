@@ -13,9 +13,9 @@ import AuthService from '@/services/auth/auth.service'
 
 import { useAuthStore } from '@/store/authStore'
 import { useEffect } from 'react'
+import { useAuthRedirect } from '@/lib/hooks/useAuthRedirect'
 
 export default function Login() {
-	const router = useRouter()
 	const { setIsAuth } = useAuthStore()
 
 	const logMutation = useMutation({
@@ -46,9 +46,10 @@ export default function Login() {
 	useEffect(() => {
 		if (logMutation.isSuccess) {
 			setIsAuth(true)
-			router.push('/')
 		}
-	}, [logMutation.isSuccess, router, setIsAuth])
+	}, [logMutation.isSuccess, setIsAuth])
+
+	useAuthRedirect()
 
 	return (
 		<>

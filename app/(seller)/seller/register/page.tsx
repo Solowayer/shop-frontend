@@ -9,10 +9,9 @@ import { registerSeller } from '@/lib/mutations'
 import { useMutation } from '@tanstack/react-query'
 import { useSellerStore } from '@/store/sellerStore'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useSellerRedirect } from '@/lib/hooks/useSellerRedirect'
 
 export default function SellerRegister() {
-	const router = useRouter()
 	const { setIsSeller } = useSellerStore()
 
 	const sellerMutation = useMutation({
@@ -46,9 +45,10 @@ export default function SellerRegister() {
 	useEffect(() => {
 		if (sellerMutation.isSuccess) {
 			setIsSeller(true)
-			router.push('/seller/dashboard')
 		}
-	}, [router, sellerMutation.isSuccess, setIsSeller])
+	}, [sellerMutation.isSuccess, setIsSeller])
+
+	useSellerRedirect()
 
 	return (
 		<div className="flex flex-col">
