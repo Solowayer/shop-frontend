@@ -8,7 +8,8 @@ import { Button, ButtonLink, Input } from '@/components/ui'
 import { useRouter } from 'next/navigation'
 
 import { useMutation } from '@tanstack/react-query'
-import { loginUser } from '@/lib/mutations'
+
+import AuthService from '@/services/auth/auth.service'
 
 import { useAuthStore } from '@/store/authStore'
 import { useEffect } from 'react'
@@ -18,7 +19,7 @@ export default function Login() {
 	const { setIsAuth } = useAuthStore()
 
 	const logMutation = useMutation({
-		mutationFn: loginUser
+		mutationFn: AuthService.login
 	})
 
 	const {

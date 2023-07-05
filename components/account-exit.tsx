@@ -6,14 +6,14 @@ import { Button } from '@/components/ui'
 import { useRouter } from 'next/navigation'
 
 import { useMutation } from '@tanstack/react-query'
-import { logout } from '@/lib/mutations'
+import AuthService from '@/services/auth/auth.service'
 import { useAuthStore } from '@/store/authStore'
 
 export default function AccountExit() {
 	const { setIsAuth } = useAuthStore()
 
 	const mutation = useMutation({
-		mutationFn: logout,
+		mutationFn: AuthService.logout,
 		onSuccess: () => setIsAuth(false)
 	})
 

@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight } from '@/components/icons'
 import { useQuery } from '@tanstack/react-query'
 
 export default function Page() {
-	const perPage = 8
+	const perPage = 16
 	const [products, setProducts] = useState<Product[]>([])
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
@@ -16,7 +16,7 @@ export default function Page() {
 
 	const pages = Array.from({ length: totalPages }, (_, index) => index + 1)
 
-	const { data, isLoading, isError, isSuccess } = useQuery({
+	const { data, isError, isLoading, isSuccess } = useQuery({
 		queryKey: ['all-products', 'newest', undefined, undefined, undefined, currentPage, perPage],
 		queryFn: () => fetchAllProducts('newest', undefined, undefined, undefined, currentPage, perPage),
 		retry: false

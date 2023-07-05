@@ -38,7 +38,7 @@ export default function SellerProducts() {
 		return <Spinner />
 	}
 
-	console.log('Seller products:', products)
+	// console.log('Seller products:', products)
 
 	return (
 		<div className="flex flex-col w-full gap-6">
@@ -53,6 +53,7 @@ export default function SellerProducts() {
 							<TH>Назва</TH>
 							<TH>Ціна</TH>
 							<TH>Рейтинг</TH>
+							<TH>Дії</TH>
 						</tr>
 					</thead>
 					<tbody className="bg-white divide-y divide-gray-200">
@@ -85,7 +86,7 @@ export default function SellerProducts() {
 											<ButtonLink href={`/seller/dashboard/products/edit/${product.id}`} intent="secondary">
 												Змінити
 											</ButtonLink>
-											<Button intent="secondary" onClick={() => deleteOneProduct(product.id)}>
+											<Button shape="square" intent="danger" onClick={() => deleteOneProduct(product.id)}>
 												<Delete />
 											</Button>
 										</div>

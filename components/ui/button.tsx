@@ -17,7 +17,7 @@ export const buttonStyles = cva(
 			intent: {
 				primary: 'bg-black text-white hover:bg-zinc-800 active:bg-zinc-600',
 				secondary: 'bg-transparent text-black hover:bg-zinc-100 active:bg-zinc-200 border',
-				danger: 'text-white bg-red-500 hover:bg-red-600 active:bg-red-700'
+				danger: 'text-white bg-red-700 hover:bg-red-800 active:bg-red-900'
 			},
 			align: {
 				start: 'justify-start',

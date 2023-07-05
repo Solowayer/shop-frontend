@@ -1,13 +1,16 @@
 import { StyledLink } from '@/components/ui'
+import { Home, ChevronRight } from './icons'
 
 export default function CategoryBreadcrumbs({ breadcrumbs }: { breadcrumbs: Category[] }) {
 	return (
-		<div>
-			<StyledLink href="/">Додому</StyledLink>
-			{' > '}
+		<div className="flex items-center gap-1">
+			<StyledLink href="/">
+				<Home size="24" />
+			</StyledLink>
+			<ChevronRight />
 			{breadcrumbs.map((crumb, index) => (
-				<span key={crumb.id}>
-					{index !== 0 && ' > '}
+				<span key={crumb.id} className="flex items-center gap-1">
+					{index !== 0 && <ChevronRight />}
 					{index === breadcrumbs.length - 1 ? (
 						<span>{crumb.name}</span>
 					) : (

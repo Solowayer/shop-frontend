@@ -4,7 +4,9 @@ import Link from 'next/link'
 import { Spinner, ButtonLink, Input } from '@/components/ui'
 import { Cart, Person, Search } from '../icons'
 import { useQuery } from '@tanstack/react-query'
-import { fetchCheckAuth, fetchCheckSeller } from '@/lib/queries'
+import { fetchCheckSeller } from '@/lib/queries'
+
+import AuthService from '@/services/auth/auth.service'
 
 import { useAuthStore } from '@/store/authStore'
 import { useStore } from '@/store/use-store-hook'
@@ -21,18 +23,20 @@ export default function SiteHeader() {
 
 	const {
 		data: dataIsAuth,
-		isLoading: authLoading,
-		isSuccess: authSuccess
+		isLoading: isAuthLoading,
+		isSuccess: isAuthSuccess,
+		isError: isAuthError
 	} = useQuery({
 		queryKey: ['check-auth'],
-		queryFn: fetchCheckAuth,
+		queryFn: AuthService.checkAuth,
 		retry: false
 	})
 
 	const {
 		data: dataIsSeller,
-		isLoading: sellerLoading,
-		isSuccess: sellerSuccess
+		// isLoading: isSellerLoading,
+		isSuccess: isSellerSuccess,
+		isError: isSellerError
 	} = useQuery({
 		queryKey: ['check-seller'],
 		queryFn: fetchCheckSeller,
@@ -40,14 +44,15 @@ export default function SiteHeader() {
 	})
 
 	useEffect(() => {
-		if (authSuccess) {
+		if (isAuthSuccess) {
 			setIsAuth(dataIsAuth)
 		}
-		if (sellerSuccess) {
+		if (isSellerSuccess) {
 			setIsSeller(dataIsSeller)
 		}
-		// console.log('totalQuantity in header:', totalQuantity)
-	}, [dataIsAuth, authSuccess, setIsAuth, sellerSuccess, setIsSeller, dataIsSeller, totalQuantity])
+	}, [dataIsAuth, dataIsSeller, isAuthSuccess, isSellerSuccess, setIsAuth, setIsSeller])
+
+	console.log('isSeller:', isSeller)
 
 	return (
 		<>
@@ -62,25 +67,24 @@ export default function SiteHeader() {
 				</div>
 				<div className="flex items-center gap-4">
 					<Input placeholder="Шукати..." icon={<Search />} />
+
 					{isAuth && (
 						<ButtonLink intent="secondary" href={isSeller ? '/seller/dashboard' : '/seller/register'}>
 							Кабінет продавця
 						</ButtonLink>
 					)}
-					{authLoading ? (
-						<Spinner />
-					) : (
-						<ButtonLink intent={isAuth ? 'secondary' : 'primary'} href={isAuth ? '/account' : '/auth/login'}>
-							{isAuth ? (
-								'Мій аккаунт'
-							) : (
-								<>
-									<Person />
-									Увійти
-								</>
-							)}
-						</ButtonLink>
-					)}
+
+					<ButtonLink intent={isAuth ? 'secondary' : 'primary'} href={isAuth ? '/account' : '/auth/login'}>
+						{isAuth ? (
+							'Мій аккаунт'
+						) : (
+							<>
+								<Person />
+								Увійти
+							</>
+						)}
+					</ButtonLink>
+
 					<ButtonLink intent="secondary" href="/cart">
 						<Cart />
 						{isAuth && totalQuantity && totalQuantity > 0 ? (

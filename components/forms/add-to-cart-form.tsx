@@ -36,17 +36,8 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 		if (isAuth) {
 			const quantityValue = data.quantity
 			setTotalQuantity(totalQuantity + quantityValue)
-			console.log('totalQuantity:', totalQuantity)
 		}
 	}
-
-	if (mutation.isError) {
-		throw new Error('Failed to load')
-	}
-
-	useEffect(() => {
-		console.log('inititalized totalQuantity:', totalQuantity)
-	}, [totalQuantity])
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">

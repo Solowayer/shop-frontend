@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { Button, ButtonLink, Input } from '@/components/ui'
 
 import { useMutation } from '@tanstack/react-query'
-import { loginUser, registerUser } from '@/lib/mutations'
+import AuthService from '@/services/auth/auth.service'
 import { useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
 
@@ -17,11 +17,11 @@ export default function Register() {
 	const { setIsAuth } = useAuthStore()
 
 	const logMutation = useMutation({
-		mutationFn: loginUser
+		mutationFn: AuthService.login
 	})
 
 	const regMutation = useMutation({
-		mutationFn: registerUser
+		mutationFn: AuthService.register
 	})
 
 	const {

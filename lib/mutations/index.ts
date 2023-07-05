@@ -1,33 +1,7 @@
 import axios from 'axios'
 
 // USER
-export const registerUser = async (data: UserRegister) => {
-	try {
-		await axios.post(`${process.env.api}/auth/register`, data, { withCredentials: true })
-	} catch (error: any) {
-		throw new Error(error?.response?.data?.message)
-	}
-}
 
-export const loginUser = async (data: UserLogin) => {
-	try {
-		await axios.post(`${process.env.api}/auth/login`, data, {
-			withCredentials: true
-		})
-	} catch (error) {
-		console.log(error)
-	}
-}
-
-export const logout = async (data: void) => {
-	try {
-		await axios.post(`${process.env.api}/auth/logout`, data, {
-			withCredentials: true
-		})
-	} catch (error) {
-		console.log(error)
-	}
-}
 
 // SELLER
 export const registerSeller = async (data: SellerRegister) => {

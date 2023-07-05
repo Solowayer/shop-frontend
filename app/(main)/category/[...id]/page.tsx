@@ -1,26 +1,23 @@
 import CategoryBreadcrumbs from '@/components/category-breadcrumbs'
 import { StyledLink } from '@/components/ui'
 import Products from '@/components/products'
-import { fetchCategoryById, fetchProductsByCategoryId } from '@/lib/queries'
-import { getCategoryBreadcrumbs } from '@/lib/utils/getCategoryBreadcrumbs'
+import { fetchCategoryBreadcrumbs, fetchCategoryById, fetchProductsByCategoryId } from '@/lib/queries'
 
 export default async function Category({ params }: { params: { id: number } }) {
 	const category = await fetchCategoryById(params.id)
-	const breadcrumbs = await getCategoryBreadcrumbs(category)
+	const breadcrumbs = await fetchCategoryBreadcrumbs(params.id)
 	const products = await fetchProductsByCategoryId(params.id)
 
-	const filteredChildren = category.children.filter(childCategory => childCategory.parentId === category.id)
-
-	console.log('category:', category)
+	const childrenWithSameParent = category.children.filter(childCategory => childCategory.parentId === category.id)
 
 	return (
 		<div className="flex flex-col gap-4">
 			<CategoryBreadcrumbs breadcrumbs={breadcrumbs} />
 			<h3 className="font-bold text-3xl">{category.name}</h3>
-			<>{category.isMain ? 'ГОЛОВНА КАТЕГОРІЯ' : 'ПІДКАТЕГОРІЯ'}</>
+			<>{category.parentId ? 'ПІДКАТЕГОРІЯ' : 'ГОЛОВНА КАТЕГОРІЯ'}</>
 			<div className="flex flex-col">
-				{filteredChildren.length > 0 &&
-					filteredChildren.map(childCategory => (
+				{childrenWithSameParent.length > 0 &&
+					childrenWithSameParent.map(childCategory => (
 						<StyledLink key={childCategory.id} href={`/category/${childCategory.id}`}>
 							{childCategory.name}
 						</StyledLink>

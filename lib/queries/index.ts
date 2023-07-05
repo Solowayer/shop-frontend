@@ -1,28 +1,11 @@
 import axios from 'axios'
 
 // AUTH
-export const fetchCheckAuth = async (): Promise<boolean> => {
-	try {
-		const res = await axios.get(`${process.env.api}/auth/check-auth`, { withCredentials: true })
-		return res.data
-	} catch (error) {
-		throw new Error('Failed to fetch')
-	}
-}
 
 // SELLER
 export const fetchCheckSeller = async (): Promise<boolean> => {
 	try {
 		const res = await axios.get(`${process.env.api}/seller/check-seller`, { withCredentials: true })
-		return res.data
-	} catch (error) {
-		throw new Error('Failed to fetch')
-	}
-}
-
-export const fetchSellerProducts = async (): Promise<Product[]> => {
-	try {
-		const res = await axios.get(`${process.env.api}/seller/products`, { withCredentials: true })
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')
@@ -74,6 +57,15 @@ export async function fetchCategoryById(id: number): Promise<Category> {
 export async function fetchCategoryBySlug(slug: string): Promise<Category> {
 	try {
 		const res = await axios.get(`${process.env.api}/categories/${slug}`, { params: { next: 'revalidate=5' } })
+		return res.data
+	} catch (error) {
+		throw new Error('Failed to fetch')
+	}
+}
+
+export async function fetchCategoryBreadcrumbs(id: number): Promise<Category[]> {
+	try {
+		const res = await axios.get(`${process.env.api}/categories/breadcrumbs/${id}`, { params: { next: 'revalidate=5' } })
 		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')
@@ -135,11 +127,10 @@ export async function fetchProductBySlug(slug: string): Promise<Product> {
 	}
 }
 
-export const fetchProductsMaxPrice = async (): Promise<number> => {
+export const fetchSellerProducts = async (): Promise<Product[]> => {
 	try {
-		const res = await axios.get(`${process.env.api}/products/max-price`)
-		const { productsMaxPrice } = res.data
-		return productsMaxPrice
+		const res = await axios.get(`${process.env.api}/products/seller`, { withCredentials: true })
+		return res.data
 	} catch (error) {
 		throw new Error('Failed to fetch')
 	}
