@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	env: {
-		api: 'http://localhost:4200/api'
+		api: 'http://localhost:4200/api',
+		routes: {
+			home: '/'
+		}
 	},
 	images: {
 		remotePatterns: [

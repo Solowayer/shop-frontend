@@ -5,10 +5,12 @@ import Products from '@/components/products'
 import ProductService from '@/services/product.service'
 import { Button, Spinner } from '@/components/ui'
 import { ChevronLeft, ChevronRight } from '@/components/icons'
-import { useQuery } from '@tanstack/react-query'
+import { isError, useQuery } from '@tanstack/react-query'
+import { errorCatch } from '@/lib/error-catch'
+import DefaultError from '@/components/layouts/default-error'
 
 export default function Page() {
-	const perPage = 16
+	const perPage = 8
 	const [products, setProducts] = useState<Product[]>([])
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
@@ -16,8 +18,8 @@ export default function Page() {
 
 	const pages = Array.from({ length: totalPages }, (_, index) => index + 1)
 
-	const { data, isError, isLoading, isSuccess } = useQuery({
-		queryKey: ['all-products', 'newest', undefined, undefined, undefined, currentPage, perPage],
+	const { data, isError, isLoading, isSuccess, refetch } = useQuery({
+		queryKey: ['all-products', 'low-price', undefined, undefined, undefined, currentPage, perPage],
 		queryFn: () =>
 			ProductService.getAll({
 				sort: 'low-price',
@@ -50,12 +52,12 @@ export default function Page() {
 		}
 	}
 
-	if (isError) {
-		return <h3>Помилка</h3>
-	}
-
 	if (isLoading) {
 		return <Spinner width="full" />
+	}
+
+	if (isError) {
+		return <DefaultError reset={refetch} />
 	}
 
 	return (

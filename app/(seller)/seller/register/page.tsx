@@ -6,13 +6,13 @@ import React, { useEffect } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Button, Input } from '@/components/ui'
 import { useMutation } from '@tanstack/react-query'
-import { useSellerStore } from '@/store/sellerStore'
 import Link from 'next/link'
 import { useSellerRedirect } from '@/lib/hooks/useSellerRedirect'
 import SellerService from '@/services/seller.service'
+import { useUserStore } from '@/store/userStore'
 
 export default function SellerRegister() {
-	const { setIsSeller } = useSellerStore()
+	const { setIsSeller } = useUserStore()
 
 	const sellerMutation = useMutation({
 		mutationFn: SellerService.register

@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
-import { useSellerStore } from '@/store/sellerStore'
+import { useUserStore } from '@/store/userStore'
 import { useRouter } from 'next/navigation'
 
 export const useSellerRedirect = () => {
-	const { isSeller } = useSellerStore()
+	const { isSeller } = useUserStore()
 	const { replace } = useRouter()
 
 	useEffect(() => {

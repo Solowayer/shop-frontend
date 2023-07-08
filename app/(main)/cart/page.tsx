@@ -1,41 +1,37 @@
 'use client'
 
-import CartItemList from '@/components/cart-items'
+import CartItems from '@/components/cart-items'
 import { StyledLink, Spinner, Button } from '@/components/ui'
 import CartService from '@/services/cart.service'
-import { useCartStore } from '@/store/cartStore'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useAuthStore } from '@/store/authStore'
-import { useEffect } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useUserStore } from '@/store/userStore'
+import { useStore } from '@/store/use-store-hook'
+import DefaultError from '@/components/layouts/default-error'
 
 export default function Cart() {
-	const { totalQuantity, cartItems, totalAmount, setCart, setCartDelete } = useCartStore()
-	const { isAuth } = useAuthStore()
+	const queryClient = useQueryClient()
+	const isAuth = useStore(useUserStore, state => state.isAuth)
+	const { setCartTotalQty } = useUserStore()
 
-	const { data, isLoading, isError, isSuccess } = useQuery({
+	const { data, isLoading, isError, isSuccess, refetch } = useQuery({
 		queryKey: ['cart'],
-		queryFn: CartService.get,
-		retry: false
+		queryFn: CartService.get
 	})
 
-	useEffect(() => {
-		if (isSuccess) {
-			console.log('cartData:', data)
-			data && setCart(data.cartItems, data.totalQuantity, data.totalAmount)
+	const cartMutation = useMutation({
+		mutationFn: CartService.delete,
+		onSuccess: () => {
+			queryClient.invalidateQueries(['cart'])
+			setCartTotalQty(0)
 		}
-	}, [data, isSuccess, setCart])
-
-	const mutation = useMutation({
-		mutationFn: CartService.delete
 	})
 
 	const handleDeleteCart = async () => {
 		try {
-			mutation.mutate()
+			cartMutation.mutate()
 		} catch (error) {
 			console.log(error)
 		}
-		setCartDelete()
 	}
 
 	if (isLoading) {
@@ -52,24 +48,20 @@ export default function Cart() {
 				</div>
 			)
 		} else {
-			return (
-				<div className="flex flex-col gap-8 w-full">
-					<h3>Виникла помилка під час завантаження корзини</h3>
-				</div>
-			)
+			return <DefaultError reset={refetch} />
 		}
 	}
 
 	return (
 		<div className="flex flex-col gap-8 w-full">
 			<h1 className="text-3xl font-bold">Корзина</h1>
-			{cartItems && cartItems.length > 0 ? (
+			{data && data.cartItems ? (
 				<div className="flex gap-10">
-					<CartItemList cartItems={cartItems} />
+					<CartItems cartItems={data.cartItems} />
 					<div className="flex flex-col w-[400px] gap-4">
 						<div className="flex justify-between">
-							<span>Всього товарів ({data ? totalQuantity : 0}):</span>
-							<span className="text-lg font-bold">{data ? totalAmount : 0} ₴</span>
+							<span>Всього товарів ({data ? data.totalQuantity : 0}):</span>
+							<span className="text-lg font-bold">{data ? data.totalAmount : 0} ₴</span>
 						</div>
 						<Button>Оформити замовлення</Button>
 						<Button intent="secondary" onClick={() => handleDeleteCart()}>

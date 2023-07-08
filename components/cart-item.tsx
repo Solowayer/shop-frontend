@@ -2,19 +2,24 @@
 
 import React from 'react'
 import Image from 'next/image'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import CartService from '@/services/cart.service'
 
-import { useCartStore } from '@/store/cartStore'
 import { Spinner, Button } from '@/components/ui'
 import Link from 'next/link'
+import { useUserStore } from '@/store/userStore'
 
 export default function CartItem({ id, image, name, price, quantity, productId }: CartItem) {
-	const { cartItems, setCartItems, setCartItemDelete } = useCartStore()
+	const { cartTotalQty, setCartTotalQty } = useUserStore()
+	const queryClient = useQueryClient()
 
 	const mutation = useMutation({
-		mutationFn: CartService.deleteCartItem
+		mutationFn: CartService.deleteCartItem,
+		onSuccess: () => {
+			queryClient.invalidateQueries(['cart'])
+			setCartTotalQty(cartTotalQty - quantity)
+		}
 	})
 
 	const { isLoading } = mutation
@@ -23,9 +28,6 @@ export default function CartItem({ id, image, name, price, quantity, productId }
 		try {
 			mutation.mutate(id)
 			console.log(id)
-			setCartItemDelete(id, quantity, price)
-			if (cartItems && cartItems.length === 0) setCartItems([])
-			console.log(cartItems)
 		} catch (error) {
 			console.log(error)
 		}

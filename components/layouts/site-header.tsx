@@ -1,58 +1,58 @@
 'use client'
 
 import Link from 'next/link'
-import { Spinner, ButtonLink, Input } from '@/components/ui'
+import { ButtonLink, Input } from '@/components/ui'
 import { Cart, Person, Search } from '../icons'
 import { useQuery } from '@tanstack/react-query'
 
-import SellerService from '@/services/seller.service'
 import AuthService from '@/services/auth.service'
+import SellerService from '@/services/seller.service'
 
-import { useAuthStore } from '@/store/authStore'
 import { useStore } from '@/store/use-store-hook'
-import { useCartStore } from '@/store/cartStore'
 import { useEffect } from 'react'
-import { useSellerStore } from '@/store/sellerStore'
+import { useUserStore } from '@/store/userStore'
+import CartService from '@/services/cart.service'
 
 export default function SiteHeader() {
-	const isAuth = useStore(useAuthStore, state => state.isAuth)
-	const isSeller = useStore(useSellerStore, state => state.isSeller)
-	const totalQuantity = useStore(useCartStore, state => state.totalQuantity)
-	const { setIsAuth } = useAuthStore()
-	const { setIsSeller } = useSellerStore()
+	const isAuth = useStore(useUserStore, state => state.isAuth)
+	const isSeller = useStore(useUserStore, state => state.isSeller)
+	const cartTotalQty = useStore(useUserStore, state => state.cartTotalQty)
+	const { setIsAuth, setIsSeller, setCartTotalQty } = useUserStore()
 
-	const {
-		data: dataIsAuth,
-		isLoading: isAuthLoading,
-		isSuccess: isAuthSuccess,
-		isError: isAuthError
-	} = useQuery({
+	const { data: dataIsAuth, isSuccess: isAuthSuccess } = useQuery({
 		queryKey: ['check-auth'],
-		queryFn: AuthService.checkAuth,
-		retry: false
+		queryFn: AuthService.checkAuth
 	})
 
-	const {
-		data: dataIsSeller,
-		// isLoading: isSellerLoading,
-		isSuccess: isSellerSuccess,
-		isError: isSellerError
-	} = useQuery({
+	const { data: dataIsSeller, isSuccess: isSellerSuccess } = useQuery({
 		queryKey: ['check-seller'],
-		queryFn: SellerService.check,
-		retry: false
+		queryFn: SellerService.check
+	})
+
+	const { data: cartData, isSuccess: cartIsSuccess } = useQuery({
+		queryKey: ['cart'],
+		queryFn: CartService.get
 	})
 
 	useEffect(() => {
-		if (isAuthSuccess) {
-			setIsAuth(dataIsAuth)
+		if (isAuthSuccess) setIsAuth(dataIsAuth)
+		if (isSellerSuccess) setIsSeller(dataIsSeller)
+		if (cartIsSuccess && cartData.totalQuantity) {
+			setCartTotalQty(cartData.totalQuantity)
+		} else {
+			setCartTotalQty(0)
 		}
-		if (isSellerSuccess) {
-			setIsSeller(dataIsSeller)
-		}
-	}, [dataIsAuth, dataIsSeller, isAuthSuccess, isSellerSuccess, setIsAuth, setIsSeller])
-
-	console.log('isSeller:', isSeller)
+	}, [
+		cartData,
+		cartIsSuccess,
+		dataIsAuth,
+		dataIsSeller,
+		isAuthSuccess,
+		isSellerSuccess,
+		setCartTotalQty,
+		setIsAuth,
+		setIsSeller
+	])
 
 	return (
 		<>
@@ -87,9 +87,9 @@ export default function SiteHeader() {
 
 					<ButtonLink intent="secondary" href="/cart">
 						<Cart />
-						{isAuth && totalQuantity && totalQuantity > 0 ? (
+						{isAuth && cartTotalQty && cartTotalQty > 0 ? (
 							<span className="absolute py-1 px-2 left-10 bottom-6 bg-red-500 text-white rounded-lg text-sm">
-								{totalQuantity}
+								{cartTotalQty}
 							</span>
 						) : null}
 					</ButtonLink>

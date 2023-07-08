@@ -50,7 +50,7 @@ class SellerServ {
 
 	async check(): Promise<boolean> {
 		try {
-			const res = await instance.get(`${SELLER}/chech-seller`)
+			const res = await instance.get(`${SELLER}/check-seller`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)

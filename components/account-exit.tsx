@@ -7,14 +7,18 @@ import { useRouter } from 'next/navigation'
 
 import { useMutation } from '@tanstack/react-query'
 import AuthService from '@/services/auth.service'
-import { useAuthStore } from '@/store/authStore'
+import { useUserStore } from '@/store/userStore'
 
 export default function AccountExit() {
-	const { setIsAuth } = useAuthStore()
+	const { setIsAuth, setIsSeller, setCartTotalQty } = useUserStore()
 
 	const mutation = useMutation({
 		mutationFn: AuthService.logout,
-		onSuccess: () => setIsAuth(false)
+		onSuccess: () => {
+			setIsAuth(false)
+			setIsSeller(false)
+			setCartTotalQty(0)
+		}
 	})
 
 	const router = useRouter()

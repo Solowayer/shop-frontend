@@ -9,11 +9,11 @@ import { Button, ButtonLink, Input } from '@/components/ui'
 import { useMutation } from '@tanstack/react-query'
 import AuthService from '@/services/auth.service'
 import { useEffect } from 'react'
-import { useAuthStore } from '@/store/authStore'
+import { useUserStore } from '@/store/userStore'
 import { useAuthRedirect } from '@/lib/hooks/useAuthRedirect'
 
 export default function Register() {
-	const { setIsAuth } = useAuthStore()
+	const { setIsAuth } = useUserStore()
 
 	const logMutation = useMutation({
 		mutationFn: AuthService.login

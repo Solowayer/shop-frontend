@@ -6,16 +6,14 @@ import { useMutation } from '@tanstack/react-query'
 import CartService from '@/services/cart.service'
 
 import { Button, Input } from '@/components/ui'
-import { useCartStore } from '@/store/cartStore'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addToCartSchema } from '@/lib/validation/cartSchema'
 import { useStore } from '@/store/use-store-hook'
-import { useAuthStore } from '@/store/authStore'
-import { useEffect } from 'react'
+import { useUserStore } from '@/store/userStore'
 
 export default function AddToCartForm({ productId }: { productId: number }) {
-	const { setTotalQuantity, totalQuantity } = useCartStore()
-	const isAuth = useStore(useAuthStore, state => state.isAuth)
+	const isAuth = useStore(useUserStore, state => state.isAuth)
+	const { cartTotalQty, setCartTotalQty } = useUserStore()
 
 	const mutation = useMutation({
 		mutationFn: CartService.addCartItem
@@ -36,8 +34,7 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 	const onSubmit: SubmitHandler<AddCartItem> = data => {
 		mutation.mutate({ ...data })
 		if (isAuth) {
-			const quantityValue = data.quantity
-			setTotalQuantity(totalQuantity + quantityValue)
+			setCartTotalQty(cartTotalQty + data.quantity)
 		}
 	}
 
@@ -55,7 +52,7 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 			<Button type="submit" fullWidth disabled={isSubmitting}>
 				{isSubmitting ? 'Додається...' : 'Додати в корзину'}
 			</Button>
-			{!isAuth && mutation.isSuccess && <span className="text-red-500">Увійдіть, щоб додавати товари в корзину</span>}
+			{!isAuth && mutation.isError && <span className="text-red-500">Увійдіть, щоб додавати товари в корзину</span>}
 		</form>
 	)
 }

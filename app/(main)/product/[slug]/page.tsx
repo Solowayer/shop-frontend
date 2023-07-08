@@ -7,8 +7,6 @@ export default async function ProductPage({ params }: { params: { slug: string }
 	const product = await ProductService.getBySlug(params.slug)
 	const breadcrumbs = await CategoryService.getBreadcrumbs(product.categoryId)
 
-	if (!product) return <div>Помилка</div>
-
 	return (
 		<div className="flex flex-col gap-4">
 			<CategoryBreadcrumbs breadcrumbs={breadcrumbs} />
