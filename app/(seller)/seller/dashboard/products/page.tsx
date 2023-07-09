@@ -1,12 +1,14 @@
 'use client'
 
 import { ButtonLink, Spinner, Button, StyledLink, TD, TH } from '@/components/ui'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Delete } from '@/components/icons'
 import Image from 'next/image'
 import ProductService from '@/services/product.service'
 
 export default function SellerProducts() {
+	const queryClient = useQueryClient()
+
 	const {
 		data: products,
 		isError,
@@ -18,7 +20,10 @@ export default function SellerProducts() {
 	})
 
 	const deleteProductMutation = useMutation({
-		mutationFn: ProductService.delete
+		mutationFn: ProductService.delete,
+		onSuccess: () => {
+			queryClient.invalidateQueries(['seller-products'])
+		}
 	})
 
 	const deleteOneProduct = async (productId: number) => {

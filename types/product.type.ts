@@ -3,7 +3,7 @@ interface Product {
 	slug: string
 	images?: string[]
 	name: string
-	description?: string
+	description?: string | null
 	price: number
 	categoryId: number
 	rating: number
