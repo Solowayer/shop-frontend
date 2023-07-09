@@ -10,13 +10,15 @@ import DefaultError from '@/components/layouts/default-error'
 
 export default function Page() {
 	const perPage = 4
+	const [products, setProducts] = useState<Product[]>([])
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [length, setLength] = useState<number>(1)
+	const [loadedPages, setLoadedPages] = useState<number[]>([])
 
 	const pages = Array.from({ length: totalPages }, (_, index) => index + 1)
 
-	const { data, isError, isLoading, isSuccess, refetch, isFetching } = useQuery({
+	const { data, isError, isLoading, isSuccess, refetch, isPreviousData } = useQuery({
 		queryKey: [
 			'products',
 			{ sort: 'low-price' },
@@ -48,11 +50,38 @@ export default function Page() {
 
 	useEffect(() => {
 		if (isSuccess) {
+			setProducts(prevProducts => [...prevProducts, ...data.products])
 			setLength(data.length)
 			setTotalPages(Math.ceil(data.length / perPage))
 		}
 	}, [data, isSuccess])
 
+	const handlePrevPage = () => {
+		setProducts([])
+		setLoadedPages([])
+		if (currentPage > 1) {
+			setCurrentPage(old => Math.max(old - 1, 1))
+		}
+
+		if (loadedPages.length > 0 && loadedPages[0] > 1) {
+			setCurrentPage(loadedPages[0] - 1)
+		}
+	}
+
+	const handleNextPage = () => {
+		setProducts([])
+		setLoadedPages([])
+		if (currentPage < totalPages) {
+			setCurrentPage(old => old + 1)
+		}
+	}
+
+	const handleShowMore = () => {
+		if (currentPage < totalPages) {
+			setLoadedPages(prevPages => [...prevPages, currentPage])
+			setCurrentPage(old => old + 1)
+		}
+	}
 
 	if (isLoading) {
 		return <Spinner width="full" />
@@ -62,21 +91,16 @@ export default function Page() {
 		return <DefaultError reset={refetch} />
 	}
 
-	const handlePrevPage = () => {
-		setCurrentPage(old => Math.max(old - 1, 1))
-	}
-
-	const handleNextPage = () => {
-		setCurrentPage(old => old + 1)
-	}
-
 	return (
 		<div className="flex flex-col gap-8">
 			<h3 className="font-bold text-3xl">Всі товари - {length}</h3>
-			<Products products={data.products} />
+			<Products products={products} />
 			<div className="flex flex-col gap-8">
+				<Button intent="secondary" onClick={handleShowMore} disabled={currentPage >= totalPages}>
+					Показати ще
+				</Button>
 				<div className="w-full items-center justify-center flex gap-8">
-					<Button shape="circle" onClick={handlePrevPage} disabled={currentPage === 1}>
+					<Button shape="circle" onClick={handlePrevPage} disabled={currentPage <= 1 || loadedPages[0] === 1}>
 						<ChevronLeft />
 					</Button>
 					<div className="flex gap-2">
@@ -85,9 +109,11 @@ export default function Page() {
 								key={index}
 								intent={`${currentPage === index + 1 ? 'primary' : 'secondary'}`}
 								onClick={() => {
+									setProducts([])
 									setCurrentPage(index + 1)
+									setLoadedPages([])
 								}}
-								disabled={currentPage === index + 1}
+								disabled={loadedPages.includes(pages[index])}
 							>
 								{index + 1}
 							</Button>
