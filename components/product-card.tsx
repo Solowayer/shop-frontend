@@ -20,7 +20,7 @@ export default function ProductCard({ href, images, name, price, rating }: Produ
 				</div>
 
 				<div className="flex flex-col p-4 gap-2">
-					<span className="hover:text-amber-700 line-clamp-2" title={name}>
+					<span className="hover:text-amber-700 line-clamp-1" title={name}>
 						{name}
 					</span>
 					<span className="flex items-center gap-1">

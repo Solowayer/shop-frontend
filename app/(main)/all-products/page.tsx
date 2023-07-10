@@ -9,12 +9,27 @@ import { useQuery } from '@tanstack/react-query'
 import DefaultError from '@/components/layouts/default-error'
 
 export default function Page() {
-	const perPage = 8
+	const perPage = 1
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [length, setLength] = useState<number>(1)
 
-	const pages = Array.from({ length: totalPages }, (_, index) => index + 1)
+	let pages = Array.from({ length: totalPages }, (_, index) => index + 1)
+
+	if (totalPages > 9) {
+		const maxVisiblePages = 9
+		const middlePage = Math.ceil(maxVisiblePages / 2)
+
+		if (currentPage <= middlePage) {
+			pages = [...pages.slice(0, maxVisiblePages - 2), -1, totalPages]
+		} else if (currentPage > totalPages - middlePage) {
+			pages = [1, -1, ...pages.slice(totalPages - maxVisiblePages + 3)]
+		} else {
+			const startPage = currentPage - Math.floor((maxVisiblePages - 3) / 2)
+			const endPage = currentPage + Math.floor((maxVisiblePages - 4) / 2)
+			pages = [1, -1, ...pages.slice(startPage, endPage), -1, totalPages]
+		}
+	}
 
 	const {
 		data: productsData,
@@ -85,17 +100,24 @@ export default function Page() {
 						<ChevronLeft />
 					</Button>
 					<div className="flex gap-2">
-						{pages.map((_, index) => (
-							<Button
-								key={index}
-								intent={`${currentPage === index + 1 ? 'primary' : 'secondary'}`}
-								onClick={() => {
-									setCurrentPage(index + 1)
-								}}
-								disabled={currentPage === index + 1}
-							>
-								{index + 1}
-							</Button>
+						{pages.map((page, index) => (
+							<React.Fragment key={index}>
+								{page === -1 ? (
+									<span className="inline-flex items-center mx-2">...</span>
+								) : (
+									<Button
+										intent={`${currentPage === page ? 'primary' : 'secondary'}`}
+										onClick={() => {
+											if (page !== currentPage) {
+												setCurrentPage(page)
+											}
+										}}
+										disabled={currentPage === page}
+									>
+										{page}
+									</Button>
+								)}
+							</React.Fragment>
 						))}
 					</div>
 					<Button shape="circle" onClick={handleNextPage} disabled={currentPage >= totalPages}>
