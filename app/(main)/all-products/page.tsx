@@ -9,14 +9,20 @@ import { useQuery } from '@tanstack/react-query'
 import DefaultError from '@/components/layouts/default-error'
 
 export default function Page() {
-	const perPage = 4
+	const perPage = 8
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [length, setLength] = useState<number>(1)
 
 	const pages = Array.from({ length: totalPages }, (_, index) => index + 1)
 
-	const { data, isError, isLoading, isSuccess, refetch, isFetching } = useQuery({
+	const {
+		data: productsData,
+		isError,
+		isLoading,
+		isSuccess,
+		refetch
+	} = useQuery({
 		queryKey: [
 			'products',
 			{ sort: 'low-price' },
@@ -48,11 +54,10 @@ export default function Page() {
 
 	useEffect(() => {
 		if (isSuccess) {
-			setLength(data.length)
-			setTotalPages(Math.ceil(data.length / perPage))
+			setLength(productsData.length)
+			setTotalPages(Math.ceil(productsData.length / perPage))
 		}
-	}, [data, isSuccess])
-
+	}, [productsData, isSuccess])
 
 	if (isLoading) {
 		return <Spinner width="full" />
@@ -73,7 +78,7 @@ export default function Page() {
 	return (
 		<div className="flex flex-col gap-8">
 			<h3 className="font-bold text-3xl">Всі товари - {length}</h3>
-			<Products products={data.products} />
+			<Products products={productsData.products} />
 			<div className="flex flex-col gap-8">
 				<div className="w-full items-center justify-center flex gap-8">
 					<Button shape="circle" onClick={handlePrevPage} disabled={currentPage === 1}>

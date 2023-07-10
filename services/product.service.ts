@@ -12,7 +12,10 @@ class ProductServ {
 		}
 	}
 
-	async getByCategoryId(categoryId: number, queryData?: ProductFilters): Promise<Product[]> {
+	async getByCategoryId(
+		categoryId: number,
+		queryData?: ProductFilters
+	): Promise<{ products: Product[]; length: number }> {
 		try {
 			const res = await instance.get(`${PRODUCTS}/c/${categoryId}`, { params: queryData })
 			return res.data
@@ -21,7 +24,10 @@ class ProductServ {
 		}
 	}
 
-	async getByCategoryTree(categoryId: number, queryData?: ProductFilters): Promise<Product[]> {
+	async getByCategoryTree(
+		categoryId: number,
+		queryData?: ProductFilters
+	): Promise<{ products: Product[]; length: number }> {
 		try {
 			const res = await instance.get(`${PRODUCTS}/c/tree/${categoryId}`, { params: queryData })
 			return res.data
