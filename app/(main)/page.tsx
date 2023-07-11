@@ -33,7 +33,7 @@ export default function Home() {
 						<div className="bg-zinc-100 py-2 px-4 rounded-full hover:bg-zinc-200">{category.name}</div>
 					</Link>
 				))}
-				<Link href={`/all-products`}>
+				<Link href={`/all-products/1`}>
 					<div className="bg-black text-white py-2 px-4 rounded-full">Всі товари (temp)</div>
 				</Link>
 			</div>
