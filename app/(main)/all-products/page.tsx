@@ -15,15 +15,15 @@ export default function Page() {
 	const [length, setLength] = useState<number>(1)
 
 	let pages = Array.from({ length: totalPages }, (_, index) => index + 1)
+	const maxVisiblePages = 9
 
-	if (totalPages > 9) {
-		const maxVisiblePages = 9
+	if (totalPages > maxVisiblePages) {
 		const middlePage = Math.ceil(maxVisiblePages / 2)
 
 		if (currentPage <= middlePage) {
 			pages = [...pages.slice(0, maxVisiblePages - 2), -1, totalPages]
 		} else if (currentPage > totalPages - middlePage) {
-			pages = [1, -1, ...pages.slice(totalPages - maxVisiblePages + 3)]
+			pages = [1, -1, ...pages.slice(totalPages - maxVisiblePages + 2)]
 		} else {
 			const startPage = currentPage - Math.floor((maxVisiblePages - 3) / 2)
 			const endPage = currentPage + Math.floor((maxVisiblePages - 4) / 2)
