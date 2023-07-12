@@ -19,10 +19,11 @@ export default function Page() {
 		isError,
 		isLoading,
 		isSuccess,
-		refetch
-	} = useQuery({
-		queryKey: ['products', undefined, undefined, undefined, undefined, page, perPage],
-		queryFn: () =>
+		refetch,
+		isFetching
+	} = useQuery(
+		['products', undefined, undefined, undefined, undefined, page, perPage],
+		() =>
 			ProductService.getAll({
 				sort: undefined,
 				min_price: undefined,
@@ -31,8 +32,8 @@ export default function Page() {
 				page,
 				limit: perPage
 			}),
-		keepPreviousData: true
-	})
+		{ keepPreviousData: true }
+	)
 
 	useEffect(() => {
 		if (isSuccess) {
@@ -55,6 +56,7 @@ export default function Page() {
 			<h3 className="font-bold text-3xl">Всі товари - {length}</h3>
 			<Products products={productsData.products} />
 			<Pagination totalPages={totalPages} page={page} setPage={setPage} />
+			{isFetching && 'Loading...'}
 		</div>
 	)
 }
