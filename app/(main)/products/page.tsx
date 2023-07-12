@@ -9,14 +9,12 @@ import DefaultError from '@/components/layouts/default-error'
 import Pagination from '@/components/pagination'
 import { useSearchParams } from 'next/navigation'
 
-export default function Page() {
-	const searchParams = useSearchParams()
+// export async function generateStaticParams() {
+// 	return [{ page: '1' }, { page: '2' }, { page: '3' }]
+// }
 
-	const search = searchParams.get('page')
-
-	console.log(search)
-
-	const PER_PAGE = 1
+export default function Page({ searchParams }: { searchParams: { page: number } }) {
+	const PER_PAGE = 4
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [length, setLength] = useState<number>(1)
@@ -28,14 +26,14 @@ export default function Page() {
 		isSuccess,
 		refetch
 	} = useQuery(
-		['products', undefined, undefined, undefined, undefined, currentPage, PER_PAGE],
+		['products', searchParams.page, PER_PAGE],
 		() =>
 			ProductService.getAll({
 				sort: undefined,
 				min_price: undefined,
 				max_price: undefined,
 				searchTerm: undefined,
-				page: currentPage,
+				page: searchParams.page,
 				limit: PER_PAGE
 			}),
 		{ keepPreviousData: true }
