@@ -7,10 +7,17 @@ import { Spinner } from '@/components/ui'
 import { useQuery } from '@tanstack/react-query'
 import DefaultError from '@/components/layouts/default-error'
 import Pagination from '@/components/pagination'
+import { useSearchParams } from 'next/navigation'
 
 export default function Page() {
+	const searchParams = useSearchParams()
+
+	const search = searchParams.get('page')
+
+	console.log(search)
+
 	const PER_PAGE = 1
-	const [page, setPage] = useState<number>(1)
+	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [length, setLength] = useState<number>(1)
 
@@ -21,14 +28,14 @@ export default function Page() {
 		isSuccess,
 		refetch
 	} = useQuery(
-		['products', undefined, undefined, undefined, undefined, page, PER_PAGE],
+		['products', undefined, undefined, undefined, undefined, currentPage, PER_PAGE],
 		() =>
 			ProductService.getAll({
 				sort: undefined,
 				min_price: undefined,
 				max_price: undefined,
 				searchTerm: undefined,
-				page,
+				page: currentPage,
 				limit: PER_PAGE
 			}),
 		{ keepPreviousData: true }
@@ -39,8 +46,8 @@ export default function Page() {
 			setLength(productsData.length)
 			setTotalPages(Math.ceil(productsData.length / PER_PAGE))
 		}
-		console.log('curpage:', page)
-	}, [productsData, isSuccess, page])
+		console.log('curpage:', currentPage)
+	}, [productsData, isSuccess, currentPage])
 
 	if (isLoading) {
 		return <Spinner width="full" />
@@ -54,7 +61,7 @@ export default function Page() {
 		<div className="flex flex-col gap-8">
 			<h3 className="font-bold text-3xl">Всі товари - {length}</h3>
 			<Products products={productsData.products} />
-			<Pagination totalPages={totalPages} page={page} setPage={setPage} renderPageLink={page => `/products/${page}`} />
+			<Pagination totalPages={totalPages} page={currentPage} setPage={setCurrentPage} />
 		</div>
 	)
 }
