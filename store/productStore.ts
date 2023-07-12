@@ -1,3 +1,4 @@
+import { Product } from '@/types/product.type'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
