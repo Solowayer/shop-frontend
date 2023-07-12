@@ -1,10 +1,6 @@
-'use client'
-
-import React, { useEffect, useState } from 'react'
-import { Button, ButtonLink } from './ui'
+import React from 'react'
+import { Button } from './ui'
 import { ChevronLeft, ChevronRight } from './icons'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 type PaginationProps = {
 	totalPages: number
