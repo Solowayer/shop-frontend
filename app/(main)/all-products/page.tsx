@@ -38,26 +38,10 @@ export default function Page() {
 		isSuccess,
 		refetch
 	} = useQuery({
-		queryKey: [
-			'products',
-			{ sort: 'low-price' },
-			{
-				filters: {
-					min_price: undefined,
-					max_price: undefined,
-					searchTerm: undefined
-				}
-			},
-			{
-				pagination: {
-					page: currentPage,
-					limit: perPage
-				}
-			}
-		],
+		queryKey: ['products', undefined, undefined, undefined, undefined, currentPage, perPage],
 		queryFn: () =>
 			ProductService.getAll({
-				sort: 'low-price',
+				sort: undefined,
 				min_price: undefined,
 				max_price: undefined,
 				searchTerm: undefined,
