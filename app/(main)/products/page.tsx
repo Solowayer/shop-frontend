@@ -9,7 +9,7 @@ import DefaultError from '@/components/layouts/default-error'
 import Pagination from '@/components/pagination'
 
 export default function Page() {
-	const perPage = 1
+	const PER_PAGE = 1
 	const [page, setPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [length, setLength] = useState<number>(1)
@@ -19,10 +19,9 @@ export default function Page() {
 		isError,
 		isLoading,
 		isSuccess,
-		refetch,
-		isFetching
+		refetch
 	} = useQuery(
-		['products', undefined, undefined, undefined, undefined, page, perPage],
+		['products', undefined, undefined, undefined, undefined, page, PER_PAGE],
 		() =>
 			ProductService.getAll({
 				sort: undefined,
@@ -30,7 +29,7 @@ export default function Page() {
 				max_price: undefined,
 				searchTerm: undefined,
 				page,
-				limit: perPage
+				limit: PER_PAGE
 			}),
 		{ keepPreviousData: true }
 	)
@@ -38,7 +37,7 @@ export default function Page() {
 	useEffect(() => {
 		if (isSuccess) {
 			setLength(productsData.length)
-			setTotalPages(Math.ceil(productsData.length / perPage))
+			setTotalPages(Math.ceil(productsData.length / PER_PAGE))
 		}
 		console.log('curpage:', page)
 	}, [productsData, isSuccess, page])
@@ -55,8 +54,7 @@ export default function Page() {
 		<div className="flex flex-col gap-8">
 			<h3 className="font-bold text-3xl">Всі товари - {length}</h3>
 			<Products products={productsData.products} />
-			<Pagination totalPages={totalPages} page={page} setPage={setPage} />
-			{isFetching && 'Loading...'}
+			<Pagination totalPages={totalPages} page={page} setPage={setPage} renderPageLink={page => `/products/${page}`} />
 		</div>
 	)
 }

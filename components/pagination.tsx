@@ -2,14 +2,16 @@ import React from 'react'
 import { Button } from './ui'
 import { ChevronLeft, ChevronRight } from './icons'
 import { usePagination } from '@/lib/hooks/usePagination'
+import Link from 'next/link'
 
 type PaginationProps = {
 	totalPages: number
 	page: number
 	setPage: React.Dispatch<React.SetStateAction<number>>
+	renderPageLink: (page: number) => string
 }
 
-export default function Pagination({ totalPages, page, setPage }: PaginationProps) {
+export default function Pagination({ totalPages, page, setPage, renderPageLink }: PaginationProps) {
 	const pages = usePagination(totalPages, page)
 
 	const handlePrevPage = () => {
@@ -33,17 +35,18 @@ export default function Pagination({ totalPages, page, setPage }: PaginationProp
 						{p === -1 ? (
 							<span className="inline-flex items-center mx-2">...</span>
 						) : (
-							<Button
-								intent="secondary"
-								onClick={() => {
-									if (p !== page) {
-										setPage(p)
-									}
-								}}
-								disabled={page === p}
-							>
-								{p}
-							</Button>
+							// <Button
+							// 	intent="secondary"
+							// 	onClick={() => {
+							// 		if (p !== page) {
+							// 			setPage(p)
+							// 		}
+							// 	}}
+							// 	disabled={page === p}
+							// >
+							// 	{p}
+							// </Button>
+							<Link href={renderPageLink(p as number)}>{p}</Link>
 						)}
 					</React.Fragment>
 				))}
