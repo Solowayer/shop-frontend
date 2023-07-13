@@ -5,7 +5,15 @@ import CategoryService from '@/services/category.service'
 import ProductsByCategoryId from '@/components/products-by-categoryId'
 import ProductsByCategoryTree from '@/components/products-by-category-tree'
 
-export default async function Category({ params }: { params: { id: number } }) {
+export default async function Category({
+	params,
+	searchParams
+}: {
+	params: { id: number }
+	searchParams: { page: number }
+}) {
+	const PER_PAGE = 8
+
 	const category = await CategoryService.getById(params.id)
 
 	const breadcrumbs = await CategoryService.getBreadcrumbs(params.id)
@@ -28,10 +36,10 @@ export default async function Category({ params }: { params: { id: number } }) {
 									</StyledLink>
 								))}
 						</div>
-						<ProductsByCategoryTree id={params.id} />
+						<ProductsByCategoryTree id={params.id} page={searchParams.page} perPage={PER_PAGE} />
 					</div>
 				) : (
-					<ProductsByCategoryId id={params.id} />
+					<ProductsByCategoryId id={params.id} page={searchParams.page} perPage={PER_PAGE} />
 				)}
 			</>
 		</div>

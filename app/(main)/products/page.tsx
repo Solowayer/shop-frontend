@@ -10,9 +10,7 @@ import Pagination from '@/components/pagination'
 
 export default function Page({ searchParams }: { searchParams: { page: number } }) {
 	const PER_PAGE = 8
-	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
-	const [length, setLength] = useState<number>(1)
 
 	const {
 		data: productsData,
@@ -35,12 +33,11 @@ export default function Page({ searchParams }: { searchParams: { page: number } 
 	)
 
 	useEffect(() => {
-		if (isSuccess) {
-			setLength(productsData.length)
+		if (isSuccess && productsData) {
 			setTotalPages(Math.ceil(productsData.length / PER_PAGE))
 		}
-		console.log('curpage:', currentPage)
-	}, [productsData, isSuccess, currentPage])
+		console.log('curpage:')
+	}, [productsData, isSuccess])
 
 	if (isLoading) {
 		return <Spinner width="full" />
@@ -52,9 +49,9 @@ export default function Page({ searchParams }: { searchParams: { page: number } 
 
 	return (
 		<div className="flex flex-col gap-8">
-			<h3 className="font-bold text-3xl">Всі товари - {length}</h3>
+			<h3 className="font-bold text-3xl">Всі товари - {productsData.length}</h3>
 			<Products products={productsData.products} />
-			<Pagination totalPages={totalPages} page={currentPage} setPage={setCurrentPage} />
+			<Pagination totalPages={totalPages} />
 		</div>
 	)
 }

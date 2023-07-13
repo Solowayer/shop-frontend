@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, ButtonLink } from './ui'
 import { ChevronLeft, ChevronRight } from './icons'
 import { usePagination } from '@/lib/hooks/usePagination'
@@ -7,16 +7,13 @@ import { useSearchParams } from 'next/navigation'
 
 type PaginationProps = {
 	totalPages: number
-	page: number
-	setPage: (page: number) => void
 }
 
-export default function Pagination({ totalPages, page, setPage }: PaginationProps) {
+export default function Pagination({ totalPages }: PaginationProps) {
+	const [page, setPage] = useState<number>(1)
+
 	const searchParams = useSearchParams()
-
 	const search = searchParams.get('page')
-
-	console.log('search:', search)
 
 	const pages = usePagination(totalPages, page)
 
@@ -26,7 +23,7 @@ export default function Pagination({ totalPages, page, setPage }: PaginationProp
 
 	return (
 		<div className="w-full items-center justify-center flex gap-8">
-			<ButtonLink href={`?page=${Math.max(page - 1, 1)}`} shape="circle" disabled={page === 1}>
+			<ButtonLink href={page !== 1 ? `?page=${Math.max(page - 1, 1)}` : '#'} shape="circle" disabled={page === 1}>
 				<ChevronLeft />
 			</ButtonLink>
 			<div className="flex gap-2">
@@ -35,7 +32,7 @@ export default function Pagination({ totalPages, page, setPage }: PaginationProp
 						{p === -1 ? (
 							<span className="inline-flex items-center mx-2">...</span>
 						) : (
-							<Link href={`/products?page=${p}`}>
+							<Link href={`?page=${p}`} tabIndex={-1}>
 								<Button
 									intent="secondary"
 									onClick={() => {

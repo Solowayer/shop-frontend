@@ -9,13 +9,13 @@ type State = {
 
 type Actions = {
 	setPerPage: (value: number) => void
-	setTotalPages: (value: number) => void
+	setTotalPages: (length: number) => void
 	setPage: (value: number) => void
 	reset: () => void
 }
 
 const initialState: State = {
-	perPage: 8,
+	perPage: 1,
 	totalPages: 1,
 	page: 1
 }
@@ -27,8 +27,8 @@ export const usePaginationStore = create<State & Actions>()(set => ({
 		set({ perPage: value })
 	},
 
-	setTotalPages: (value: number) => {
-		set({ totalPages: value })
+	setTotalPages: (length: number) => {
+		set({ totalPages: Math.ceil(length / initialState.perPage) })
 	},
 
 	setPage: (value: number) => {
