@@ -20,6 +20,7 @@ export function ButtonLink({ href, ...props }: Props) {
 				align={props.align}
 				size={props.size}
 				shape={props.shape}
+				disabled={props.disabled}
 			>
 				{props.children}
 			</Button>

@@ -7,14 +7,9 @@ import { Spinner } from '@/components/ui'
 import { useQuery } from '@tanstack/react-query'
 import DefaultError from '@/components/layouts/default-error'
 import Pagination from '@/components/pagination'
-import { useSearchParams } from 'next/navigation'
-
-// export async function generateStaticParams() {
-// 	return [{ page: '1' }, { page: '2' }, { page: '3' }]
-// }
 
 export default function Page({ searchParams }: { searchParams: { page: number } }) {
-	const PER_PAGE = 4
+	const PER_PAGE = 8
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [length, setLength] = useState<number>(1)

@@ -20,27 +20,15 @@ export default function Pagination({ totalPages, page, setPage }: PaginationProp
 
 	const pages = usePagination(totalPages, page)
 
-	const handlePrevPage = () => {
-		const prevPage = Math.max(page - 1, 1)
-		setPage(prevPage)
-	}
-
-	const handleNextPage = () => {
-		const nextPage = page + 1
-		setPage(nextPage)
-	}
-
 	useEffect(() => {
 		search ? setPage(parseInt(search)) : null
 	}, [search, setPage])
 
 	return (
 		<div className="w-full items-center justify-center flex gap-8">
-			<Link href={`/products?page=${page - 1}`} passHref>
-				<Button shape="circle" onClick={handlePrevPage} disabled={page === 1}>
-					<ChevronLeft />
-				</Button>
-			</Link>
+			<ButtonLink href={`?page=${Math.max(page - 1, 1)}`} shape="circle" disabled={page === 1}>
+				<ChevronLeft />
+			</ButtonLink>
 			<div className="flex gap-2">
 				{pages.map((p, index) => (
 					<React.Fragment key={index}>
@@ -64,11 +52,9 @@ export default function Pagination({ totalPages, page, setPage }: PaginationProp
 					</React.Fragment>
 				))}
 			</div>
-			<Link href={`/products?page=${page + 1}`}>
-				<Button shape="circle" onClick={handleNextPage} disabled={page >= totalPages}>
-					<ChevronRight />
-				</Button>
-			</Link>
+			<ButtonLink href={page < totalPages ? `?page=${page + 1}` : '#'} shape="circle" disabled={page >= totalPages}>
+				<ChevronRight />
+			</ButtonLink>
 		</div>
 	)
 }
