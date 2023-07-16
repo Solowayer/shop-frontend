@@ -12,7 +12,7 @@ export default function ProductsByCategoryTree({ id, page, perPage }: { id: numb
 	const [totalPages, setTotalPages] = useState<number>(1)
 
 	const {
-		data: productData,
+		data: productsData,
 		isError,
 		isLoading,
 		isSuccess,
@@ -29,10 +29,10 @@ export default function ProductsByCategoryTree({ id, page, perPage }: { id: numb
 	)
 
 	useEffect(() => {
-		if (isSuccess && productData) {
-			setTotalPages(Math.ceil(productData.length / perPage))
+		if (isSuccess && productsData) {
+			setTotalPages(Math.ceil(productsData.length / perPage))
 		}
-	}, [isSuccess, perPage, productData])
+	}, [isSuccess, perPage, productsData])
 
 	if (isError) {
 		return <DefaultError reset={refetch} />
@@ -44,9 +44,9 @@ export default function ProductsByCategoryTree({ id, page, perPage }: { id: numb
 
 	return (
 		<>
-			{productData.products.length > 0 ? (
+			{productsData.products.length > 0 ? (
 				<div className="flex flex-col gap-8">
-					<Products products={productData.products} />
+					<Products products={productsData.products} />
 					{totalPages > 1 && <Pagination totalPages={totalPages} />}
 				</div>
 			) : (

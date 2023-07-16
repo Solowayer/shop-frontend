@@ -35,10 +35,10 @@ class ProductServ {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
-	// ?
-	async getBySeller(): Promise<Product[]> {
+
+	async getSellerProducts(queryData?: ProductFilters): Promise<{ products: Product[]; length: number }> {
 		try {
-			const res = await instance.get(`${PRODUCTS}/seller `)
+			const res = await instance.get(`${PRODUCTS}/seller`, { params: queryData })
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
