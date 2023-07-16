@@ -1,7 +1,8 @@
 import * as z from 'zod'
 
 export const registerSchema = z.object({
-	username: z.string().min(1, { message: 'Вкажіть name' }).max(15),
+	firstName: z.string().min(1, { message: 'Вкажіть ім`я' }).max(20),
+	lastName: z.string().min(1, { message: 'Вкажіть прізвище' }).max(20),
 	email: z.string().email({ message: 'Вкажіть email' }),
 	phoneNumber: z.string().transform(phoneNumber => {
 		if (phoneNumber === '') return null

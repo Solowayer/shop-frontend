@@ -19,9 +19,9 @@ export default function SellerProducts({ searchParams }: { searchParams: { page:
 		isError,
 		isLoading,
 		isSuccess
-	} = useQuery(['seller-products', searchParams.page, PER_PAGE], () =>
+	} = useQuery(['seller-products', 'high-price', searchParams.page, PER_PAGE], () =>
 		ProductService.getSellerProducts({
-			sort: undefined,
+			sort: 'high-price',
 			min_price: undefined,
 			max_price: undefined,
 			searchTerm: undefined,
