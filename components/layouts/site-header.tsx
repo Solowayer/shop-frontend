@@ -1,17 +1,27 @@
 'use client'
 
 import Link from 'next/link'
-import { ButtonLink, Input } from '@/components/ui'
+import { Button, ButtonLink, Input } from '@/components/ui'
 import { Cart, Person, Search } from '../icons'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
-import AuthService from '@/services/auth.service'
-import SellerService from '@/services/seller.service'
+import AuthService from '@/services/auth-service'
+import SellerService from '@/services/seller-service'
+import CartService from '@/services/cart-service'
 
 import { useStore } from '@/store/use-store-hook'
 import { useEffect } from 'react'
 import { useUserStore } from '@/store/userStore'
-import CartService from '@/services/cart.service'
+import { useLogoutRedirect } from '@/lib/hooks/useLogoutRedirect'
+
+import {
+	DropdownMenu,
+	DropdownMenuTrigger,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuGroup
+} from '@/components/ui/dropdown-menu'
 
 export default function SiteHeader() {
 	const isAuth = useStore(useUserStore, state => state.isAuth)
@@ -33,6 +43,25 @@ export default function SiteHeader() {
 		queryKey: ['cart'],
 		queryFn: CartService.get
 	})
+
+	const exitMutation = useMutation({
+		mutationFn: AuthService.logout,
+		onSuccess: () => {
+			setIsAuth(false)
+			setIsSeller(false)
+			setCartTotalQty(0)
+		}
+	})
+
+	const handleLogout = async () => {
+		try {
+			exitMutation.mutate()
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	useLogoutRedirect()
 
 	useEffect(() => {
 		if (isAuthSuccess) setIsAuth(dataIsAuth)
@@ -68,22 +97,39 @@ export default function SiteHeader() {
 				<div className="flex items-center gap-4">
 					<Input placeholder="Шукати..." icon={<Search />} />
 
-					{isAuth && (
-						<ButtonLink intent="secondary" href={isSeller ? '/seller/dashboard' : '/seller/register'}>
-							Кабінет продавця
+					{isAuth ? (
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button intent="secondary">
+									<Person />
+								</Button>
+							</DropdownMenuTrigger>
+
+							<DropdownMenuContent>
+								<DropdownMenuGroup>
+									<DropdownMenuItem asChild>
+										<Link href="/account">Ваш аккаунт</Link>
+									</DropdownMenuItem>
+									{isSeller ? (
+										<DropdownMenuItem asChild>
+											<Link href="/seller/dashboard">Дашборд продавця</Link>
+										</DropdownMenuItem>
+									) : (
+										<DropdownMenuItem asChild>
+											<Link href="/seller/register">Стати продавцем</Link>
+										</DropdownMenuItem>
+									)}
+								</DropdownMenuGroup>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem onClick={handleLogout}>Вийти</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					) : (
+						<ButtonLink href="/auth/login">
+							<Person />
+							Увійти
 						</ButtonLink>
 					)}
-
-					<ButtonLink intent={isAuth ? 'secondary' : 'primary'} href={isAuth ? '/account' : '/auth/login'}>
-						{isAuth ? (
-							'Мій аккаунт'
-						) : (
-							<>
-								<Person />
-								Увійти
-							</>
-						)}
-					</ButtonLink>
 
 					<ButtonLink intent="secondary" href="/cart">
 						<Cart />

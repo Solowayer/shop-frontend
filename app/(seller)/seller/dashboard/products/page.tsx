@@ -4,7 +4,7 @@ import { ButtonLink, Spinner, Button, StyledLink, TD, TH } from '@/components/ui
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Delete } from '@/components/icons'
 import Image from 'next/image'
-import ProductService from '@/services/product.service'
+import ProductService from '@/services/product-service'
 
 export default function SellerProducts() {
 	const queryClient = useQueryClient()

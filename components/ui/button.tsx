@@ -1,5 +1,7 @@
+'use client'
+
 import { cva, VariantProps } from 'class-variance-authority'
-import React, { ComponentProps } from 'react'
+import React, { forwardRef } from 'react'
 
 export const buttonStyles = cva(
 	[
@@ -65,14 +67,17 @@ export const buttonStyles = cva(
 	}
 )
 
-export interface ButtonProps extends ComponentProps<'button'>, VariantProps<typeof buttonStyles> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonStyles> {
 	children: React.ReactNode
 }
 
-export function Button({ intent, align, size, shape, fullWidth, children, ...props }: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+	{ intent, align, size, shape, fullWidth, children, ...props },
+	ref
+) {
 	return (
-		<button className={buttonStyles({ intent, align, size, shape, fullWidth })} {...props}>
+		<button ref={ref} className={buttonStyles({ intent, align, size, shape, fullWidth })} {...props}>
 			{children}
 		</button>
 	)
-}
+})

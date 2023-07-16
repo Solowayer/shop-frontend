@@ -2,9 +2,9 @@
 
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
-import ProductService from '@/services/product.service'
-import CategoryService from '@/services/category.service'
-import UploadService from '@/services/upload.service'
+import ProductService from '@/services/product-service'
+import CategoryService from '@/services/category-service'
+import UploadService from '@/services/upload-service'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createProductSchema } from '@/lib/validation/productSchema'

@@ -2,7 +2,7 @@
 
 import CartItems from '@/components/cart-items'
 import { StyledLink, Spinner, Button } from '@/components/ui'
-import CartService from '@/services/cart.service'
+import CartService from '@/services/cart-service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useUserStore } from '@/store/userStore'
 import { useStore } from '@/store/use-store-hook'

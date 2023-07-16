@@ -1,19 +1,15 @@
 'use client'
 
-import React, { ComponentProps } from 'react'
-import Link from 'next/link'
+import React, { forwardRef } from 'react'
+import Link, { LinkProps } from 'next/link'
 import { ButtonProps } from './button'
 import { Button } from './button'
 
-type ButtonLinkProps = ComponentProps<'a'> & ButtonProps
+type ButtonLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & ButtonProps & LinkProps
 
-export interface Props extends ButtonLinkProps {
-	href: string
-}
-
-export function ButtonLink({ href, ...props }: Props) {
+export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(function ButtonLink({ href, ...props }, ref) {
 	return (
-		<Link href={href} className="inline-flex" tabIndex={-1}>
+		<Link ref={ref} href={href} passHref>
 			<Button
 				fullWidth={props.fullWidth}
 				intent={props.intent}
@@ -26,4 +22,4 @@ export function ButtonLink({ href, ...props }: Props) {
 			</Button>
 		</Link>
 	)
-}
+})

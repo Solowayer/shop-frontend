@@ -1,7 +1,7 @@
 import CategoryBreadcrumbs from '@/components/category-breadcrumbs'
 import { StyledLink } from '@/components/ui'
 
-import CategoryService from '@/services/category.service'
+import CategoryService from '@/services/category-service'
 import ProductsByCategoryId from '@/components/products-by-categoryId'
 import ProductsByCategoryTree from '@/components/products-by-category-tree'
 

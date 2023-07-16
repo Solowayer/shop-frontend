@@ -1,6 +1,6 @@
 'use client'
 
-import ProductService from '@/services/product.service'
+import ProductService from '@/services/product-service'
 import React, { useEffect, useState } from 'react'
 import Products from './products'
 import { useQuery } from '@tanstack/react-query'

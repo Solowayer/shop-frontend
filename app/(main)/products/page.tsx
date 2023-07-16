@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Products from '@/components/products'
-import ProductService from '@/services/product.service'
+import ProductService from '@/services/product-service'
 import { Spinner } from '@/components/ui'
 import { useQuery } from '@tanstack/react-query'
 import DefaultError from '@/components/layouts/default-error'

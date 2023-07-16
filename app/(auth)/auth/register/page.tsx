@@ -7,7 +7,7 @@ import { registerSchema } from '@/lib/validation/authorizationSchema'
 import { Button, ButtonLink, Input } from '@/components/ui'
 
 import { useMutation } from '@tanstack/react-query'
-import AuthService from '@/services/auth.service'
+import AuthService from '@/services/auth-service'
 import { useEffect } from 'react'
 import { useUserStore } from '@/store/userStore'
 import { useAuthRedirect } from '@/lib/hooks/useAuthRedirect'

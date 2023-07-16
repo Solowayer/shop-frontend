@@ -1,7 +1,7 @@
 import CategoryBreadcrumbs from '@/components/category-breadcrumbs'
 import Product from '@/components/product'
-import ProductService from '@/services/product.service'
-import CategoryService from '@/services/category.service'
+import ProductService from '@/services/product-service'
+import CategoryService from '@/services/category-service'
 
 export default async function ProductPage({ params }: { params: { id: number } }) {
 	const product = await ProductService.getById(params.id)

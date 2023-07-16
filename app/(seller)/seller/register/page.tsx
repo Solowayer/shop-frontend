@@ -8,7 +8,7 @@ import { Button, Input } from '@/components/ui'
 import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useSellerRedirect } from '@/lib/hooks/useSellerRedirect'
-import SellerService from '@/services/seller.service'
+import SellerService from '@/services/seller-service'
 import { useUserStore } from '@/store/userStore'
 
 export default function SellerRegister() {

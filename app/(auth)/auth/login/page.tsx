@@ -8,7 +8,7 @@ import { Button, ButtonLink, Input } from '@/components/ui'
 
 import { useMutation } from '@tanstack/react-query'
 
-import AuthService from '@/services/auth.service'
+import AuthService from '@/services/auth-service'
 
 import { useUserStore } from '@/store/userStore'
 import { useEffect } from 'react'

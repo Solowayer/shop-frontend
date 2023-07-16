@@ -4,7 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import CartService from '@/services/cart.service'
+import CartService from '@/services/cart-service'
 
 import { Spinner, Button } from '@/components/ui'
 import Link from 'next/link'
