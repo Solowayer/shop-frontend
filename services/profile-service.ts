@@ -1,3 +1,4 @@
+import { Profile } from '@/types/profile.type'
 import instance from './api'
 
 const PROFILE = '/profile'

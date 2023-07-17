@@ -1,10 +1,11 @@
-enum Gender {
+export enum Gender {
 	MALE = 'MALE',
 	FEMALE = 'FEMALE',
 	OTHER = 'OTHER'
 }
 
-interface Profile {
+export interface Profile {
 	firstName: string
 	lastName: string
+	gender: Gender
 }

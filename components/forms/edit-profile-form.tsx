@@ -7,14 +7,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import ProfileService from '@/services/profile-service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { profileSchema } from '@/lib/validation/profileSchema'
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
+import { Profile, Gender } from '@/types/profile.type'
 
 type ProfileFormProps = {
-	firstName: string
-	lastName: string
 	setOpen: (value: boolean) => void
-}
+} & Profile
 
-export default function EditProfileForm({ firstName, lastName, setOpen }: ProfileFormProps) {
+export default function EditProfileForm({ firstName, lastName, gender, setOpen }: ProfileFormProps) {
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation((data: Profile) => ProfileService.updateProfile(data), {
@@ -24,11 +24,13 @@ export default function EditProfileForm({ firstName, lastName, setOpen }: Profil
 	const {
 		register,
 		handleSubmit,
-		formState: { errors, isSubmitting, isDirty }
+		formState: { errors, isSubmitting, isDirty },
+		setValue
 	} = useForm<Profile>({
 		defaultValues: {
 			firstName,
-			lastName
+			lastName,
+			gender
 		},
 		resolver: zodResolver(profileSchema)
 	})
@@ -53,6 +55,20 @@ export default function EditProfileForm({ firstName, lastName, setOpen }: Profil
 				{errors.firstName?.message && <span className="text-red-500">{errors.firstName?.message}</span>}
 				<Input {...register('lastName')} disabled={isSubmitting} label="Прізвище" id="lastName" fullWidth />
 				{errors.lastName?.message && <span className="text-red-500">{errors.lastName?.message}</span>}
+
+				<span className="font-medium">
+					Стать {gender === null && <span className="text-zinc-500">(Не вказано)</span>}
+				</span>
+				<RadioGroup
+					defaultValue={gender ?? null}
+					onValueChange={(value: Gender) => setValue('gender', value, { shouldDirty: true })}
+				>
+					<div className="flex flex-col gap-4">
+						<RadioGroupItem {...register('gender')} value={Gender.FEMALE} label="Жіноча" id="female" />
+						<RadioGroupItem {...register('gender')} value={Gender.MALE} label="Чоловіча" id="male" />
+						<RadioGroupItem {...register('gender')} value={Gender.OTHER} label="Інше" id="other" />
+					</div>
+				</RadioGroup>
 			</div>
 
 			<div className="flex justify-end gap-4">

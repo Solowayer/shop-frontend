@@ -9,6 +9,12 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import EditProfileForm from '@/components/forms/edit-profile-form'
 
 export default function Page() {
+	const genderLabels = {
+		MALE: 'Чоловіча',
+		FEMALE: 'Жіноча',
+		OTHER: 'Інше'
+	}
+
 	const [open, setOpen] = useState<boolean>(false)
 	const { data, isError, isLoading, refetch } = useQuery(['profile'], ProfileService.get)
 
@@ -30,7 +36,12 @@ export default function Page() {
 					</DialogTrigger>
 
 					<DialogContent title="Редагування профілю" description="Внесіть зміни у свій профіль тут.">
-						<EditProfileForm firstName={data.firstName} lastName={data.lastName} setOpen={setOpen} />
+						<EditProfileForm
+							firstName={data.firstName}
+							lastName={data.lastName}
+							gender={data.gender}
+							setOpen={setOpen}
+						/>
 					</DialogContent>
 				</Dialog>
 			</div>
@@ -44,6 +55,11 @@ export default function Page() {
 				<div className="flex flex-col">
 					<span className="font-bold">Прізвище:</span>
 					{data.lastName}
+				</div>
+
+				<div className="flex flex-col">
+					<span className="font-bold">Стать:</span>
+					<span>{genderLabels[data.gender] ?? 'Не вказано'}</span>
 				</div>
 			</div>
 		</div>

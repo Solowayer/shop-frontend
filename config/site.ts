@@ -4,5 +4,6 @@ export const siteConfig = {
 			title: 'Мій аккаунт',
 			href: '/'
 		}
-	]
+	],
+	profile: []
 }
