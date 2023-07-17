@@ -61,8 +61,6 @@ export default function SiteHeader() {
 		}
 	}
 
-	useLogoutRedirect()
-
 	useEffect(() => {
 		if (isAuthSuccess) setIsAuth(dataIsAuth)
 		if (isSellerSuccess) setIsSeller(dataIsSeller)
