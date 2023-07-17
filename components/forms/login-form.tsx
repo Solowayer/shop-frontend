@@ -37,7 +37,7 @@ const LoginForm = () => {
 
 	const onSubmit: SubmitHandler<Login> = async data => {
 		try {
-			logMutation.mutate({ ...data })
+			await logMutation.mutateAsync({ ...data })
 			console.log({ ...data })
 		} catch (error) {
 			console.log(error)
