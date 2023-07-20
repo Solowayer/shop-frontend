@@ -1,15 +1,44 @@
-import React from 'react'
-import Image from 'next/image'
-import { Star } from './icons'
-import Link from 'next/link'
+'use client'
 
-interface ProductProps extends Omit<Product, 'id' | 'slug' | 'description' | 'categoryId' | 'published'> {
+import React, { useState } from 'react'
+import Image from 'next/image'
+import { FavoriteFilled, FavoriteOutlined, Star } from './icons'
+import Link from 'next/link'
+import { Toggle } from './ui/toggle'
+import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
+import { Button } from './ui'
+import { useQuery } from '@tanstack/react-query'
+import ListService from '@/services/list-service'
+
+interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string
 }
 
-export default function ProductCard({ href, images, name, price, rating }: ProductProps) {
+export default function ProductCard({ id, href, images, name, price, rating }: ProductProps) {
+	const [pressed, setPressed] = useState<boolean>(false)
+
+	const { data: listData } = useQuery(['lists'], ListService.getAll)
+
 	return (
-		<div className="flex flex-col min-w-[240px] border-2 rounded hover:border-zinc-300 overflow-hidden bg-white">
+		<div className="relative flex flex-col min-w-[240px] border-2 rounded hover:border-zinc-300 overflow-hidden bg-white">
+			<Dialog>
+				<DialogTrigger asChild>
+					<Toggle className="absolute flex items-center top-2 right-2 z-50 bg-white p-2 rounded-full" pressed={true}>
+						{pressed ? <FavoriteFilled size="24" className="text-red-500" /> : <FavoriteOutlined size="24" />}
+					</Toggle>
+				</DialogTrigger>
+				<DialogContent title="Ваше обране">
+					<Button intent="secondary" onClick={() => setPressed(!pressed)}>
+						+ Додати новий список
+					</Button>
+					{listData?.map((list, index) => (
+						<Button intent="secondary" key={index} onClick={() => alert(list.id)}>
+							{list.name}
+						</Button>
+					))}
+				</DialogContent>
+			</Dialog>
+
 			<Link href={href}>
 				<div className="relative h-[180px] w-full">
 					{images && images.length > 0 ? (

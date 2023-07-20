@@ -17,7 +17,7 @@ export default function ProductsByCategoryId({ id, page, perPage }: { id: number
 		isLoading,
 		isSuccess,
 		refetch
-	} = useQuery(['products-byCategoryId', page, perPage], () =>
+	} = useQuery(['products-by-category-id', page, perPage], () =>
 		ProductService.getByCategoryId(id, {
 			sort: undefined,
 			min_price: undefined,

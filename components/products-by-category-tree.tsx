@@ -17,7 +17,7 @@ export default function ProductsByCategoryTree({ id, page, perPage }: { id: numb
 		isLoading,
 		isSuccess,
 		refetch
-	} = useQuery(['products-byCategoryTree', page, perPage], () =>
+	} = useQuery(['products-by-category-tree', page, perPage], () =>
 		ProductService.getByCategoryTree(id, {
 			sort: undefined,
 			min_price: undefined,

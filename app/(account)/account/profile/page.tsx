@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Button, Spinner } from '@/components/ui'
+import { Button, ButtonLink, Spinner } from '@/components/ui'
 import DefaultError from '@/components/layouts/default-error'
 import ProfileService from '@/services/profile-service'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'

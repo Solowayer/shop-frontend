@@ -6,6 +6,7 @@ export default function Products({ products }: { products: Product[] }) {
 		<div className="grid grid-cols-4 gap-4">
 			{products.map(product => (
 				<ProductCard
+					id={product.id}
 					key={product.id}
 					href={`/product/${product.slug}`}
 					images={product.images}

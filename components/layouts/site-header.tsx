@@ -12,7 +12,7 @@ import CartService from '@/services/cart-service'
 import { useStore } from '@/store/use-store-hook'
 import { useEffect } from 'react'
 import { useUserStore } from '@/store/userStore'
-import { useLogoutRedirect } from '@/lib/hooks/useLogoutRedirect'
+// import { useLogoutRedirect } from '@/lib/hooks/useLogoutRedirect'
 
 import {
 	DropdownMenu,
@@ -107,6 +107,9 @@ export default function SiteHeader() {
 								<DropdownMenuGroup>
 									<DropdownMenuItem asChild>
 										<Link href="/account">Ваш аккаунт</Link>
+									</DropdownMenuItem>
+									<DropdownMenuItem asChild>
+										<Link href="/account/lists">Обране</Link>
 									</DropdownMenuItem>
 									{isSeller ? (
 										<DropdownMenuItem asChild>

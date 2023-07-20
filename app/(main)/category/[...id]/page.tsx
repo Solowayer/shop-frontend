@@ -2,7 +2,7 @@ import CategoryBreadcrumbs from '@/components/category-breadcrumbs'
 import { StyledLink } from '@/components/ui'
 
 import CategoryService from '@/services/category-service'
-import ProductsByCategoryId from '@/components/products-by-categoryId'
+import ProductsByCategoryId from '@/components/products-by-category-id'
 import ProductsByCategoryTree from '@/components/products-by-category-tree'
 
 export default async function Category({

@@ -9,9 +9,11 @@ interface IAccountCard {
 
 export default function AccountCard({ href, title, subtitle }: IAccountCard) {
 	return (
-		<Link href={href} passHref className="flex flex-col gap-2 p-6 border hover:bg-zinc-100 rounded overflow-hidden">
-			<span className="font-medium text-lg">{title}</span>
-			<span className="text-sm text-zinc-500">{subtitle}</span>
+		<Link href={href} passHref className="p-6 border hover:bg-zinc-100 rounded overflow-hidden">
+			<div className="flex flex-col gap-2">
+				<span className="font-medium text-lg">{title}</span>
+				<span className="text-sm text-zinc-500">{subtitle}</span>
+			</div>
 		</Link>
 	)
 }

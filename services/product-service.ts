@@ -36,6 +36,15 @@ class ProductServ {
 		}
 	}
 
+	async getByList(listId: number, queryData?: ProductFilters): Promise<{ products: Product[]; length: number }> {
+		try {
+			const res = await instance.get(`${PRODUCTS}/l/${listId}`, { params: queryData })
+			return res.data
+		} catch (error: any) {
+			throw new Error(error?.response?.data?.message)
+		}
+	}
+
 	async getSellerProducts(queryData?: ProductFilters): Promise<{ products: Product[]; length: number }> {
 		try {
 			const res = await instance.get(`${PRODUCTS}/seller`, { params: queryData })
