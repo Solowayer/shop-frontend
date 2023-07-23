@@ -3,7 +3,7 @@ import instance from './api'
 const CART = '/cart'
 
 class CartServ {
-	async get(): Promise<Cart> {
+	async getAllItems(): Promise<Cart> {
 		try {
 			const res = await instance.get(`${CART}`)
 			return res.data
@@ -12,16 +12,16 @@ class CartServ {
 		}
 	}
 
-	async delete() {
+	async deleteItems() {
 		try {
-			const res = await instance.delete(`${CART}/delete`)
+			const res = await instance.delete(`${CART}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async addCartItem(data: AddCartItem): Promise<CartItem> {
+	async addItem(data: AddCartItem): Promise<CartItem> {
 		try {
 			const res = await instance.post(`${CART}/add`, data)
 			return res.data
@@ -30,7 +30,7 @@ class CartServ {
 		}
 	}
 
-	async updateCartItem(id: number, data: EditCartItem): Promise<CartItem> {
+	async updateItem(id: number, data: EditCartItem): Promise<CartItem> {
 		try {
 			const res = await instance.patch(`${CART}/${id}`, data)
 			return res.data
@@ -39,7 +39,7 @@ class CartServ {
 		}
 	}
 
-	async deleteCartItem(id: number) {
+	async deleteItem(id: number) {
 		try {
 			const res = await instance.delete(`${CART}/${id}`)
 			return res.data

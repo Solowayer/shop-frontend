@@ -15,7 +15,7 @@ export default function CartItem({ id, image, name, price, quantity, productId }
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation({
-		mutationFn: CartService.deleteCartItem,
+		mutationFn: CartService.deleteItem,
 		onSuccess: () => {
 			queryClient.invalidateQueries(['cart'])
 			setCartTotalQty(cartTotalQty - quantity)

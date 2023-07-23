@@ -17,7 +17,7 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 	const { cartTotalQty, setCartTotalQty } = useUserStore()
 
 	const mutation = useMutation({
-		mutationFn: CartService.addCartItem,
+		mutationFn: CartService.addItem,
 		onSuccess: () => setCartTotalQty(cartTotalQty + 1)
 	})
 

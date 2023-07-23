@@ -16,7 +16,7 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 	const { cartTotalQty, setCartTotalQty } = useUserStore()
 
 	const mutation = useMutation({
-		mutationFn: CartService.addCartItem
+		mutationFn: CartService.addItem
 	})
 
 	const {
