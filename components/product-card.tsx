@@ -20,7 +20,7 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 	const { data: listData } = useQuery(['lists'], ListService.getAll)
 
 	return (
-		<div className="relative flex flex-col min-w-[240px] border-2 rounded hover:border-zinc-300 overflow-hidden bg-white">
+		<li className="relative flex flex-col min-w-[240px] border-2 rounded hover:border-zinc-300 overflow-hidden bg-white">
 			<Dialog>
 				<DialogTrigger asChild>
 					<Toggle className="absolute flex items-center top-2 right-2 z-50 bg-white p-2 rounded-full" pressed={true}>
@@ -58,6 +58,6 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 					<span className="font-bold text-xl">{price} ₴</span>
 				</div>
 			</Link>
-		</div>
+		</li>
 	)
 }

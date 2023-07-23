@@ -2,7 +2,7 @@
 
 import ProductService from '@/services/product-service'
 import React, { useEffect, useState } from 'react'
-import Products from './products'
+import ProductCards from './product-cards'
 import { useQuery } from '@tanstack/react-query'
 import DefaultError from './layouts/default-error'
 import { Spinner } from './ui'
@@ -46,7 +46,7 @@ export default function ProductsByCategoryTree({ id, page, perPage }: { id: numb
 		<>
 			{productsData.products.length > 0 ? (
 				<div className="flex flex-col gap-8">
-					<Products products={productsData.products} />
+					<ProductCards products={productsData.products} />
 					{totalPages > 1 && <Pagination totalPages={totalPages} />}
 				</div>
 			) : (

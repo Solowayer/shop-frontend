@@ -5,7 +5,7 @@ import ListService from '@/services/list-service'
 import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@/components/ui'
 import ProductService from '@/services/product-service'
-import ProductListCard from '@/components/product-list-card'
+import ProductListItems from '@/components/product-list-items'
 
 export default function Page({ params }: { params: { id: number } }) {
 	const { data: list, isLoading } = useQuery(['list'], () => ListService.getById(params.id))
@@ -14,23 +14,10 @@ export default function Page({ params }: { params: { id: number } }) {
 	if (isLoading) return <Spinner />
 
 	return (
-		<>
+		<div className="flex flex-col gap-8">
 			<h1 className="w-full text-3xl font-bold">{list?.name}</h1>
-			{productsData && (
-				<div className="flex flex-col gap-4">
-					{productsData.products.map((product, index) => (
-						<ProductListCard
-							key={index}
-							href={''}
-							id={product.id}
-							images={product.images}
-							rating={product.rating}
-							name={product.name}
-							price={product.price}
-						/>
-					))}
-				</div>
-			)}
-		</>
+			<hr />
+			{productsData && <ProductListItems products={productsData.products} />}
+		</div>
 	)
 }

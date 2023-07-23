@@ -12,6 +12,7 @@ interface Product {
 
 interface FullProduct extends Product {
 	category: Category
+	cartItems: CartItem[]
 }
 
 interface CreateProduct extends Omit<Product, 'id' | 'rating'> {}

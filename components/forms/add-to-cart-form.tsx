@@ -32,7 +32,12 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 	})
 
 	const onSubmit: SubmitHandler<AddCartItem> = data => {
-		mutation.mutate({ ...data })
+		try {
+			mutation.mutate({ ...data })
+		} catch (error) {
+			console.log(error)
+		}
+
 		if (isAuth) {
 			setCartTotalQty(cartTotalQty + data.quantity)
 		}

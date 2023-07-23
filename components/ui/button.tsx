@@ -6,6 +6,7 @@ import React, { forwardRef } from 'react'
 export const buttonStyles = cva(
 	[
 		'relative',
+		'select-none',
 		'inline-flex items-center',
 		'font-medium',
 		'focus:outline-none focus:ring focus:ring-blue-300 focus:ring-offset-2',

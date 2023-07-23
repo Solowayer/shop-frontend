@@ -1,9 +1,9 @@
 import React from 'react'
 import ProductCard from './product-card'
 
-export default function Products({ products }: { products: Product[] }) {
+export default function ProductCards({ products }: { products: Product[] }) {
 	return (
-		<div className="grid grid-cols-4 gap-4">
+		<li className="grid grid-cols-4 gap-4">
 			{products.map(product => (
 				<ProductCard
 					id={product.id}
@@ -15,6 +15,6 @@ export default function Products({ products }: { products: Product[] }) {
 					rating={product.rating}
 				/>
 			))}
-		</div>
+		</li>
 	)
 }
