@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import CartService from '@/services/cart-service'
 
-import { Spinner, Button } from '@/components/ui'
+import { Button } from '@/components/ui'
 import Link from 'next/link'
 import { useUserStore } from '@/store/userStore'
 import { Delete } from './icons'
@@ -16,38 +16,34 @@ export default function CartItem({ id, image, name, price, quantity, productId }
 	const queryClient = useQueryClient()
 	const { cartTotalQty, setCartTotalQty } = useUserStore()
 
-	const deleteMutation = useMutation(CartService.deleteItem, {
+	const deleteCartItemMutation = useMutation(CartService.deleteItem, {
 		onSuccess: () => {
 			queryClient.invalidateQueries(['cart'])
 			setCartTotalQty(cartTotalQty - quantity)
 		}
 	})
 
-	const updateMutation = useMutation((data: EditCartItem) => CartService.updateItem(id, data), {
+	const editCartItemMutation = useMutation((data: EditCartItem) => CartService.updateItem(id, data), {
 		onSuccess: () => {
 			queryClient.invalidateQueries(['cart'])
 		}
 	})
 
+	const handleUpdateCartItem = async (newQuantity: number) => {
+		try {
+			await editCartItemMutation.mutateAsync({ quantity: newQuantity })
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 	const handleDeleteCartItem = async () => {
 		try {
-			await deleteMutation.mutateAsync(id)
+			await deleteCartItemMutation.mutateAsync(id)
 			console.log(id)
 		} catch (error) {
 			console.log(error)
 		}
-	}
-
-	const handleUpdateCartItem = async (newQuantity: number) => {
-		try {
-			await updateMutation.mutateAsync({ quantity: newQuantity })
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	if (deleteMutation.isLoading) {
-		return <Spinner />
 	}
 
 	return (
@@ -65,7 +61,7 @@ export default function CartItem({ id, image, name, price, quantity, productId }
 					<span className="font-bold text-xl min-w-[200px] inline-flex justify-end">{price} ₴</span>
 				</div>
 				<div className="flex items-center gap-4">
-					<Stepper quantity={quantity} handleUpdate={handleUpdateCartItem} handleDelete={handleDeleteCartItem} />
+					<Stepper value={quantity} setValue={handleUpdateCartItem} onDeleteButton={handleDeleteCartItem} max={33} />
 					{quantity > 1 ? (
 						<Button intent="secondary" shape="circle" onClick={handleDeleteCartItem}>
 							<Delete />

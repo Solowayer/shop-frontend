@@ -8,6 +8,7 @@ import { Button } from './ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import CartService from '@/services/cart-service'
 import { useUserStore } from '@/store/userStore'
+import Stepper from './stepper'
 
 interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string
@@ -19,7 +20,7 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 
 	const { data: cartItemData } = useQuery([`cart-item-${id}`], () => CartService.getItemByProductId(id))
 
-	const mutation = useMutation({
+	const addCartItemMutation = useMutation({
 		mutationFn: CartService.addItem,
 		onSuccess: () => {
 			setCartTotalQty(cartTotalQty + 1), queryClient.invalidateQueries([`cart-item-${id}`])
@@ -28,7 +29,7 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 
 	const addProductToCart = async () => {
 		try {
-			await mutation.mutateAsync({ productId: id, quantity: 1 })
+			await addCartItemMutation.mutateAsync({ productId: id, quantity: 1 })
 		} catch (error) {
 			console.error('Помилка при додаванні товару до корзини:', error)
 		}
@@ -58,9 +59,14 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 					</span>
 				</div>
 				<div className="flex justify-end">
-					<Button onClick={addProductToCart}>
-						<span className="whitespace-nowrap">В корзину {cartItemData && cartItemData.quantity}</span>
-					</Button>
+					{cartItemData && cartItemData.quantity ? (
+						// <Stepper quantity={cartItemData.quantity} />
+						'cringe'
+					) : (
+						<Button onClick={addProductToCart}>
+							<span className="whitespace-nowrap">В корзину</span>
+						</Button>
+					)}
 				</div>
 			</div>
 		</li>
