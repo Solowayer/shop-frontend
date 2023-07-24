@@ -13,7 +13,12 @@ export default function Cart() {
 	const isAuth = useStore(useUserStore, state => state.isAuth)
 	const { setCartTotalQty } = useUserStore()
 
-	const { data, isLoading, isError, isSuccess, refetch } = useQuery({
+	const {
+		data: cartData,
+		isLoading,
+		isError,
+		refetch
+	} = useQuery({
 		queryKey: ['cart'],
 		queryFn: CartService.getAllItems
 	})
@@ -55,13 +60,13 @@ export default function Cart() {
 	return (
 		<div className="flex flex-col gap-8 w-full">
 			<h1 className="text-3xl font-bold">Корзина</h1>
-			{data && data.cartItems ? (
+			{cartData && cartData.cartItems.length ? (
 				<div className="flex gap-10">
-					<CartItems cartItems={data.cartItems} />
+					<CartItems cartItems={cartData.cartItems} />
 					<div className="flex flex-col w-[400px] gap-4">
 						<div className="flex justify-between">
-							<span>Всього товарів ({data ? data.totalQuantity : 0}):</span>
-							<span className="text-lg font-bold">{data ? data.totalAmount : 0} ₴</span>
+							<span>Всього товарів ({cartData ? cartData.totalQuantity : 0}):</span>
+							<span className="text-lg font-bold">{cartData ? cartData.totalAmount : 0} ₴</span>
 						</div>
 						<Button>Оформити замовлення</Button>
 						<Button intent="secondary" onClick={() => handleDeleteCart()}>

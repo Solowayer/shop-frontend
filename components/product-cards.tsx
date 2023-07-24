@@ -3,7 +3,7 @@ import ProductCard from './product-card'
 
 export default function ProductCards({ products }: { products: Product[] }) {
 	return (
-		<li className="grid grid-cols-4 gap-4">
+		<ul className="grid grid-cols-4 gap-4">
 			{products.map(product => (
 				<ProductCard
 					id={product.id}
@@ -15,6 +15,6 @@ export default function ProductCards({ products }: { products: Product[] }) {
 					rating={product.rating}
 				/>
 			))}
-		</li>
+		</ul>
 	)
 }

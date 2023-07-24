@@ -1,11 +1,11 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import { Star } from './icons'
 import Link from 'next/link'
 import { Button } from './ui'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import CartService from '@/services/cart-service'
 import { useUserStore } from '@/store/userStore'
 
@@ -14,11 +14,16 @@ interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryI
 }
 
 export default function ProductListItem({ id, href, images, name, price, rating }: ProductProps) {
+	const queryClient = useQueryClient()
 	const { cartTotalQty, setCartTotalQty } = useUserStore()
+
+	const { data: cartItemData } = useQuery([`cart-item-${id}`], () => CartService.getItemByProductId(id))
 
 	const mutation = useMutation({
 		mutationFn: CartService.addItem,
-		onSuccess: () => setCartTotalQty(cartTotalQty + 1)
+		onSuccess: () => {
+			setCartTotalQty(cartTotalQty + 1), queryClient.invalidateQueries([`cart-item-${id}`])
+		}
 	})
 
 	const addProductToCart = async () => {
@@ -54,7 +59,7 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 				</div>
 				<div className="flex justify-end">
 					<Button onClick={addProductToCart}>
-						<span className="whitespace-nowrap">В корзину</span>
+						<span className="whitespace-nowrap">В корзину {cartItemData && cartItemData.quantity}</span>
 					</Button>
 				</div>
 			</div>

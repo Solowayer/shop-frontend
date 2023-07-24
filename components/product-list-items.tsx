@@ -3,7 +3,7 @@ import ProductListItem from './product-list-item'
 
 export default function ProductListItems({ products }: { products: Product[] }) {
 	return (
-		<li className="flex flex-col gap-4">
+		<ul className="flex flex-col gap-4">
 			{products.map((product, index) => (
 				<ProductListItem
 					key={index}
@@ -15,6 +15,6 @@ export default function ProductListItems({ products }: { products: Product[] }) 
 					price={product.price}
 				/>
 			))}
-		</li>
+		</ul>
 	)
 }
