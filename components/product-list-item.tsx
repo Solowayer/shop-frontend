@@ -2,13 +2,11 @@
 
 import React, { useEffect } from 'react'
 import Image from 'next/image'
-import { Star } from './icons'
+import { Cart, Check, Star } from './icons'
 import Link from 'next/link'
-import { Button } from './ui'
+import { Button, ButtonLink, Spinner } from './ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import CartService from '@/services/cart-service'
-import { useUserStore } from '@/store/userStore'
-import Stepper from './stepper'
 
 interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string
@@ -16,14 +14,15 @@ interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryI
 
 export default function ProductListItem({ id, href, images, name, price, rating }: ProductProps) {
 	const queryClient = useQueryClient()
-	const { cartTotalQty, setCartTotalQty } = useUserStore()
 
-	const { data: cartItemData } = useQuery([`cart-item-${id}`], () => CartService.getItemByProductId(id))
+	const { isError: isCartItemError, isLoading: isCartItemLoading } = useQuery([`cart-item-${id}`], () =>
+		CartService.getItemByProductId(id)
+	)
 
 	const addCartItemMutation = useMutation({
 		mutationFn: CartService.addItem,
 		onSuccess: () => {
-			setCartTotalQty(cartTotalQty + 1), queryClient.invalidateQueries([`cart-item-${id}`])
+			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries([`cart-item-${id}`])
 		}
 	})
 
@@ -59,13 +58,20 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 					</span>
 				</div>
 				<div className="flex justify-end">
-					{cartItemData && cartItemData.quantity ? (
-						// <Stepper quantity={cartItemData.quantity} />
-						'cringe'
-					) : (
-						<Button onClick={addProductToCart}>
-							<span className="whitespace-nowrap">В корзину</span>
+					{isCartItemError ? (
+						<Button intent="secondary" shape="square" onClick={addProductToCart}>
+							{isCartItemLoading ? <Spinner /> : <Cart />}
 						</Button>
+					) : (
+						<div>
+							{isCartItemLoading ? (
+								<Spinner />
+							) : (
+								<ButtonLink intent="positive" shape="square" href="/cart">
+									<Check />
+								</ButtonLink>
+							)}
+						</div>
 					)}
 				</div>
 			</div>

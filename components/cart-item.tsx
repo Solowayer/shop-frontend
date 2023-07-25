@@ -8,22 +8,19 @@ import CartService from '@/services/cart-service'
 
 import { Button } from '@/components/ui'
 import Link from 'next/link'
-import { useUserStore } from '@/store/userStore'
 import { Delete } from './icons'
 import Stepper from './stepper'
 
 export default function CartItem({ id, image, name, price, quantity, productId }: CartItem) {
 	const queryClient = useQueryClient()
-	const { cartTotalQty, setCartTotalQty } = useUserStore()
 
-	const deleteCartItemMutation = useMutation(CartService.deleteItem, {
+	const updateCartItemMutation = useMutation((data: EditCartItem) => CartService.updateItem(id, data), {
 		onSuccess: () => {
 			queryClient.invalidateQueries(['cart'])
-			setCartTotalQty(cartTotalQty - quantity)
 		}
 	})
 
-	const editCartItemMutation = useMutation((data: EditCartItem) => CartService.updateItem(id, data), {
+	const deleteCartItemMutation = useMutation(CartService.deleteItem, {
 		onSuccess: () => {
 			queryClient.invalidateQueries(['cart'])
 		}
@@ -31,7 +28,7 @@ export default function CartItem({ id, image, name, price, quantity, productId }
 
 	const handleUpdateCartItem = async (newQuantity: number) => {
 		try {
-			await editCartItemMutation.mutateAsync({ quantity: newQuantity })
+			await updateCartItemMutation.mutateAsync({ quantity: newQuantity })
 		} catch (error) {
 			console.log(error)
 		}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import CartService from '@/services/cart-service'
 
@@ -12,11 +12,13 @@ import { useStore } from '@/store/use-store-hook'
 import { useUserStore } from '@/store/userStore'
 
 export default function AddToCartForm({ productId }: { productId: number }) {
+	const queryClient = useQueryClient()
+
 	const isAuth = useStore(useUserStore, state => state.isAuth)
-	const { cartTotalQty, setCartTotalQty } = useUserStore()
 
 	const mutation = useMutation({
-		mutationFn: CartService.addItem
+		mutationFn: CartService.addItem,
+		onSuccess: () => queryClient.invalidateQueries(['cart'])
 	})
 
 	const {
@@ -36,10 +38,6 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 			mutation.mutate({ ...data })
 		} catch (error) {
 			console.log(error)
-		}
-
-		if (isAuth) {
-			setCartTotalQty(cartTotalQty + data.quantity)
 		}
 	}
 
