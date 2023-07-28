@@ -16,10 +16,16 @@ interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryI
 }
 
 export default function ProductCard({ id, href, images, name, price, rating }: ProductProps) {
+	const [open, setOpen] = useState(false)
+
 	const queryClient = useQueryClient()
 	const [pressed, setPressed] = useState<boolean>(false)
 
-	const { data: cartData } = useQuery([`check-product-in-cart-${id}`], () => CartService.checkProductInCart(id))
+	const { data: cartCheck } = useQuery([`check-product-in-cart-${id}`], () => CartService.checkProductInCart(id))
+
+	const { data: listCheck } = useQuery([`check-product-in-list-${id}`], () => ListService.checkProductInList(id))
+
+	const { data: listData } = useQuery(['lists'], ListService.findAll)
 
 	const addCartItemMutation = useMutation({
 		mutationFn: CartService.addItem,
@@ -30,7 +36,10 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 
 	const addProductToListMutation = useMutation({
 		mutationFn: ({ listId, productId }: { listId: number; productId: number }) =>
-			ListService.addProduct(listId, productId)
+			ListService.addProduct(listId, productId),
+		onSuccess: () => {
+			queryClient.invalidateQueries([`check-product-in-list-${id}`])
+		}
 	})
 
 	const addListMutation = useMutation(ListService.create)
@@ -46,6 +55,7 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 	const handleAddProductToList = async (listId: number) => {
 		try {
 			await addProductToListMutation.mutateAsync({ productId: id, listId })
+			setOpen(false)
 		} catch (error) {
 			console.error('Помилка при додаванні товару до корзини:', error)
 		}
@@ -59,14 +69,16 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 		}
 	}
 
-	const { data: listData } = useQuery(['lists'], ListService.findAll)
-
 	return (
 		<li className="relative flex flex-col min-w-[240px] border rounded hover:border-zinc-300 overflow-hidden bg-white">
-			<Dialog>
+			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogTrigger asChild>
 					<Toggle className="absolute flex items-center top-2 right-2 z-50 bg-white p-2 rounded-full" pressed={true}>
-						{pressed ? <FavoriteFilled size="24" className="text-red-500" /> : <FavoriteOutlined size="24" />}
+						{listCheck?.isInList ? (
+							<FavoriteFilled size="24" className="text-red-500" />
+						) : (
+							<FavoriteOutlined size="24" />
+						)}
 					</Toggle>
 				</DialogTrigger>
 				<DialogContent title="Ваше обране">
@@ -82,7 +94,7 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 			</Dialog>
 
 			<div className="absolute z-50 bottom-32 right-4">
-				{cartData?.isInCart ? (
+				{cartCheck?.isInCart ? (
 					<ButtonLink intent="positive" shape="circle" href="/cart">
 						<CartFilled />
 					</ButtonLink>

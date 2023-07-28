@@ -65,6 +65,15 @@ class ListServ {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
+
+	async checkProductInList(productId: number): Promise<{ isInList: boolean }> {
+		try {
+			const res = await instance.get(`${LISTS}/check/${productId}`)
+			return res.data
+		} catch (error: any) {
+			throw new Error(error?.response?.data?.message)
+		}
+	}
 }
 
 const ListService = new ListServ()

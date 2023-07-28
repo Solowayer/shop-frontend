@@ -2,17 +2,19 @@
 
 import React from 'react'
 import Image from 'next/image'
-import { Cart, Star, CartFilled } from './icons'
+import { Cart, Star, CartFilled, Delete } from './icons'
 import Link from 'next/link'
-import { Button, ButtonLink, Spinner } from './ui'
+import { Button, ButtonLink } from './ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import CartService from '@/services/cart-service'
+import ListService from '@/services/list-service'
 
-interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
+interface FavoriteItemProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string
+	listId: number
 }
 
-export default function ProductListItem({ id, href, images, name, price, rating }: ProductProps) {
+export default function FavoriteItem({ id, listId, href, images, name, price, rating }: FavoriteItemProps) {
 	const queryClient = useQueryClient()
 
 	const { data: cartData } = useQuery([`check-product-in-cart-${id}`], () => CartService.checkProductInCart(id))
@@ -24,13 +26,25 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 		}
 	})
 
-	console.log(cartData?.isInCart)
+	const deleteListItemMutation = useMutation({
+		mutationFn: ({ listId, productId }: { listId: number; productId: number }) =>
+			ListService.deleteProduct(listId, productId),
+		onSuccess: () => queryClient.invalidateQueries([`list-products-${listId}`])
+	})
 
 	const addProductToCart = async () => {
 		try {
 			await addCartItemMutation.mutateAsync({ productId: id, quantity: 1 })
 		} catch (error) {
 			console.error('Помилка при додаванні товару до корзини:', error)
+		}
+	}
+
+	const handleDeleteProductFromList = async () => {
+		try {
+			await deleteListItemMutation.mutateAsync({ productId: id, listId })
+		} catch (error) {
+			console.log(error)
 		}
 	}
 
@@ -57,7 +71,7 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 						{rating} <Star fill="#ffa41c" />
 					</span>
 				</div>
-				<div className="flex justify-end">
+				<div className="flex gap-2 justify-end">
 					{cartData?.isInCart ? (
 						<ButtonLink intent="positive" shape="square" href="/cart">
 							<CartFilled />
@@ -67,6 +81,9 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 							<Cart />
 						</Button>
 					)}
+					<Button intent="secondary" shape="square" onClick={handleDeleteProductFromList}>
+						<Delete />
+					</Button>
 				</div>
 			</div>
 		</li>
