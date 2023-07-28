@@ -3,7 +3,7 @@ import instance from './api'
 const CATEGORIES = '/categories'
 
 class CategoryServ {
-	async getAll(): Promise<Category[]> {
+	async findAll(): Promise<Category[]> {
 		try {
 			const res = await instance.get(`${CATEGORIES}`)
 			return res.data
@@ -12,7 +12,7 @@ class CategoryServ {
 		}
 	}
 
-	async getMain(): Promise<Category[]> {
+	async findMain(): Promise<Category[]> {
 		try {
 			const res = await instance.get(`${CATEGORIES}/main`)
 			return res.data
@@ -21,7 +21,7 @@ class CategoryServ {
 		}
 	}
 
-	async getById(id: number): Promise<FullCategory> {
+	async findById(id: number): Promise<FullCategory> {
 		try {
 			const res = await instance.get(`${CATEGORIES}/c/${id}`)
 			return res.data
@@ -30,7 +30,7 @@ class CategoryServ {
 		}
 	}
 
-	async getBySlug(slug: string): Promise<Category> {
+	async findBySlug(slug: string): Promise<Category> {
 		try {
 			const res = await instance.get(`${CATEGORIES}/${slug}`)
 			return res.data
@@ -39,7 +39,7 @@ class CategoryServ {
 		}
 	}
 
-	async getBreadcrumbs(id: number): Promise<Category[]> {
+	async findBreadcrumbs(id: number): Promise<Category[]> {
 		try {
 			const res = await instance.get(`${CATEGORIES}/breadcrumbs/${id}`)
 			return res.data

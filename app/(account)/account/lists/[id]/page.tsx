@@ -8,8 +8,8 @@ import ProductService from '@/services/product-service'
 import ProductListItems from '@/components/product-list-items'
 
 export default function Page({ params }: { params: { id: number } }) {
-	const { data: list, isLoading } = useQuery(['list'], () => ListService.getById(params.id))
-	const { data: productsData } = useQuery(['list-products'], () => ProductService.getByList(params.id))
+	const { data: list, isLoading } = useQuery(['list'], () => ListService.findById(params.id))
+	const { data: productsData } = useQuery(['list-products'], () => ProductService.findByList(params.id))
 
 	if (isLoading) return <Spinner />
 

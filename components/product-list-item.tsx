@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import Image from 'next/image'
-import { Cart, Check, Star } from './icons'
+import { Cart, Star, CartFilled } from './icons'
 import Link from 'next/link'
 import { Button, ButtonLink, Spinner } from './ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -15,16 +15,16 @@ interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryI
 export default function ProductListItem({ id, href, images, name, price, rating }: ProductProps) {
 	const queryClient = useQueryClient()
 
-	const { isError: isCartItemError, isLoading: isCartItemLoading } = useQuery([`cart-item-${id}`], () =>
-		CartService.getItemByProductId(id)
-	)
+	const { data: cartData } = useQuery([`check-product-in-cart-${id}`], () => CartService.checkProductInCart(id))
 
 	const addCartItemMutation = useMutation({
 		mutationFn: CartService.addItem,
 		onSuccess: () => {
-			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries([`cart-item-${id}`])
+			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries([`check-product-in-cart-${id}`])
 		}
 	})
+
+	console.log(cartData?.isInCart)
 
 	const addProductToCart = async () => {
 		try {
@@ -58,20 +58,14 @@ export default function ProductListItem({ id, href, images, name, price, rating 
 					</span>
 				</div>
 				<div className="flex justify-end">
-					{isCartItemError ? (
-						<Button intent="secondary" shape="square" onClick={addProductToCart}>
-							{isCartItemLoading ? <Spinner /> : <Cart />}
-						</Button>
+					{cartData?.isInCart ? (
+						<ButtonLink intent="positive" shape="square" href="/cart">
+							<CartFilled />
+						</ButtonLink>
 					) : (
-						<div>
-							{isCartItemLoading ? (
-								<Spinner />
-							) : (
-								<ButtonLink intent="positive" shape="square" href="/cart">
-									<Check />
-								</ButtonLink>
-							)}
-						</div>
+						<Button intent="secondary" shape="square" onClick={addProductToCart}>
+							<Cart />
+						</Button>
 					)}
 				</div>
 			</div>

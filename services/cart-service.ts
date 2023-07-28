@@ -12,15 +12,6 @@ class CartServ {
 		}
 	}
 
-	async getItemByProductId(productId: number): Promise<CartItem> {
-		try {
-			const res = await instance.get(`${CART}/p/${productId}`)
-			return res.data
-		} catch (error: any) {
-			throw new Error(error?.response?.data?.message)
-		}
-	}
-
 	async deleteItems() {
 		try {
 			const res = await instance.delete(`${CART}`)
@@ -51,6 +42,15 @@ class CartServ {
 	async deleteItem(id: number) {
 		try {
 			const res = await instance.delete(`${CART}/${id}`)
+			return res.data
+		} catch (error: any) {
+			throw new Error(error?.response?.data?.message)
+		}
+	}
+
+	async checkProductInCart(productId: number): Promise<{ isInCart: boolean }> {
+		try {
+			const res = await instance.get(`${CART}/check/${productId}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)

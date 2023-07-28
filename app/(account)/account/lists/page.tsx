@@ -9,7 +9,7 @@ import Link from 'next/link'
 import React from 'react'
 
 export default function Page() {
-	const { data: listData, isError, isLoading, refetch } = useQuery(['lists'], ListService.getAll)
+	const { data: listData, isError, isLoading, refetch } = useQuery(['lists'], ListService.findAll)
 
 	if (isLoading) return <Spinner />
 	if (isError) return <DefaultError reset={refetch} />

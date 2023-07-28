@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { Cart, Check, FavoriteFilled, FavoriteOutlined, Star } from './icons'
+import { Cart, FavoriteFilled, FavoriteOutlined, Star, CartFilled } from './icons'
 import Link from 'next/link'
 import { Toggle } from './ui/toggle'
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
@@ -19,18 +19,23 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 	const queryClient = useQueryClient()
 	const [pressed, setPressed] = useState<boolean>(false)
 
-	const { isError: isCartItemError, isLoading: isCartItemLoading } = useQuery([`cart-item-${id}`], () =>
-		CartService.getItemByProductId(id)
-	)
+	const { data: cartData } = useQuery([`check-product-in-cart-${id}`], () => CartService.checkProductInCart(id))
 
 	const addCartItemMutation = useMutation({
 		mutationFn: CartService.addItem,
 		onSuccess: () => {
-			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries([`cart-item-${id}`])
+			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries([`check-product-in-cart-${id}`])
 		}
 	})
 
-	const addProductToCart = async () => {
+	const addProductToListMutation = useMutation({
+		mutationFn: ({ listId, productId }: { listId: number; productId: number }) =>
+			ListService.addProduct(listId, productId)
+	})
+
+	const addListMutation = useMutation(ListService.create)
+
+	const handleAddProductToCart = async () => {
 		try {
 			await addCartItemMutation.mutateAsync({ productId: id, quantity: 1 })
 		} catch (error) {
@@ -38,7 +43,23 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 		}
 	}
 
-	const { data: listData } = useQuery(['lists'], ListService.getAll)
+	const handleAddProductToList = async (listId: number) => {
+		try {
+			await addProductToListMutation.mutateAsync({ productId: id, listId })
+		} catch (error) {
+			console.error('Помилка при додаванні товару до корзини:', error)
+		}
+	}
+
+	const handleCreateList = async (data: CreateList) => {
+		try {
+			await addListMutation.mutateAsync(data)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const { data: listData } = useQuery(['lists'], ListService.findAll)
 
 	return (
 		<li className="relative flex flex-col min-w-[240px] border rounded hover:border-zinc-300 overflow-hidden bg-white">
@@ -53,7 +74,7 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 						+ Додати новий список
 					</Button>
 					{listData?.map((list, index) => (
-						<Button intent="secondary" key={index} onClick={() => alert(list.id)}>
+						<Button intent="secondary" key={index} onClick={() => handleAddProductToList(list.id)}>
 							{list.name}
 						</Button>
 					))}
@@ -61,14 +82,14 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 			</Dialog>
 
 			<div className="absolute z-50 bottom-32 right-4">
-				{isCartItemError ? (
-					<Button shape="circle" onClick={addProductToCart}>
+				{cartData?.isInCart ? (
+					<ButtonLink intent="positive" shape="circle" href="/cart">
+						<CartFilled />
+					</ButtonLink>
+				) : (
+					<Button shape="circle" onClick={handleAddProductToCart}>
 						<Cart />
 					</Button>
-				) : (
-					<ButtonLink intent="positive" shape="circle" href="/cart">
-						<Check />
-					</ButtonLink>
 				)}
 			</div>
 

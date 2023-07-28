@@ -135,7 +135,7 @@ export default function SiteHeader() {
 					<ButtonLink shape="square" intent="secondary" href="/cart">
 						<Cart />
 						{isAuth && cartTotalQty && cartTotalQty > 0 ? (
-							<span className="absolute py-1 px-2 left-10 bottom-6 bg-red-500 text-white rounded-lg text-sm">
+							<span className="absolute py-1 px-2 left-8 bottom-6 bg-red-500 text-white rounded-lg text-sm">
 								{cartTotalQty}
 							</span>
 						) : null}

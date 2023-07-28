@@ -3,6 +3,24 @@ import instance from './api'
 const LISTS = '/lists'
 
 class ListServ {
+	async findAll(): Promise<List[]> {
+		try {
+			const res = await instance.get(`${LISTS}`)
+			return res.data
+		} catch (error: any) {
+			throw new Error(error?.response?.data?.message)
+		}
+	}
+
+	async findById(id: number): Promise<List> {
+		try {
+			const res = await instance.get(`${LISTS}/${id}`)
+			return res.data
+		} catch (error: any) {
+			throw new Error(error?.response?.data?.message)
+		}
+	}
+
 	async create(data: CreateList): Promise<List> {
 		try {
 			const res = await instance.post(`${LISTS}/create`, data)
@@ -12,7 +30,7 @@ class ListServ {
 		}
 	}
 
-	async update(id: number, data: EditList): Promise<List> {
+	async update(id: number, data: UpdateList): Promise<List> {
 		try {
 			const res = await instance.patch(`${LISTS}/edit/${id}`, data)
 			return res.data
@@ -30,18 +48,18 @@ class ListServ {
 		}
 	}
 
-	async getById(id: number): Promise<List> {
+	async addProduct(listId: number, productId: number): Promise<{ productId: number; listId: number }> {
 		try {
-			const res = await instance.get(`${LISTS}/${id}`)
+			const res = await instance.post(`${LISTS}/${listId}/product/${productId}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async getAll(): Promise<List[]> {
+	async deleteProduct(listId: number, productId: number) {
 		try {
-			const res = await instance.get(`${LISTS}`)
+			const res = await instance.delete(`${LISTS}/${listId}/product/${productId}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
