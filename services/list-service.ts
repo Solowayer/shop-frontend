@@ -57,9 +57,9 @@ class ListServ {
 		}
 	}
 
-	async deleteProduct(listId: number, productId: number) {
+	async deleteProduct(productId: number) {
 		try {
-			const res = await instance.delete(`${LISTS}/${listId}/product/${productId}`)
+			const res = await instance.delete(`${LISTS}/product/${productId}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)

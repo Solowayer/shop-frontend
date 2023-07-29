@@ -9,7 +9,7 @@ import FavoriteItems from '@/components/favorite-items'
 
 export default function Page({ params }: { params: { id: number } }) {
 	const { data: list, isLoading } = useQuery([`list-${params.id}`], () => ListService.findById(params.id))
-	const { data: productsData } = useQuery([`list-products-${params.id}`], () => ProductService.findByList(params.id))
+	const { data: productsData } = useQuery([`list-products`], () => ProductService.findByList(params.id))
 
 	if (isLoading) return <Spinner />
 
@@ -18,7 +18,7 @@ export default function Page({ params }: { params: { id: number } }) {
 			<h1 className="w-full text-3xl font-bold">{list?.name}</h1>
 			<hr />
 			{productsData && productsData.products.length > 0 ? (
-				<FavoriteItems products={productsData.products} listId={params.id} />
+				<FavoriteItems products={productsData.products} />
 			) : (
 				<span>Тут нічого немає</span>
 			)}

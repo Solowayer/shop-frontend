@@ -11,10 +11,9 @@ import ListService from '@/services/list-service'
 
 interface FavoriteItemProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string
-	listId: number
 }
 
-export default function FavoriteItem({ id, listId, href, images, name, price, rating }: FavoriteItemProps) {
+export default function FavoriteItem({ id, href, images, name, price, rating }: FavoriteItemProps) {
 	const queryClient = useQueryClient()
 
 	const { data: cartData } = useQuery([`check-product-in-cart-${id}`], () => CartService.checkProductInCart(id))
@@ -27,9 +26,8 @@ export default function FavoriteItem({ id, listId, href, images, name, price, ra
 	})
 
 	const deleteListItemMutation = useMutation({
-		mutationFn: ({ listId, productId }: { listId: number; productId: number }) =>
-			ListService.deleteProduct(listId, productId),
-		onSuccess: () => queryClient.invalidateQueries([`list-products-${listId}`])
+		mutationFn: (productId: number) => ListService.deleteProduct(productId),
+		onSuccess: () => queryClient.invalidateQueries([`list-products`])
 	})
 
 	const addProductToCart = async () => {
@@ -42,7 +40,7 @@ export default function FavoriteItem({ id, listId, href, images, name, price, ra
 
 	const handleDeleteProductFromList = async () => {
 		try {
-			await deleteListItemMutation.mutateAsync({ productId: id, listId })
+			await deleteListItemMutation.mutateAsync(id)
 		} catch (error) {
 			console.log(error)
 		}

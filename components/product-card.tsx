@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { Cart, FavoriteFilled, FavoriteOutlined, Star, CartFilled } from './icons'
 import Link from 'next/link'
-import { Toggle } from './ui/toggle'
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 import { Button, ButtonLink } from './ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -19,10 +18,8 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 	const [open, setOpen] = useState(false)
 
 	const queryClient = useQueryClient()
-	const [pressed, setPressed] = useState<boolean>(false)
 
 	const { data: cartCheck } = useQuery([`check-product-in-cart-${id}`], () => CartService.checkProductInCart(id))
-
 	const { data: listCheck } = useQuery([`check-product-in-list-${id}`], () => ListService.checkProductInList(id))
 
 	const { data: listData } = useQuery(['lists'], ListService.findAll)
@@ -42,7 +39,12 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 		}
 	})
 
-	const addListMutation = useMutation(ListService.create)
+	const deleteProductFromListMutation = useMutation({
+		mutationFn: (productId: number) => ListService.deleteProduct(productId),
+		onSuccess: () => {
+			queryClient.invalidateQueries([`check-product-in-list-${id}`])
+		}
+	})
 
 	const handleAddProductToCart = async () => {
 		try {
@@ -61,9 +63,9 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 		}
 	}
 
-	const handleCreateList = async (data: CreateList) => {
+	const handleDeleteProductFromList = async () => {
 		try {
-			await addListMutation.mutateAsync(data)
+			await deleteProductFromListMutation.mutateAsync(id)
 		} catch (error) {
 			console.log(error)
 		}
@@ -71,27 +73,30 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 
 	return (
 		<li className="relative flex flex-col min-w-[240px] border rounded hover:border-zinc-300 overflow-hidden bg-white">
-			<Dialog open={open} onOpenChange={setOpen}>
-				<DialogTrigger asChild>
-					<Toggle className="absolute flex items-center top-2 right-2 z-50 bg-white p-2 rounded-full" pressed={true}>
-						{listCheck?.isInList ? (
-							<FavoriteFilled size="24" className="text-red-500" />
-						) : (
+			{listCheck?.isInList ? (
+				<div
+					className="absolute flex items-center top-2 right-2 z-50 bg-white p-2 rounded-full"
+					onClick={handleDeleteProductFromList}
+				>
+					<FavoriteFilled size="24" className="text-red-500" />
+				</div>
+			) : (
+				<Dialog open={open} onOpenChange={setOpen}>
+					<DialogTrigger asChild>
+						<div className="absolute flex items-center top-2 right-2 z-50 bg-white p-2 rounded-full">
 							<FavoriteOutlined size="24" />
-						)}
-					</Toggle>
-				</DialogTrigger>
-				<DialogContent title="Ваше обране">
-					<Button intent="secondary" onClick={() => setPressed(!pressed)}>
-						+ Додати новий список
-					</Button>
-					{listData?.map((list, index) => (
-						<Button intent="secondary" key={index} onClick={() => handleAddProductToList(list.id)}>
-							{list.name}
-						</Button>
-					))}
-				</DialogContent>
-			</Dialog>
+						</div>
+					</DialogTrigger>
+					<DialogContent title="Ваше обране">
+						<Button intent="secondary">+ Додати новий список</Button>
+						{listData?.map((list, index) => (
+							<Button intent="secondary" key={index} onClick={() => handleAddProductToList(list.id)}>
+								{list.name}
+							</Button>
+						))}
+					</DialogContent>
+				</Dialog>
+			)}
 
 			<div className="absolute z-50 bottom-32 right-4">
 				{cartCheck?.isInCart ? (
