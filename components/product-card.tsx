@@ -2,47 +2,47 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { Cart, FavoriteFilled, FavoriteOutlined, Star, CartFilled } from './icons'
+import { Cart, FavoriteFilled, FavoriteOutlined, Star, CartFilled, ChevronLeft } from './icons'
 import Link from 'next/link'
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 import { Button, ButtonLink } from './ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import ListService from '@/services/list-service'
 import CartService from '@/services/cart-service'
+import AddListForm from './forms/new-list-form'
 
 interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string
 }
 
 export default function ProductCard({ id, href, images, name, price, rating }: ProductProps) {
-	const [open, setOpen] = useState(false)
+	const [openDialog, setOpenDialog] = useState(false)
+	const [newList, setNewList] = useState(false)
 
 	const queryClient = useQueryClient()
 
-	const { data: cartCheck } = useQuery([`check-product-in-cart-${id}`], () => CartService.checkProductInCart(id))
-	const { data: listCheck } = useQuery([`check-product-in-list-${id}`], () => ListService.checkProductInList(id))
-
+	const { data: cartCheck } = useQuery(['check-product-in-cart', id], () => CartService.checkProductInCart(id))
+	const { data: listCheck } = useQuery(['check-product-in-list', id], () => ListService.checkProductInList(id))
 	const { data: listData } = useQuery(['lists'], ListService.findAll)
 
 	const addCartItemMutation = useMutation({
 		mutationFn: CartService.addItem,
 		onSuccess: () => {
-			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries([`check-product-in-cart-${id}`])
+			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries(['check-product-in-cart', id])
 		}
 	})
 
 	const addProductToListMutation = useMutation({
-		mutationFn: ({ listId, productId }: { listId: number; productId: number }) =>
-			ListService.addProduct(listId, productId),
+		mutationFn: (listId: number) => ListService.addProduct(listId, id),
 		onSuccess: () => {
-			queryClient.invalidateQueries([`check-product-in-list-${id}`])
+			queryClient.invalidateQueries(['check-product-in-list', id])
 		}
 	})
 
 	const deleteProductFromListMutation = useMutation({
-		mutationFn: (productId: number) => ListService.deleteProduct(productId),
+		mutationFn: () => ListService.deleteProduct(id),
 		onSuccess: () => {
-			queryClient.invalidateQueries([`check-product-in-list-${id}`])
+			queryClient.invalidateQueries(['check-product-in-list', id])
 		}
 	})
 
@@ -56,8 +56,8 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 
 	const handleAddProductToList = async (listId: number) => {
 		try {
-			await addProductToListMutation.mutateAsync({ productId: id, listId })
-			setOpen(false)
+			await addProductToListMutation.mutateAsync(listId)
+			setOpenDialog(false)
 		} catch (error) {
 			console.error('Помилка при додаванні товару до корзини:', error)
 		}
@@ -65,7 +65,7 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 
 	const handleDeleteProductFromList = async () => {
 		try {
-			await deleteProductFromListMutation.mutateAsync(id)
+			await deleteProductFromListMutation.mutateAsync()
 		} catch (error) {
 			console.log(error)
 		}
@@ -81,19 +81,35 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 					<FavoriteFilled size="24" className="text-red-500" />
 				</div>
 			) : (
-				<Dialog open={open} onOpenChange={setOpen}>
+				<Dialog open={openDialog} onOpenChange={setOpenDialog}>
 					<DialogTrigger asChild>
 						<div className="absolute flex items-center top-2 right-2 z-50 bg-white p-2 rounded-full">
 							<FavoriteOutlined size="24" />
 						</div>
 					</DialogTrigger>
-					<DialogContent title="Ваше обране">
-						<Button intent="secondary">+ Додати новий список</Button>
-						{listData?.map((list, index) => (
-							<Button intent="secondary" key={index} onClick={() => handleAddProductToList(list.id)}>
-								{list.name}
-							</Button>
-						))}
+
+					<DialogContent title={newList ? 'Назвіть новий список' : 'Ваше обране'}>
+						<div>
+							{newList && (
+								<Button size="small" intent="secondary" onClick={() => setNewList(false)}>
+									<ChevronLeft /> Назад
+								</Button>
+							)}
+						</div>
+						{newList ? (
+							<AddListForm setDialogClose={() => setOpenDialog(false)} />
+						) : (
+							<div className="flex flex-col gap-4">
+								<Button intent="secondary" onClick={() => setNewList(true)}>
+									+ Додати новий список
+								</Button>
+								{listData?.map((list, index) => (
+									<Button intent="secondary" key={index} onClick={() => handleAddProductToList(list.id)}>
+										{list.name}
+									</Button>
+								))}
+							</div>
+						)}
 					</DialogContent>
 				</Dialog>
 			)}

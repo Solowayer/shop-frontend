@@ -1,24 +1,41 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import ListService from '@/services/list-service'
 import { useQuery } from '@tanstack/react-query'
-import { Spinner } from '@/components/ui'
+import { Button, Spinner } from '@/components/ui'
 import ProductService from '@/services/product-service'
 import FavoriteItems from '@/components/favorite-items'
+import { More } from '@/components/icons'
+import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog'
+import EditListForm from '@/components/forms/edit-list-form'
 
 export default function Page({ params }: { params: { id: number } }) {
-	const { data: list, isLoading } = useQuery([`list-${params.id}`], () => ListService.findById(params.id))
-	const { data: productsData } = useQuery([`list-products`], () => ProductService.findByList(params.id))
+	const [openDialog, setOpenDialog] = useState(false)
+	const { data: list, isLoading } = useQuery([`list`, params.id], () => ListService.findById(params.id))
+	const { data: productsData } = useQuery(['list-products', params.id], () => ProductService.findByList(params.id))
 
 	if (isLoading) return <Spinner />
 
 	return (
 		<div className="flex flex-col gap-8">
-			<h1 className="w-full text-3xl font-bold">{list?.name}</h1>
+			<div className="flex items-center">
+				<h1 className="w-full text-3xl font-bold">{list?.name}</h1>
+				<Dialog open={openDialog} onOpenChange={setOpenDialog}>
+					<DialogTrigger asChild>
+						<Button intent="secondary">
+							Налаштування
+							<More />
+						</Button>
+					</DialogTrigger>
+					<DialogContent title="Налаштування">
+						<EditListForm listId={params.id} setDialogClose={() => setOpenDialog(false)} />
+					</DialogContent>
+				</Dialog>
+			</div>
 			<hr />
 			{productsData && productsData.products.length > 0 ? (
-				<FavoriteItems products={productsData.products} />
+				<FavoriteItems products={productsData.products} listId={params.id} />
 			) : (
 				<span>Тут нічого немає</span>
 			)}

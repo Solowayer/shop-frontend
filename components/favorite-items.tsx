@@ -1,7 +1,7 @@
 import React from 'react'
 import FavoriteItem from './favorite-item'
 
-export default function FavoriteItems({ products }: { products: Product[] }) {
+export default function FavoriteItems({ products, listId }: { products: Product[]; listId: number }) {
 	return (
 		<ul className="flex flex-col gap-4">
 			{products.map((product, index) => (
@@ -9,6 +9,7 @@ export default function FavoriteItems({ products }: { products: Product[] }) {
 					key={index}
 					href={''}
 					id={product.id}
+					listId={listId}
 					images={product.images}
 					rating={product.rating}
 					name={product.name}

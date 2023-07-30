@@ -8,11 +8,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { addToCartSchema } from '@/lib/validation/cartSchema'
 import ListService from '@/services/list-service'
 
-export default function AddToCartForm() {
+type AddListFormProps = {
+	setDialogClose: () => void
+}
+
+export default function AddListForm({ setDialogClose }: AddListFormProps) {
 	const queryClient = useQueryClient()
 
-	const mutation = useMutation({
-		mutationFn: ListService.create
+	const createListmutation = useMutation({
+		mutationFn: ListService.create,
+		onSuccess: () => queryClient.invalidateQueries(['lists'])
 	})
 
 	const {
@@ -22,13 +27,13 @@ export default function AddToCartForm() {
 	} = useForm<CreateList>({
 		defaultValues: {
 			name: ''
-		},
-		resolver: zodResolver(addToCartSchema)
+		}
 	})
 
-	const onSubmit: SubmitHandler<CreateList> = data => {
+	const onSubmit: SubmitHandler<CreateList> = async data => {
 		try {
-			mutation.mutate({ ...data })
+			createListmutation.mutateAsync({ ...data })
+			setDialogClose()
 		} catch (error) {
 			console.log(error)
 		}
@@ -36,8 +41,7 @@ export default function AddToCartForm() {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-			<hr />
-			<Input label="Виберіть кількість:" id="name" {...register('name', { valueAsNumber: true })} />
+			<Input label="Назва" id="name" {...register('name')} />
 			{errors.name && <span className="text-red-500">Помилка</span>}
 			<Button type="submit" fullWidth disabled={isSubmitting}>
 				{isSubmitting ? 'Створюється...' : 'Створити'}

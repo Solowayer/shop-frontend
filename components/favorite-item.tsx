@@ -11,23 +11,24 @@ import ListService from '@/services/list-service'
 
 interface FavoriteItemProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string
+	listId: number
 }
 
-export default function FavoriteItem({ id, href, images, name, price, rating }: FavoriteItemProps) {
+export default function FavoriteItem({ id, listId, href, images, name, price, rating }: FavoriteItemProps) {
 	const queryClient = useQueryClient()
 
-	const { data: cartData } = useQuery([`check-product-in-cart-${id}`], () => CartService.checkProductInCart(id))
+	const { data: cartData } = useQuery(['check-product-in-cart', id], () => CartService.checkProductInCart(id))
 
 	const addCartItemMutation = useMutation({
 		mutationFn: CartService.addItem,
 		onSuccess: () => {
-			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries([`check-product-in-cart-${id}`])
+			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries(['check-product-in-cart', id])
 		}
 	})
 
 	const deleteListItemMutation = useMutation({
-		mutationFn: (productId: number) => ListService.deleteProduct(productId),
-		onSuccess: () => queryClient.invalidateQueries([`list-products`])
+		mutationFn: () => ListService.deleteProduct(id),
+		onSuccess: () => queryClient.invalidateQueries(['list-products', listId])
 	})
 
 	const addProductToCart = async () => {
@@ -40,7 +41,7 @@ export default function FavoriteItem({ id, href, images, name, price, rating }: 
 
 	const handleDeleteProductFromList = async () => {
 		try {
-			await deleteListItemMutation.mutateAsync(id)
+			await deleteListItemMutation.mutateAsync()
 		} catch (error) {
 			console.log(error)
 		}

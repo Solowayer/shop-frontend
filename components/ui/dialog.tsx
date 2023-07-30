@@ -51,10 +51,10 @@ const DialogContent = React.forwardRef<
 
 		<DialogPrimitive.Content
 			ref={ref}
-			className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg sm:rounded-lg md:w-full"
+			className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] border bg-white shadow-lg sm:rounded-lg md:w-full"
 			{...props}
 		>
-			<div className="flex items-start justify-between border-b pb-4 gap-4">
+			<div className="flex items-start justify-between border-b gap-4 p-4">
 				<div className="flex flex-col gap-2">
 					<DialogTitle>{title}</DialogTitle>
 					<DialogDescription>{description}</DialogDescription>
@@ -64,7 +64,9 @@ const DialogContent = React.forwardRef<
 					<span className="sr-only">Close</span>
 				</DialogPrimitive.Close>
 			</div>
-			{children}
+			<div className="max-h-[400px] overflow-y-auto">
+				<div className="flex flex-col p-4">{children}</div>
+			</div>
 		</DialogPrimitive.Content>
 	</DialogPortal>
 ))

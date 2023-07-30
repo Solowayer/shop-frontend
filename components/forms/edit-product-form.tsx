@@ -27,7 +27,7 @@ export default function EditProductForm({ productId }: { productId: number }) {
 		isSuccess: isProductSuccess
 	} = useQuery({
 		queryKey: ['product', productId],
-		queryFn: () => ProductService.getById(productId),
+		queryFn: () => ProductService.findById(productId),
 		retry: false
 	})
 
@@ -62,7 +62,7 @@ export default function EditProductForm({ productId }: { productId: number }) {
 		isError: isCategoriesError
 	} = useQuery({
 		queryKey: ['all-categories'],
-		queryFn: CategoryService.getAll,
+		queryFn: CategoryService.findAll,
 		retry: false
 	})
 

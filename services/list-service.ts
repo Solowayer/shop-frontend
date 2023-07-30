@@ -30,7 +30,7 @@ class ListServ {
 		}
 	}
 
-	async update(id: number, data: UpdateList): Promise<List> {
+	async update(id: number, data: EditList): Promise<List> {
 		try {
 			const res = await instance.patch(`${LISTS}/edit/${id}`, data)
 			return res.data
