@@ -48,7 +48,6 @@ const DialogContent = React.forwardRef<
 >(({ className, children, title, description, ...props }, ref) => (
 	<DialogPortal>
 		<DialogOverlay />
-
 		<DialogPrimitive.Content
 			ref={ref}
 			className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] border bg-white shadow-lg sm:rounded-lg md:w-full"
@@ -65,7 +64,7 @@ const DialogContent = React.forwardRef<
 				</DialogPrimitive.Close>
 			</div>
 			<div className="max-h-[400px] overflow-y-auto">
-				<div className="flex flex-col p-4">{children}</div>
+				<div className="flex flex-col p-4 gap-4">{children}</div>
 			</div>
 		</DialogPrimitive.Content>
 	</DialogPortal>

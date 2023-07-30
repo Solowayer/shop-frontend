@@ -6,6 +6,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Input } from '@/components/ui'
 import ListService from '@/services/list-service'
 import { useRouter } from 'next/navigation'
+import { listSchema } from '@/lib/validation/listSchema'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 type EditListFormProps = {
 	listId: number
@@ -24,7 +26,9 @@ export default function EditListForm({ listId, setDialogClose }: EditListFormPro
 
 	const deleteListMutation = useMutation({
 		mutationFn: () => ListService.delete(listId),
-		onSuccess: () => queryClient.invalidateQueries(['lists'])
+		onSuccess: () => {
+			queryClient.invalidateQueries(['lists'])
+		}
 	})
 
 	const {
@@ -34,7 +38,8 @@ export default function EditListForm({ listId, setDialogClose }: EditListFormPro
 	} = useForm<EditList>({
 		defaultValues: {
 			name: list?.name
-		}
+		},
+		resolver: zodResolver(listSchema)
 	})
 
 	const onSubmit: SubmitHandler<EditList> = async data => {
@@ -47,16 +52,16 @@ export default function EditListForm({ listId, setDialogClose }: EditListFormPro
 	}
 
 	const handleDeleteList = async () => {
+		router.replace('/account/lists')
 		try {
 			deleteListMutation.mutateAsync()
-			router.push('/account/lists')
 		} catch (error) {
 			console.log(error)
 		}
 	}
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
 			<Input label="Назва" id="name" {...register('name')} />
 			{errors.name && <span className="text-red-500">Помилка</span>}
 			<div className="flex justify-between gap-4">
@@ -68,7 +73,7 @@ export default function EditListForm({ listId, setDialogClose }: EditListFormPro
 						Скасувати
 					</Button>
 					<Button type="submit" disabled={isSubmitting}>
-						{isSubmitting ? 'Створюється...' : 'Перейменувати'}
+						{isSubmitting ? 'Збереження...' : 'Зберегти'}
 					</Button>
 				</div>
 			</div>

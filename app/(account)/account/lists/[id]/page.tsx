@@ -5,10 +5,10 @@ import ListService from '@/services/list-service'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Spinner } from '@/components/ui'
 import ProductService from '@/services/product-service'
-import FavoriteItems from '@/components/favorite-items'
 import { More } from '@/components/icons'
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog'
 import EditListForm from '@/components/forms/edit-list-form'
+import FavoriteItem from '@/components/favorite-item'
 
 export default function Page({ params }: { params: { id: number } }) {
 	const [openDialog, setOpenDialog] = useState(false)
@@ -35,7 +35,20 @@ export default function Page({ params }: { params: { id: number } }) {
 			</div>
 			<hr />
 			{productsData && productsData.products.length > 0 ? (
-				<FavoriteItems products={productsData.products} listId={params.id} />
+				<ul className="flex flex-col gap-4">
+					{productsData.products.map((product, index) => (
+						<FavoriteItem
+							key={index}
+							href={''}
+							id={product.id}
+							listId={params.id}
+							images={product.images}
+							rating={product.rating}
+							name={product.name}
+							price={product.price}
+						/>
+					))}
+				</ul>
 			) : (
 				<span>Тут нічого немає</span>
 			)}
