@@ -9,6 +9,7 @@ import { More } from '@/components/icons'
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog'
 import EditListForm from '@/components/forms/edit-list-form'
 import FavoriteItem from '@/components/favorite-item'
+import Breadcrumbs from '@/components/breadcrumbs'
 
 export default function Page({ params }: { params: { id: number } }) {
 	const [openDialog, setOpenDialog] = useState(false)
@@ -19,6 +20,13 @@ export default function Page({ params }: { params: { id: number } }) {
 
 	return (
 		<div className="flex flex-col gap-8">
+			<Breadcrumbs
+				breadcrumbs={[
+					{ name: 'Аккаунт', href: '/account' },
+					{ name: 'Мої списки', href: '/account/lists' },
+					{ name: `Список ${list?.name}`, href: '/' }
+				]}
+			/>
 			<div className="flex items-center">
 				<h1 className="w-full text-3xl font-bold">{list?.name}</h1>
 				<Dialog open={openDialog} onOpenChange={setOpenDialog}>

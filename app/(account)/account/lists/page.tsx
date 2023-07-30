@@ -1,6 +1,8 @@
 'use client'
 
+import Breadcrumbs from '@/components/breadcrumbs'
 import AddListForm from '@/components/forms/create-list-form'
+import { ChevronRight } from '@/components/icons'
 import DefaultError from '@/components/layouts/default-error'
 import { Button, Spinner } from '@/components/ui'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -18,6 +20,12 @@ export default function Page() {
 
 	return (
 		<div className="flex flex-col gap-8">
+			<Breadcrumbs
+				breadcrumbs={[
+					{ name: 'Аккаунт', href: '/account' },
+					{ name: 'Мої списки', href: '' }
+				]}
+			/>
 			<div className="flex items-center justify-between">
 				<h1 className="text-3xl font-bold">Мої списки</h1>
 				<Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -32,13 +40,12 @@ export default function Page() {
 			<div className="grid grid-cols-3 gap-4">
 				{lists && lists.length
 					? lists.map((list, index) => (
-							<Link
-								href={`/account/lists/${list.id}`}
-								key={index}
-								className="border rounded p-4 h-[130px] hover:border-black"
-							>
+							<Link href={`/account/lists/${list.id}`} key={index} className="bg-zinc-100 rounded p-4 h-[130px]">
 								<div className="flex flex-col gap-1">
-									<span className="font-medium">{list.name}</span>
+									<div className="flex items-center justify-between">
+										<span className="font-medium">{list.name}</span>
+										<ChevronRight />
+									</div>
 									{/* <span className="text-sm text-zinc-400">2 шт</span> */}
 								</div>
 							</Link>
