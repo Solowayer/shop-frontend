@@ -11,10 +11,21 @@ import EditListForm from '@/components/forms/edit-list-form'
 import FavoriteItem from '@/components/favorite-item'
 import Breadcrumbs from '@/components/breadcrumbs'
 
-export default function Page({ params }: { params: { id: number } }) {
+export default function Page({ params, searchParams }: { params: { id: number }; searchParams: { page: number } }) {
+	const PER_PAGE = 8
+
 	const [openDialog, setOpenDialog] = useState(false)
 	const { data: list, isLoading } = useQuery([`list`, params.id], () => ListService.findById(params.id))
-	const { data: productsData } = useQuery(['list-products', params.id], () => ProductService.findByList(params.id))
+	const { data: productsData } = useQuery(['list-products', params.id], () =>
+		ProductService.findByList(params.id, {
+			sort: 'high-price',
+			min_price: undefined,
+			max_price: undefined,
+			searchTerm: undefined,
+			page: searchParams.page,
+			limit: PER_PAGE
+		})
+	)
 
 	if (isLoading) return <Spinner />
 

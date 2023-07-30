@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { Cart, FavoriteFilled, FavoriteOutlined, Star, CartFilled, ChevronLeft } from './icons'
+import { Cart, FavoriteFilled, FavoriteOutlined, Star, CartFilled, ChevronLeft, Add } from './icons'
 import Link from 'next/link'
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 import { Button, ButtonLink } from './ui'
@@ -104,13 +104,21 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 							<CreateListForm setDialogClose={() => setOpenDialog(false)} productId={id} />
 						) : (
 							<div className="flex flex-col gap-4">
-								<Button intent="secondary" onClick={() => setNewList(true)}>
-									+ Додати новий список
-								</Button>
+								<button className="flex items-center gap-4" onClick={() => setNewList(true)}>
+									<span className="border p-4 rounded">
+										<Add size="24" />
+									</span>
+									Додати новий список
+								</button>
 								{listData?.map((list, index) => (
-									<Button intent="secondary" key={index} onClick={() => handleAddProductToList(list.id)}>
+									<button
+										key={index}
+										className="flex items-center gap-4"
+										onClick={() => handleAddProductToList(list.id)}
+									>
+										<span className="h-[58px] w-[58px] bg-zinc-100 rounded"></span>
 										{list.name}
-									</Button>
+									</button>
 								))}
 							</div>
 						)}

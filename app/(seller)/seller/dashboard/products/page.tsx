@@ -20,7 +20,7 @@ export default function SellerProducts({ searchParams }: { searchParams: { page:
 		isLoading,
 		isSuccess
 	} = useQuery(['seller-products', 'high-price', searchParams.page, PER_PAGE], () =>
-		ProductService.getSellerProducts({
+		ProductService.findSellerProducts({
 			sort: 'high-price',
 			min_price: undefined,
 			max_price: undefined,

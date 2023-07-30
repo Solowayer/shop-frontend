@@ -8,6 +8,7 @@ import ListService from '@/services/list-service'
 import { useRouter } from 'next/navigation'
 import { listSchema } from '@/lib/validation/listSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Delete } from '../icons'
 
 type EditListFormProps = {
 	listId: number
@@ -34,7 +35,7 @@ export default function EditListForm({ listId, setDialogClose }: EditListFormPro
 	const {
 		register,
 		handleSubmit,
-		formState: { errors, isSubmitting }
+		formState: { errors, isSubmitting, isDirty }
 	} = useForm<EditList>({
 		defaultValues: {
 			name: list?.name
@@ -62,17 +63,20 @@ export default function EditListForm({ listId, setDialogClose }: EditListFormPro
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-			<Input label="Назва" id="name" {...register('name')} />
-			{errors.name && <span className="text-red-500">Помилка</span>}
+			<div className="flex flex-col gap-2">
+				<Input label="Назва" id="name" {...register('name')} />
+				{errors.name && <span className="text-red-500">{errors.name?.message}</span>}
+			</div>
 			<div className="flex justify-between gap-4">
-				<Button intent="danger" disabled={isSubmitting} onClick={handleDeleteList}>
+				<Button intent="secondary" disabled={isSubmitting} onClick={handleDeleteList}>
+					<Delete />
 					Видалити
 				</Button>
 				<div className="flex gap-4">
 					<Button intent="secondary" disabled={isSubmitting} onClick={setDialogClose}>
 						Скасувати
 					</Button>
-					<Button type="submit" disabled={isSubmitting}>
+					<Button type="submit" disabled={isSubmitting || !isDirty}>
 						{isSubmitting ? 'Збереження...' : 'Зберегти'}
 					</Button>
 				</div>

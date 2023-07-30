@@ -22,6 +22,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuGroup
 } from '@/components/ui/dropdown-menu'
+import { siteConfig } from '@/config/site'
 
 export default function SiteHeader() {
 	const isAuth = useStore(useUserStore, state => state.isAuth)
@@ -105,21 +106,11 @@ export default function SiteHeader() {
 
 							<DropdownMenuContent>
 								<DropdownMenuGroup>
-									<DropdownMenuItem asChild>
-										<Link href="/account">Ваш аккаунт</Link>
-									</DropdownMenuItem>
-									<DropdownMenuItem asChild>
-										<Link href="/account/lists">Обране</Link>
-									</DropdownMenuItem>
-									{isSeller ? (
-										<DropdownMenuItem asChild>
-											<Link href="/seller/dashboard">Дашборд продавця</Link>
+									{siteConfig.userHeaderMenu.map(item => (
+										<DropdownMenuItem key={item.title} asChild>
+											<Link href={item.href}>{item.title}</Link>
 										</DropdownMenuItem>
-									) : (
-										<DropdownMenuItem asChild>
-											<Link href="/seller/register">Стати продавцем</Link>
-										</DropdownMenuItem>
-									)}
+									))}
 								</DropdownMenuGroup>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem onClick={handleLogout}>Вийти</DropdownMenuItem>

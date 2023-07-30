@@ -57,7 +57,7 @@ export default function CreateListForm({ setDialogClose, productId }: AddListFor
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
 			<Input label="Назва" id="name" {...register('name')} />
-			{errors.name && <span className="text-red-500">Помилка</span>}
+			{errors.name && <span className="text-red-500">{errors.name?.message}</span>}
 			<Button type="submit" fullWidth disabled={isSubmitting}>
 				{isSubmitting ? 'Створюється...' : 'Створити'}
 			</Button>
