@@ -26,9 +26,8 @@ import { siteConfig } from '@/config/site'
 
 export default function SiteHeader() {
 	const isAuth = useStore(useUserStore, state => state.isAuth)
-	const isSeller = useStore(useUserStore, state => state.isSeller)
 	const cartTotalQty = useStore(useUserStore, state => state.cartTotalQty)
-	const { setIsAuth, setIsSeller, setCartTotalQty } = useUserStore()
+	const { setIsAuth, setIsSeller, setCartTotalQty, reset } = useUserStore()
 
 	const { data: dataIsAuth, isSuccess: isAuthSuccess } = useQuery({
 		queryKey: ['check-auth'],
@@ -48,9 +47,7 @@ export default function SiteHeader() {
 	const exitMutation = useMutation({
 		mutationFn: AuthService.logout,
 		onSuccess: () => {
-			setIsAuth(false)
-			setIsSeller(false)
-			setCartTotalQty(0)
+			reset()
 		}
 	})
 
@@ -103,7 +100,6 @@ export default function SiteHeader() {
 									<Person />
 								</Button>
 							</DropdownMenuTrigger>
-
 							<DropdownMenuContent>
 								<DropdownMenuGroup>
 									{siteConfig.userHeaderMenu.map(item => (

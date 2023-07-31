@@ -9,14 +9,14 @@ export default async function Category({
 	params,
 	searchParams
 }: {
-	params: { id: number }
+	params: { slug: string }
 	searchParams: { page: number }
 }) {
 	const PER_PAGE = 8
 
-	const category = await CategoryService.findById(params.id)
+	const category = await CategoryService.findBySlug(params.slug)
 
-	const breadcrumbs = await CategoryService.findBreadcrumbs(params.id)
+	const breadcrumbs = await CategoryService.findBreadcrumbs(category.id)
 
 	const children = category.children
 	const childrenWithSameParent = children.filter(childCategory => childCategory.parentId === category.id)
@@ -31,15 +31,15 @@ export default async function Category({
 						<div className="flex flex-col">
 							{childrenWithSameParent.length > 0 &&
 								childrenWithSameParent.map(childCategory => (
-									<StyledLink key={childCategory.id} href={`/category/${childCategory.id}`}>
+									<StyledLink key={childCategory.id} href={`/category/${childCategory.slug}`}>
 										{childCategory.name}
 									</StyledLink>
 								))}
 						</div>
-						<ProductsByCategoryTree id={params.id} page={searchParams.page} perPage={PER_PAGE} />
+						<ProductsByCategoryTree id={category.id} page={searchParams.page} perPage={PER_PAGE} />
 					</div>
 				) : (
-					<ProductsByCategoryId id={params.id} page={searchParams.page} perPage={PER_PAGE} />
+					<ProductsByCategoryId id={category.id} page={searchParams.page} perPage={PER_PAGE} />
 				)}
 			</>
 		</div>

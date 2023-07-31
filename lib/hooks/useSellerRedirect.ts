@@ -9,6 +9,8 @@ export const useSellerRedirect = () => {
 	useEffect(() => {
 		if (isSeller) {
 			replace('/seller/dashboard')
+		} else {
+			replace('/seller/register')
 		}
 	}, [isSeller, replace])
 }

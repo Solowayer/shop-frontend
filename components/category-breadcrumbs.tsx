@@ -14,7 +14,7 @@ export default function CategoryBreadcrumbs({ breadcrumbs }: { breadcrumbs: Cate
 					{index === breadcrumbs.length - 1 ? (
 						<span>{crumb.name}</span>
 					) : (
-						<StyledLink href={`/category/${crumb.id}`}>{crumb.name}</StyledLink>
+						<StyledLink href={`/category/${crumb.slug}`}>{crumb.name}</StyledLink>
 					)}
 				</span>
 			))}

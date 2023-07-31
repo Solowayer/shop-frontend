@@ -29,7 +29,7 @@ export default function Home() {
 		<div className="flex flex-col gap-8">
 			<div className="flex gap-2">
 				{mainCategories.map((category, index) => (
-					<Link key={index} href={`/category/${category.id}`}>
+					<Link key={index} href={`/category/${category.slug}`}>
 						<div className="bg-zinc-100 py-2 px-4 rounded-full hover:bg-zinc-200">{category.name}</div>
 					</Link>
 				))}

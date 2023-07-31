@@ -1,5 +1,6 @@
 const Routes = {
-	ACCOUNT: '/account'
+	ACCOUNT: '/account',
+	SELLER: '/seller'
 }
 
 export const siteConfig = {
@@ -14,7 +15,7 @@ export const siteConfig = {
 		},
 		{
 			title: 'Дашборд продавця',
-			href: '/seller/dashboard'
+			href: `${Routes.SELLER}/dashboard`
 		}
 	],
 	profile: []

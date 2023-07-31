@@ -1,5 +1,6 @@
 interface Category {
 	id: number
+	slug: string
 	name: string
 	isMain: boolean
 	parentId: number

@@ -30,7 +30,7 @@ class CategoryServ {
 		}
 	}
 
-	async findBySlug(slug: string): Promise<Category> {
+	async findBySlug(slug: string): Promise<FullCategory> {
 		try {
 			const res = await instance.get(`${CATEGORIES}/${slug}`)
 			return res.data
