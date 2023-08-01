@@ -35,7 +35,7 @@ export default function Page({ params, searchParams }: { params: { id: number };
 				breadcrumbs={[
 					{ name: 'Аккаунт', href: '/account' },
 					{ name: 'Мої списки', href: '/account/lists' },
-					{ name: `Список ${list?.name}`, href: '/' }
+					{ name: `Список "${list?.name}"`, href: '/' }
 				]}
 			/>
 			<div className="flex items-center">

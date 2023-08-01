@@ -1,7 +1,7 @@
 'use client'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Search } from '../icons'
+import { Close, Search } from '../icons'
 import { useRouter } from 'next/navigation'
 
 
@@ -11,8 +11,8 @@ export default function SearchForm() {
 	const {
 		register,
 		handleSubmit,
-		setValue,
-		formState: { isSubmitting },
+		reset,
+		formState: { isSubmitting, isDirty },
 	} = useForm<{ value: string }>({
 		defaultValues: {
 			value: ''
@@ -21,20 +21,26 @@ export default function SearchForm() {
 
 	const onSubmit: SubmitHandler<{ value: string }> = (data) => {
 		console.log(data.value);
-		router.replace(`/search?searchTerm=${data.value}`)
+		if (data.value === '') {
+			return null
+		} else {
+			router.replace(`/search?searchTerm=${data.value}`)
+			reset()
+		}
 	}
-
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const value = event.target.value
-		setValue('value', value)
-	}
-
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className='w-[600px]'>
 			<div className='relative flex items-center bg-zinc-100 h-[40px] rounded-full overflow-hidden'>
-				<input id="name" placeholder='Пошук' {...register('value')} onChange={handleChange} className="bg-transparent px-6 py-2 w-full h-full outline-none" />
-				<button type="submit" disabled={isSubmitting} className='flex items-center justify-center h-full w-[64px] bg-black p-2 text-white right-0'>
+				<div className='flex w-full relative items-center'>
+					<input id="name" placeholder='Пошук' {...register('value')} className="bg-transparent px-6 py-2 flex-1 h-full outline-none" />
+					{isDirty &&
+						<div className='absolute right-2 hover:cursor-pointer'>
+							<Close onClick={() => reset()} />
+						</div>
+					}
+				</div>
+				<button type="submit" disabled={isSubmitting} className='flex items-center justify-center h-full w-[64px] bg-black p-2 text-white right-0 disabled:bg-zinc-400'>
 					<Search size="24" />
 				</button>
 			</div>

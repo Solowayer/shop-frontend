@@ -1,21 +1,27 @@
 'use client'
 
 import ProductCard from '@/components/product-card'
+import { Spinner } from '@/components/ui'
 import ProductService from '@/services/product-service'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 
 export default function Page({ searchParams }: { searchParams: { searchTerm: string } }) {
-	const { data: productsData } = useQuery(['products-search', searchParams.searchTerm], () => ProductService.findAll({ searchTerm: searchParams.searchTerm }))
+	const { data: productsData, isLoading: isProductsLoading } = useQuery(['products-search', searchParams.searchTerm], () => ProductService.findAll({ searchTerm: searchParams.searchTerm }))
+
+	if (isProductsLoading) {
+		return <Spinner />
+	}
 
 	return (
 		<div className="flex flex-col gap-6">
 			<div>
-				Результати пошуку <span className="text-green-600 font-bold">&quot;{searchParams.searchTerm}&quot;</span>
+				Результати пошуку <span className="text-black font-bold">&quot;{searchParams.searchTerm}&quot;</span>
+				<span className='text-zinc-400 text-sm ml-2'>({productsData?.length} шт)</span>
 			</div>
-			<div className="grid grid-cols-4 gap-4">
-				{productsData &&
-					productsData.products.map((product, index) => (
+			{productsData && productsData.length > 0 ?
+				<div className="grid grid-cols-4 gap-4">
+					{productsData.products.map((product, index) => (
 						<ProductCard
 							key={index}
 							href={`/product/${product.slug}`}
@@ -26,7 +32,7 @@ export default function Page({ searchParams }: { searchParams: { searchTerm: str
 							rating={product.rating}
 						/>
 					))}
-			</div>
+				</div> : <span>За даними параметрами нічого не знайдено</span>}
 		</div>
 	)
 }
