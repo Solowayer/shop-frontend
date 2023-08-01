@@ -44,7 +44,7 @@ export default function CartItem({ id, image, name, price, quantity, productId }
 	}
 
 	return (
-		<div className="flex gap-6 bg-white drop-shadow-[0_4px_20px_rgba(34,34,34,.15)] p-6 rounded">
+		<div className="flex gap-6 bg-white border p-6 rounded">
 			{image && (
 				<div className="relative h-[120px] w-[120px]">
 					<Image src={image} alt={''} fill className="object-contain" />

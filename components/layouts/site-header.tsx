@@ -23,6 +23,7 @@ import {
 	DropdownMenuGroup
 } from '@/components/ui/dropdown-menu'
 import { siteConfig } from '@/config/site'
+import SearchForm from '../forms/search-form'
 
 export default function SiteHeader() {
 	const isAuth = useStore(useUserStore, state => state.isAuth)
@@ -90,9 +91,8 @@ export default function SiteHeader() {
 						{!isAuth && <span className="text-zinc-600 text-sm">Увійдіть, щоб купувати або продавати</span>}
 					</div>
 				</div>
+				<SearchForm />
 				<div className="flex items-center gap-4">
-					<Input placeholder="Шукати..." icon={<Search />} />
-
 					{isAuth ? (
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>

@@ -15,7 +15,7 @@ import { Spinner, Button, Input, Textarea } from '@/components/ui'
 import { ChevronLeft, Delete } from '@/components/icons'
 import { useRouter } from 'next/navigation'
 
-export default function AddProductForm() {
+export default function CreateProductForm() {
 	const [productImages, setProductImages] = useState<string[]>([])
 
 	const router = useRouter()
@@ -51,7 +51,7 @@ export default function AddProductForm() {
 		isError: isCategoriesError
 	} = useQuery({
 		queryKey: ['all-categories'],
-		queryFn: CategoryService.getAll,
+		queryFn: CategoryService.findAll,
 		retry: false
 	})
 
