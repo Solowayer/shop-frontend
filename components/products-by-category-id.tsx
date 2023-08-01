@@ -22,7 +22,7 @@ export default function ProductsByCategoryId({ id, page, perPage }: { id: number
 			sort: undefined,
 			min_price: undefined,
 			max_price: undefined,
-			searchTerm: undefined,
+			q: undefined,
 			page: page,
 			limit: perPage
 		})

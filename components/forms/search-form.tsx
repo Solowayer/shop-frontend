@@ -24,7 +24,7 @@ export default function SearchForm() {
 		if (data.value === '') {
 			return null
 		} else {
-			router.replace(`/search?searchTerm=${data.value}`)
+			router.replace(`/search?q=${data.value}`)
 			reset()
 		}
 	}

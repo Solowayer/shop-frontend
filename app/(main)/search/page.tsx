@@ -6,8 +6,8 @@ import ProductService from '@/services/product-service'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 
-export default function Page({ searchParams }: { searchParams: { searchTerm: string } }) {
-	const { data: productsData, isLoading: isProductsLoading } = useQuery(['products-search', searchParams.searchTerm], () => ProductService.findAll({ searchTerm: searchParams.searchTerm }))
+export default function Page({ searchParams }: { searchParams: { q: string } }) {
+	const { data: productsData, isLoading: isProductsLoading } = useQuery(['products-search', searchParams.q], () => ProductService.findAll({ q: searchParams.q }))
 
 	if (isProductsLoading) {
 		return <Spinner />
@@ -16,7 +16,7 @@ export default function Page({ searchParams }: { searchParams: { searchTerm: str
 	return (
 		<div className="flex flex-col gap-6">
 			<div>
-				Результати пошуку <span className="text-black font-bold">&quot;{searchParams.searchTerm}&quot;</span>
+				Результати пошуку <span className="text-black font-bold">&quot;{searchParams.q}&quot;</span>
 				<span className='text-zinc-400 text-sm ml-2'>({productsData?.length} шт)</span>
 			</div>
 			{productsData && productsData.length > 0 ?

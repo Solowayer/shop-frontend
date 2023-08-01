@@ -22,7 +22,7 @@ export default function ProductsByCategoryTree({ id, page, perPage }: { id: numb
 			sort: 'oldest',
 			min_price: undefined,
 			max_price: undefined,
-			searchTerm: undefined,
+			q: undefined,
 			page: page,
 			limit: perPage
 		})

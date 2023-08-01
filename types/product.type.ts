@@ -25,5 +25,5 @@ interface ProductFilters extends Pagination {
 	sort?: ProductSortOptions
 	min_price?: number
 	max_price?: number
-	searchTerm?: string
+	q?: string
 }
