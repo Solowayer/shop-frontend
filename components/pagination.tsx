@@ -49,7 +49,7 @@ export default function Pagination({ totalPages }: PaginationProps) {
 					</React.Fragment>
 				))}
 			</div>
-			<ButtonLink href={page < totalPages ? `?page=${page + 1}` : '#'} shape="circle" disabled={page >= totalPages}>
+			<ButtonLink href={page < totalPages ? `?page=${page + 1}` : `?page=${page}`} shape="circle" disabled={page >= totalPages}>
 				<ChevronRight />
 			</ButtonLink>
 		</div>

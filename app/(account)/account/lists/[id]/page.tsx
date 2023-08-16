@@ -17,11 +17,11 @@ export default function Page({ params, searchParams }: { params: { id: number };
 	const [openDialog, setOpenDialog] = useState(false)
 	const { data: list, isLoading } = useQuery([`list`, params.id], () => ListService.findById(params.id))
 	const { data: productsData } = useQuery(['list-products', params.id], () =>
-		ProductService.findByList(params.id, {
+		ProductService.findByWishlist(params.id, {
 			sort: 'high-price',
 			min_price: undefined,
 			max_price: undefined,
-			searchTerm: undefined,
+			q: undefined,
 			page: searchParams.page,
 			limit: PER_PAGE
 		})
@@ -58,13 +58,12 @@ export default function Page({ params, searchParams }: { params: { id: number };
 					{productsData.products.map((product, index) => (
 						<FavoriteItem
 							key={index}
-							href={''}
+							href={`/product/${product.slug}`}
 							id={product.id}
 							listId={params.id}
-							images={product.images}
+							variations={product.variations}
 							rating={product.rating}
 							name={product.name}
-							price={product.price}
 						/>
 					))}
 				</ul>

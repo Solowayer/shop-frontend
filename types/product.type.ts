@@ -1,13 +1,11 @@
 interface Product {
 	id: number
 	slug: string
-	images?: string[]
 	name: string
 	description?: string | null
-	price: number
 	categoryId: number
 	rating: number
-	published: boolean
+	variations: ProductVariation[]
 }
 
 interface FullProduct extends Product {

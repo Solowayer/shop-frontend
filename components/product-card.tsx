@@ -15,7 +15,7 @@ interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryI
 	href: string
 }
 
-export default function ProductCard({ id, href, images, name, price, rating }: ProductProps) {
+export default function ProductCard({ id, href, name, variations, rating }: ProductProps) {
 	const [openDialog, setOpenDialog] = useState(false)
 	const [newList, setNewList] = useState(false)
 
@@ -127,7 +127,7 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 			)}
 
 			<div className="absolute z-50 bottom-32 right-4">
-				{cartCheck?.isInCart ? (
+				{variations.length > 1 ? <ButtonLink href={''}>Опції</ButtonLink> : cartCheck?.isInCart ? (
 					<ButtonLink intent="positive" shape="circle" href="/cart">
 						<CartFilled />
 					</ButtonLink>
@@ -140,15 +140,15 @@ export default function ProductCard({ id, href, images, name, price, rating }: P
 
 			<Link href={href}>
 				<div className="relative h-[180px] w-full">
-					{images && images.length > 0 ? (
-						<Image src={images[0]} alt={'Product photo'} fill sizes="300px" className="p-4 object-contain" />
+					{variations[0].images && variations[0].images.length > 0 ? (
+						<Image src={variations[0].images[0]} alt={'Product photo'} fill sizes="300px" className="p-4 object-contain" />
 					) : (
 						<Image src="/../public/no-product-photo.png" alt={'Product photo'} className="object-contain" fill />
 					)}
 				</div>
 
 				<div className="flex flex-col p-4 gap-2">
-					<span className="font-bold">₴{price}</span>
+					<span className="font-bold">₴{variations[0].price}</span>
 					<span className="hover:text-amber-700 line-clamp-1" title={name}>
 						{name}
 					</span>

@@ -36,9 +36,12 @@ class ProductServ {
 		}
 	}
 
-	async findByList(listId: number, queryData?: ProductFilters): Promise<{ products: Product[]; length: number }> {
+	async findByWishlist(
+		wishlistId: number,
+		queryData?: ProductFilters
+	): Promise<{ products: Product[]; length: number }> {
 		try {
-			const res = await instance.get(`${PRODUCTS}/l/${listId}`, { params: queryData })
+			const res = await instance.get(`${PRODUCTS}/wishlist/${wishlistId}`, { params: queryData })
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)

@@ -3,7 +3,6 @@
 import { Spinner } from '@/components/ui'
 import CategoryService from '@/services/category-service'
 import { useQuery } from '@tanstack/react-query'
-import Image from 'next/image'
 
 import Link from 'next/link'
 
