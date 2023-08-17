@@ -11,7 +11,7 @@ import Link from 'next/link'
 import { Delete } from './icons'
 import Stepper from './stepper'
 
-export default function CartItem({ id, image, name, price, quantity, productId }: CartItem) {
+export default function CartItem({ id, image, name, price, quantity }: CartItem) {
 	const queryClient = useQueryClient()
 
 	const updateCartItemMutation = useMutation((data: EditCartItem) => CartService.updateItem(id, data), {
@@ -53,7 +53,8 @@ export default function CartItem({ id, image, name, price, quantity, productId }
 			<div className="flex flex-1 gap-8 flex-col justify-between">
 				<div className="flex justify-between gap-6">
 					<span className="w-full flex flex-1 font-medium text-lg hover:text-amber-700 hover:underline cursor-pointer">
-						<Link href={`/product/p/${productId}`}>{name}</Link>
+						{/* <Link href={`/product/p/${productId}`}>{name}</Link> */}
+						{name}
 					</span>
 					<span className="font-bold text-xl min-w-[200px] inline-flex justify-end">{price} ₴</span>
 				</div>

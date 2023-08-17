@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComponentProps, forwardRef } from 'react'
 
-const inputStyles = ['w-full px-4 bg-zinc-100 rounded', 'text-md h-10']
+const inputStyles = ['w-full px-4 bg-zinc-50 border border-zinc-400 rounded overflow', 'text-md h-10']
 
 interface InputProps extends ComponentProps<'input'> {
 	label?: string
@@ -16,7 +16,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	return (
 		<div className={`inline-flex flex-col ${fullWidth ? 'w-full' : ''}`}>
 			{label && (
-				<label className={`font-medium mb-2`} htmlFor={id}>
+				<label className={`text-md mb-2`} htmlFor={id}>
 					{label}
 				</label>
 			)}

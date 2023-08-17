@@ -48,7 +48,7 @@ export default function ProductCard({ id, href, name, variations, rating }: Prod
 
 	const handleAddProductToCart = async () => {
 		try {
-			await addCartItemMutation.mutateAsync({ productId: id, quantity: 1 })
+			await addCartItemMutation.mutateAsync({ productVariationId: variations[0].id, quantity: 1 })
 		} catch (error) {
 			console.error('Помилка при додаванні товару до корзини:', error)
 		}
@@ -127,7 +127,7 @@ export default function ProductCard({ id, href, name, variations, rating }: Prod
 			)}
 
 			<div className="absolute z-50 bottom-32 right-4">
-				{variations.length > 1 ? <ButtonLink href={''}>Опції</ButtonLink> : cartCheck?.isInCart ? (
+				{variations.length > 1 ? <ButtonLink href={href} shape="round" intent="secondary">Опції</ButtonLink> : cartCheck?.isInCart ? (
 					<ButtonLink intent="positive" shape="circle" href="/cart">
 						<CartFilled />
 					</ButtonLink>

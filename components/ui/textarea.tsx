@@ -13,14 +13,14 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
 	return (
 		<div className={`inline-flex flex-col ${fullWidth ? 'w-full' : ''}`}>
 			{label && (
-				<label className={`font-medium mb-2`} htmlFor={id}>
+				<label className={`text-md mb-2`} htmlFor={id}>
 					{label}
 				</label>
 			)}
 			<div className="inline-flex w-full relative items-center">
 				<textarea
 					ref={ref}
-					className="w-full h-[100px] bg-zinc-100 rounded text-md p-2"
+					className="w-full h-[150px] bg-zinc-50 border border-zinc-400 rounded text-md p-2"
 					id={id}
 					placeholder={placeholder}
 					{...props}

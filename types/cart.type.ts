@@ -10,12 +10,11 @@ interface CartItem {
 	name: string
 	quantity: number
 	price: number
-	productId: number
 }
 
 interface AddCartItem {
 	quantity: number
-	productId: number
+	productVariationId: number
 }
 
 interface EditCartItem extends Partial<AddCartItem> {}

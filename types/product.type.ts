@@ -13,9 +13,19 @@ interface FullProduct extends Product {
 	cartItems: CartItem[]
 }
 
-interface CreateProduct extends Omit<Product, 'id' | 'rating'> {}
+interface CreateProduct {
+	slug: string
+	name: string
+	description?: string
+	tags: string[]
+	categoryId: number
+	images: string[]
+	price: number
+	stock: number
+	attributeValues: { attributeId: number; value: string }[]
+}
 
-interface EditProduct extends Partial<Product> {}
+interface EditProduct extends Partial<CreateProduct> {}
 
 type ProductSortOptions = 'rating' | 'low-price' | 'high-price' | 'newest' | 'oldest'
 
