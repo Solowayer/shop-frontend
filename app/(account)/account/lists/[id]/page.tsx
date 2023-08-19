@@ -61,7 +61,7 @@ export default function Page({ params, searchParams }: { params: { id: number };
 							href={`/product/${product.slug}`}
 							id={product.id}
 							listId={params.id}
-							variations={product.variations}
+							variants={product.variants}
 							rating={product.rating}
 							name={product.name}
 						/>

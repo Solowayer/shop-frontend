@@ -1,4 +1,4 @@
-import EditProductForm from '@/components/forms/edit-product-form'
+import EditProductForm from '@/components/forms/product/edit-product-form'
 
 export default function SellerEditProduct({ params }: { params: { id: number } }) {
 	return (

@@ -3,9 +3,9 @@ import instance from './api'
 const CATEGORIES = '/categories'
 
 class CategoryServ {
-	async findAll(): Promise<Category[]> {
+	async findAll(queryData?: CategoryFilters): Promise<Category[]> {
 		try {
-			const res = await instance.get(`${CATEGORIES}`)
+			const res = await instance.get(`${CATEGORIES}`, { params: queryData })
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)

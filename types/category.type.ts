@@ -4,6 +4,7 @@ interface Category {
 	name: string
 	isMain: boolean
 	parentId: number
+	parent: Category
 }
 
 interface CreateCategory {
@@ -19,3 +20,7 @@ interface FullCategory extends Category {
 }
 
 interface EditCategory extends Partial<CreateCategory> {}
+
+interface CategoryFilters {
+	q?: string
+}

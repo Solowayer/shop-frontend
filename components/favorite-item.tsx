@@ -14,7 +14,7 @@ interface FavoriteItemProps extends Omit<Product, 'slug' | 'description' | 'cate
 	listId: number
 }
 
-export default function FavoriteItem({ id, listId, href, name, variations, rating }: FavoriteItemProps) {
+export default function FavoriteItem({ id, listId, href, name, variants, rating }: FavoriteItemProps) {
 	const queryClient = useQueryClient()
 
 	const { data: cartData } = useQuery(['check-product-in-cart', id], () => CartService.checkProductInCart(id))
@@ -51,8 +51,8 @@ export default function FavoriteItem({ id, listId, href, name, variations, ratin
 		<li className="flex gap-8">
 			<Link href={href}>
 				<div className="relative h-[180px] w-[180px] select-none">
-					{variations[0].images && variations[0].images.length > 0 ? (
-						<Image src={variations[0].images[0]} alt={'Product photo'} fill sizes="300px" className="p-4 object-contain" />
+					{variants[0].images && variants[0].images.length > 0 ? (
+						<Image src={variants[0].images[0]} alt={'Product photo'} fill sizes="300px" className="p-4 object-contain" />
 					) : (
 						<Image src="/../public/no-product-photo.png" alt={'Product photo'} className="object-contain" fill />
 					)}
@@ -65,7 +65,7 @@ export default function FavoriteItem({ id, listId, href, name, variations, ratin
 							{name}
 						</span>
 					</Link>
-					<span className="font-bold text-xl whitespace-nowrap">{variations[0].price} ₴</span>
+					<span className="font-bold text-xl whitespace-nowrap">{variants[0].price} ₴</span>
 					<span className="flex items-center gap-1">
 						{rating} <Star fill="#ffa41c" />
 					</span>

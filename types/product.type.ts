@@ -5,7 +5,7 @@ interface Product {
 	description?: string | null
 	categoryId: number
 	rating: number
-	variations: ProductVariation[]
+	variants: Variant[]
 }
 
 interface FullProduct extends Product {
@@ -16,7 +16,7 @@ interface FullProduct extends Product {
 interface CreateProduct {
 	slug: string
 	name: string
-	description?: string
+	description: string | null
 	tags: string[]
 	categoryId: number
 	images: string[]

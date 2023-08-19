@@ -1,3 +1,4 @@
 {
-  "extends": "next/core-web-vitals"
+	"extends": "next/core-web-vitals",
+	"rules": { "no-console": 0, "prettier/prettier": 0 }
 }

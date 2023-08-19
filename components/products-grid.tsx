@@ -9,7 +9,7 @@ export default function ProductsGrid({ products }: { products: Product[] }) {
 					id={product.id}
 					key={product.id}
 					name={product.name}
-					variations={product.variations}
+					variants={product.variants}
 					rating={product.rating}
 					href={`/product/${product.slug}`}
 				/>

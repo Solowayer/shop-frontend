@@ -1,4 +1,5 @@
 'use client'
+// @deprecated
 
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
@@ -67,7 +68,7 @@ export default function EditProductForm({ productId }: { productId: number }) {
 	})
 
 	const {
-		register,
+		register, 
 		handleSubmit,
 		getValues,
 		reset,

@@ -1,36 +1,42 @@
 import * as z from 'zod'
 import { ZodType } from 'zod'
 
+const attributeValuesSchema = z.object({
+	attributeId: z.number().min(1, { message: 'Вкажіть ID атрибуту' }),
+	value: z.string().min(1, { message: 'Вкажіть значення атрибуту' })
+})
+
 export const createProductSchema: ZodType<CreateProduct> = z.object({
 	slug: z.string().min(1, { message: 'Вкажіть slug' }),
 	name: z.string().min(1, { message: 'Вкажіть назву товару' }),
-	// images: z.array(z.string()).max(10, { message: 'Максимум 10 фото' }),
 	description: z
 		.string()
-		.optional()
 		.nullable()
 		.transform(description => {
 			if (description === '') return null
 			return description
 		}),
-	price: z.number().min(1, { message: 'Вкажіть ціну' }),
+	tags: z.array(z.string()),
 	categoryId: z.number().min(1, { message: 'Вкажіть категорію' }),
-	published: z.boolean()
+	images: z.array(z.string()).max(10, { message: 'Максимум 10 фото' }),
+	price: z.number().min(1, { message: 'Вкажіть ціну' }),
+	stock: z.number().min(1, { message: 'Вкажіть stock' }),
+	attributeValues: z.array(attributeValuesSchema)
 })
 
-export const editProductSchema: ZodType<EditProduct> = z.object({
-	slug: z.string().min(1, { message: 'Вкажіть slug' }).optional(),
-	name: z.string().min(1, { message: 'Вкажіть назву товару' }).optional(),
-	// images: z.array(z.string()).max(10, { message: 'Максимум 10 фото' }).optional(),
-	description: z
-		.string()
-		.optional()
-		.nullable()
-		.transform(description => {
-			if (description === '') return null
-			return description
-		}),
-	price: z.number().min(1, { message: 'Вкажіть ціну' }).optional(),
-	categoryId: z.number().min(1, { message: 'Вкажіть категорію' }).optional(),
-	published: z.boolean().optional()
-})
+// export const editProductSchema: ZodType<EditProduct> = z.object({
+// 	slug: z.string().min(1, { message: 'Вкажіть slug' }).optional(),
+// 	name: z.string().min(1, { message: 'Вкажіть назву товару' }).optional(),
+// 	images: z.array(z.string()).max(10, { message: 'Максимум 10 фото' }).optional(),
+// 	description: z
+// 		.string()
+// 		.optional()
+// 		.nullable()
+// 		.transform(description => {
+// 			if (description === '') return null
+// 			return description
+// 		}),
+// 	price: z.number().min(1, { message: 'Вкажіть ціну' }).optional(),
+// 	categoryId: z.number().min(1, { message: 'Вкажіть категорію' }).optional(),
+// 	published: z.boolean().optional()
+// })

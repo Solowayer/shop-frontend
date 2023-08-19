@@ -15,7 +15,7 @@ interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryI
 	href: string
 }
 
-export default function ProductCard({ id, href, name, variations, rating }: ProductProps) {
+export default function ProductCard({ id, href, name, variants, rating }: ProductProps) {
 	const [openDialog, setOpenDialog] = useState(false)
 	const [newList, setNewList] = useState(false)
 
@@ -48,7 +48,7 @@ export default function ProductCard({ id, href, name, variations, rating }: Prod
 
 	const handleAddProductToCart = async () => {
 		try {
-			await addCartItemMutation.mutateAsync({ productVariationId: variations[0].id, quantity: 1 })
+			await addCartItemMutation.mutateAsync({ productVariationId: variants[0].id, quantity: 1 })
 		} catch (error) {
 			console.error('Помилка при додаванні товару до корзини:', error)
 		}
@@ -127,7 +127,11 @@ export default function ProductCard({ id, href, name, variations, rating }: Prod
 			)}
 
 			<div className="absolute z-50 bottom-32 right-4">
-				{variations.length > 1 ? <ButtonLink href={href} shape="round" intent="secondary">Опції</ButtonLink> : cartCheck?.isInCart ? (
+				{variants.length > 1 ? (
+					<ButtonLink href={href} shape="round" intent="secondary">
+						Опції
+					</ButtonLink>
+				) : cartCheck?.isInCart ? (
 					<ButtonLink intent="positive" shape="circle" href="/cart">
 						<CartFilled />
 					</ButtonLink>
@@ -140,15 +144,21 @@ export default function ProductCard({ id, href, name, variations, rating }: Prod
 
 			<Link href={href}>
 				<div className="relative h-[180px] w-full">
-					{variations[0].images && variations[0].images.length > 0 ? (
-						<Image src={variations[0].images[0]} alt={'Product photo'} fill sizes="300px" className="p-4 object-contain" />
+					{variants[0].images && variants[0].images.length > 0 ? (
+						<Image
+							src={variants[0].images[0]}
+							alt={'Product photo'}
+							fill
+							sizes="300px"
+							className="p-4 object-contain"
+						/>
 					) : (
 						<Image src="/../public/no-product-photo.png" alt={'Product photo'} className="object-contain" fill />
 					)}
 				</div>
 
 				<div className="flex flex-col p-4 gap-2">
-					<span className="font-bold">₴{variations[0].price}</span>
+					<span className="font-bold">₴{variants[0].price}</span>
 					<span className="hover:text-amber-700 line-clamp-1" title={name}>
 						{name}
 					</span>
