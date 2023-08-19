@@ -7,12 +7,18 @@ import CategoryService from '@/services/category-service'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { ChangeEvent, useState } from 'react'
 
-export default function CategorySelect({ setCategoryId }: { setCategoryId: (id: number) => void }) {
+type Props = {
+	categoryId: number
+	setCategoryId: (id: number) => void
+}
+
+export default function CategorySelect({ categoryId, setCategoryId }: Props) {
 	const queryClient = useQueryClient()
 	const [openDialog, setOpenDialog] = useState(false)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [categoryName, setCategoryName] = useState<string>('')
 	const debouncedSearch = useDebounce(searchTerm)
+
 	const { data: categories, isLoading } = useQuery(['all-categories', debouncedSearch], () =>
 		CategoryService.findAll({ q: debouncedSearch })
 	)

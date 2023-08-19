@@ -9,22 +9,22 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { createProductSchema } from '@/lib/validation/productSchema'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Spinner, Button, Input, Textarea } from '@/components/ui'
+import { Button, Input, Textarea } from '@/components/ui'
 import { ChevronLeft } from '@/components/icons'
 import { useRouter } from 'next/navigation'
-import ProductImageGallery from './product-image-gallery'
 import CategorySelect from './category-select'
+import AttributeService from '@/services/attribute-service'
 
 export default function CreateProductForm() {
-	const [productImages, setProductImages] = useState<string[]>([])
-	const [categoryId, setCategoryId] = useState<number>()
+	const [categoryId, setCategoryId] = useState<number>(0)
 
 	const router = useRouter()
+
+	const { data: attributes } = useQuery(['attributes'], () => AttributeService.findByCategoryId(categoryId))
 
 	const productMutation = useMutation({
 		mutationFn: ProductService.create,
 		onSuccess: () => {
-			setProductImages([])
 			router.push('/seller/dashboard/products')
 		}
 	})
@@ -32,15 +32,12 @@ export default function CreateProductForm() {
 	const {
 		register,
 		handleSubmit,
-		getValues,
 		formState: { errors, isSubmitting, isDirty }
 	} = useForm<CreateProduct>({
 		defaultValues: {
 			slug: '',
 			name: '',
-			images: [],
 			description: '',
-			price: 1,
 			categoryId: undefined
 		},
 		resolver: zodResolver(createProductSchema)
@@ -48,15 +45,11 @@ export default function CreateProductForm() {
 
 	const onSubmit: SubmitHandler<CreateProduct> = async data => {
 		try {
-			await productMutation.mutateAsync({ ...data, images: productImages })
+			await productMutation.mutateAsync({ ...data })
 		} catch (error) {
 			console.log(error)
 		}
 	}
-
-	useEffect(() => {
-		console.log('Product images:', productImages)
-	}, [productImages])
 
 	return (
 		<div className="flex flex-col gap-8">
@@ -69,7 +62,7 @@ export default function CreateProductForm() {
 			<form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
 				<div className="flex flex-col gap-6">
 					<span className="text-xl font-medium">Категорія</span>
-					<CategorySelect setCategoryId={setCategoryId} />
+					<CategorySelect categoryId={categoryId} setCategoryId={setCategoryId} />
 					{errors.categoryId?.message && <p className="text-red-500">{errors.categoryId?.message}</p>}
 				</div>
 
@@ -89,32 +82,6 @@ export default function CreateProductForm() {
 				</div>
 
 				<hr />
-
-				<div className="flex flex-col gap-6">
-					<span className="text-xl font-medium">Додатково</span>
-				</div>
-
-				<hr />
-
-				<div className="flex flex-col gap-4">
-					<div className="flex flex-col gap-4">
-						<span className="text-xl font-medium">Фото</span>
-						<ProductImageGallery productImages={productImages} setProductImages={setProductImages} />
-						{errors.images?.message && <span className="text-red-500">{errors.images?.message}</span>}
-					</div>
-
-					<Input
-						{...register('price', { valueAsNumber: true })}
-						label="Ціна"
-						type="number"
-						id="price"
-						min={1}
-						disabled={isSubmitting}
-					/>
-					{errors.price?.message && !Number.isNaN(getValues('price')) && (
-						<span className="text-red-500">{errors.price?.message}</span>
-					)}
-				</div>
 
 				<div className="flex flex-col gap-4">
 					{productMutation.isLoading && <span>Loading...</span>}
