@@ -8,11 +8,10 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { ChangeEvent, useState } from 'react'
 
 type Props = {
-	categoryId: number
 	setCategoryId: (id: number) => void
 }
 
-export default function CategorySelect({ categoryId, setCategoryId }: Props) {
+export default function CategorySelect({ setCategoryId }: Props) {
 	const queryClient = useQueryClient()
 	const [openDialog, setOpenDialog] = useState(false)
 	const [searchTerm, setSearchTerm] = useState<string>('')

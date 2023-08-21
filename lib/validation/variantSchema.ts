@@ -1,6 +1,6 @@
 import { ZodType, z } from 'zod'
 
-const attributeValuesSchema = z.object({
+export const attributeValuesSchema = z.object({
 	attributeId: z.number().min(1, { message: 'Вкажіть ID атрибуту' }),
 	value: z.string().min(1, { message: 'Вкажіть значення атрибуту' })
 })

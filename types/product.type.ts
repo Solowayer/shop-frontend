@@ -19,6 +19,10 @@ interface CreateProduct {
 	description: string | null
 	tags: string[]
 	categoryId: number
+	images?: string[]
+	price: number
+	stock: number
+	attributeValues: CreateAttributeValue[]
 }
 
 interface EditProduct extends Partial<CreateProduct> {}

@@ -5,5 +5,5 @@ interface Attribute {
 
 interface CreateAttributeValue {
 	attributeId: number
-	value: number
+	value: string
 }

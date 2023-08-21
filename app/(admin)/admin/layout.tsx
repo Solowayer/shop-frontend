@@ -1,16 +1,13 @@
 import DashboardNav from '@/components/layouts/dashboard-nav'
 import React from 'react'
-import SellerHeader from '@/components/layouts/seller-header'
+import AdminHeader from '@/components/layouts/admin-header'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-	const navItems = [
-		{ href: '/seller/dashboard', title: 'Дашборд' },
-		{ href: '/seller/dashboard/products', title: 'Всі товари' }
-	]
+	const navItems = [{ href: '/admin/categories', title: 'Категорії' }]
 
 	return (
 		<>
-			<SellerHeader />
+			<AdminHeader />
 			<div className="flex h-[calc(100%-80px)]">
 				<DashboardNav navItems={navItems} />
 				<div className="flex-1 max-w-full">

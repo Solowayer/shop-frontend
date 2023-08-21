@@ -1,5 +1,6 @@
 import * as z from 'zod'
 import { ZodType } from 'zod'
+import { attributeValuesSchema } from './variantSchema'
 
 export const createProductSchema: ZodType<CreateProduct> = z.object({
 	slug: z.string().min(1, { message: 'Вкажіть slug' }),
@@ -12,7 +13,11 @@ export const createProductSchema: ZodType<CreateProduct> = z.object({
 			return description
 		}),
 	tags: z.array(z.string()),
-	categoryId: z.number().min(1, { message: 'Вкажіть категорію' })
+	categoryId: z.number().min(1, { message: 'Вкажіть категорію' }),
+	images: z.array(z.string()).max(10, { message: 'Максимум 10 фото' }),
+	price: z.number().min(1, { message: 'Вкажіть ціну' }),
+	stock: z.number().min(1, { message: 'Вкажіть stock' }),
+	attributeValues: z.array(attributeValuesSchema)
 })
 
 // export const editProductSchema: ZodType<EditProduct> = z.object({
