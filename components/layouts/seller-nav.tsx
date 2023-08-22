@@ -9,7 +9,7 @@ type NavItemsType = {
 	title: string
 }
 
-export default function DashboardNav({ navItems }: { navItems: NavItemsType[] }) {
+export default function SellerNav({ navItems }: { navItems: NavItemsType[] }) {
 	const pathname = usePathname()
 
 	return (
