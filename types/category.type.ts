@@ -2,9 +2,9 @@ interface Category {
 	id: number
 	slug: string
 	name: string
-	isMain: boolean
-	parentId: number
-	parent: Category
+	parentId?: number
+	parent?: Category
+	children?: Category[]
 }
 
 interface CreateCategory {

@@ -3,6 +3,15 @@ import instance from './api'
 const CATEGORIES = '/categories'
 
 class CategoryServ {
+	async findMain(): Promise<Category[]> {
+		try {
+			const res = await instance.get(`${CATEGORIES}/main`)
+			return res.data
+		} catch (error: any) {
+			throw new Error(error?.response?.data?.message)
+		}
+	}
+
 	async findAll(queryData?: CategoryFilters): Promise<Category[]> {
 		try {
 			const res = await instance.get(`${CATEGORIES}`, { params: queryData })
@@ -12,9 +21,18 @@ class CategoryServ {
 		}
 	}
 
-	async findMain(): Promise<Category[]> {
+	async findTree(queryData?: CategoryFilters): Promise<Category[]> {
 		try {
-			const res = await instance.get(`${CATEGORIES}/main`)
+			const res = await instance.get(`${CATEGORIES}/c-tree`, { params: queryData })
+			return res.data
+		} catch (error: any) {
+			throw new Error(error?.response?.data?.message)
+		}
+	}
+
+	async findAllById(id: number): Promise<Category[]> {
+		try {
+			const res = await instance.get(`${CATEGORIES}/c-all/${id}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
