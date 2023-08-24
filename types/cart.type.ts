@@ -10,11 +10,12 @@ interface CartItem {
 	name: string
 	quantity: number
 	price: number
+	productId: number
 }
 
-interface AddCartItem {
+interface CreateCartItem {
 	quantity: number
-	productVariationId: number
+	productId: number
 }
 
-interface EditCartItem extends Partial<AddCartItem> {}
+interface UpdateCartItem extends Partial<CreateCartItem> {}

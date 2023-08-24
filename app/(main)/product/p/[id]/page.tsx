@@ -4,8 +4,8 @@ import ProductService from '@/services/product-service'
 import CategoryService from '@/services/category-service'
 
 export default async function ProductPage({ params }: { params: { id: number } }) {
-	const product = await ProductService.findById(params.id)
-	const breadcrumbs = await CategoryService.findBreadcrumbs(product.categoryId)
+	const product = await ProductService.findProductById(params.id)
+	const breadcrumbs = await CategoryService.findCategoryBreadcrumbs(product.categoryId)
 
 	if (!product) return <div>Помилка</div>
 

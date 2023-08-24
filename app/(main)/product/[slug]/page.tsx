@@ -4,8 +4,8 @@ import ProductService from '@/services/product-service'
 import CategoryService from '@/services/category-service'
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
-	const product = await ProductService.findBySlug(params.slug)
-	const breadcrumbs = await CategoryService.findBreadcrumbs(product.categoryId)
+	const product = await ProductService.findProductBySlug(params.slug)
+	const breadcrumbs = await CategoryService.findCategoryBreadcrumbs(product.categoryId)
 
 	return (
 		<div className="flex flex-col gap-4">

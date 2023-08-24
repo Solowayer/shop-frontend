@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { Button, Input } from '@/components/ui'
-import ListService from '@/services/list-service'
+import ListService from '@/services/wishlist-service'
 import { useRouter } from 'next/navigation'
 import { listSchema } from '@/lib/validation/listSchema'
 import { zodResolver } from '@hookform/resolvers/zod'

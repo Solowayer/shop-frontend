@@ -3,7 +3,7 @@ import instance from './api'
 const PRODUCTS = '/products'
 
 class ProductServ {
-	async findAll(queryData?: ProductFilters): Promise<{ products: Product[]; length: number }> {
+	async findAllProducts(queryData?: ProductFilters): Promise<{ products: Product[]; length: number }> {
 		try {
 			const res = await instance.get(`${PRODUCTS}`, { params: queryData })
 			return res.data
@@ -12,31 +12,31 @@ class ProductServ {
 		}
 	}
 
-	async findByCategoryId(
+	async findProductsByCategoryId(
 		categoryId: number,
 		queryData?: ProductFilters
 	): Promise<{ products: Product[]; length: number }> {
 		try {
-			const res = await instance.get(`${PRODUCTS}/c/${categoryId}`, { params: queryData })
+			const res = await instance.get(`${PRODUCTS}/category/${categoryId}`, { params: queryData })
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async findByCategoryTree(
+	async findProductsByCategoryTree(
 		categoryId: number,
 		queryData?: ProductFilters
 	): Promise<{ products: Product[]; length: number }> {
 		try {
-			const res = await instance.get(`${PRODUCTS}/c/tree/${categoryId}`, { params: queryData })
+			const res = await instance.get(`${PRODUCTS}/category/tree/${categoryId}`, { params: queryData })
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async findByWishlist(
+	async findProductsByWishlist(
 		wishlistId: number,
 		queryData?: ProductFilters
 	): Promise<{ products: Product[]; length: number }> {
@@ -48,7 +48,7 @@ class ProductServ {
 		}
 	}
 
-	async findSellerProducts(queryData?: ProductFilters): Promise<{ products: Product[]; length: number }> {
+	async findProductsBySellerId(queryData?: ProductFilters): Promise<{ products: Product[]; length: number }> {
 		try {
 			const res = await instance.get(`${PRODUCTS}/seller`, { params: queryData })
 			return res.data
@@ -57,16 +57,16 @@ class ProductServ {
 		}
 	}
 
-	async findById(id: number): Promise<Product> {
+	async findProductById(id: number): Promise<Product> {
 		try {
-			const res = await instance.get(`${PRODUCTS}/p/${id}`)
+			const res = await instance.get(`${PRODUCTS}/product/${id}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async findBySlug(slug: string): Promise<Product> {
+	async findProductBySlug(slug: string): Promise<Product> {
 		try {
 			const res = await instance.get(`${PRODUCTS}/${slug}`)
 			return res.data
@@ -75,7 +75,7 @@ class ProductServ {
 		}
 	}
 
-	async create(data: CreateProduct): Promise<Product> {
+	async createProduct(data: CreateProduct): Promise<Product> {
 		try {
 			const res = await instance.post(`${PRODUCTS}/create`, data)
 			return res.data
@@ -84,18 +84,27 @@ class ProductServ {
 		}
 	}
 
-	async update(id: number, data: EditProduct): Promise<Product> {
+	async createManyProduct(data: CreateProduct[]): Promise<Product[]> {
 		try {
-			const res = await instance.patch(`${PRODUCTS}/p/${id}`, data)
+			const res = await instance.post(`${PRODUCTS}/create-many`, data)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async delete(id: number) {
+	async updateProduct(id: number, data: EditProduct): Promise<Product> {
 		try {
-			const res = await instance.delete(`${PRODUCTS}/p/${id}`)
+			const res = await instance.patch(`${PRODUCTS}/product/${id}`, data)
+			return res.data
+		} catch (error: any) {
+			throw new Error(error?.response?.data?.message)
+		}
+	}
+
+	async deleteProduct(id: number) {
+		try {
+			const res = await instance.delete(`${PRODUCTS}/product/${id}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)

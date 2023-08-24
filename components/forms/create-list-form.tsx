@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Button, Input } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import ListService from '@/services/list-service'
+import ListService from '@/services/wishlist-service'
 import { listSchema } from '@/lib/validation/listSchema'
 
 type AddListFormProps = {

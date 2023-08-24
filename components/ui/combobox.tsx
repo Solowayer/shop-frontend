@@ -1,70 +1,27 @@
-import React, { ChangeEvent, InputHTMLAttributes, useState } from 'react'
-import { ExpandMore, Search } from '../icons'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useDebounce } from '@/lib/hooks/useDebounce'
-import CategoryService from '@/services/category-service'
-import { Input } from './input'
+'use client'
 
-interface Option {
-	value: string
-	label: string
+import React, { useRef, useState } from 'react'
+import { Close, ExpandMore, Search } from '../icons'
+import { useClickOutside } from '@/lib/hooks/useClickOutside'
+
+export interface ComboboxProps extends React.HTMLProps<HTMLDivElement> {
+	value?: string
+	defaultValue: string
 }
 
-interface ComboBoxProps {
-	options: Option[]
-	onSelect: (selectedValue: string) => void
-}
-
-export const ComboboxItem = () => {
-	return <span className="py-2 px-4">Info</span>
-}
-
-export const ComboboxTest = () => {
-	const queryClient = useQueryClient()
-
-	const [selectedValue, setSelectedValue] = useState<string | null>(null)
+export const Combobox = ({ children, value, defaultValue, ...props }: ComboboxProps) => {
 	const [open, setOpen] = useState(false)
-	const [searchTerm, setSearchTerm] = useState<string>('')
-	const debouncedSearch = useDebounce(searchTerm)
+	const comboboxRef = useRef<HTMLDivElement>(null)
 
-	const { data: categories, isLoading } = useQuery(['all-categories', debouncedSearch], () =>
-		CategoryService.findAllCategories({ q: debouncedSearch })
-	)
-
-	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const newSearchTerm = e.target.value
-
-		setSearchTerm(newSearchTerm)
-		queryClient.invalidateQueries(['all-categories', newSearchTerm])
-	}
+	useClickOutside(comboboxRef, () => setOpen(false))
 
 	return (
-		<Combobox>
-			<ComboboxButton onClick={() => setOpen(!open)}>{selectedValue}</ComboboxButton>
-			<ComboboxContent open={open}>
-				<ComboboxInput icon={<Search />} onChange={e => handleInputChange(e)} />
-				<ComboboxOptions>
-					{categories &&
-						categories.map(item => (
-							<ComboboxOption key={item.id} onClick={() => setSelectedValue(item.name)} className="cursor-pointer">
-								{item.name}
-							</ComboboxOption>
-						))}
-				</ComboboxOptions>
-			</ComboboxContent>
-		</Combobox>
-	)
-}
-
-export interface ComboboxProps extends React.HTMLProps<HTMLDivElement> {}
-
-export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({ children, ...props }, ref) => {
-	return (
-		<div ref={ref} {...props} className="flex flex-col gap-2 relative">
-			{children}
+		<div ref={comboboxRef} {...props} className="flex flex-col gap-2 relative">
+			<ComboboxButton onClick={() => setOpen(!open)}>{value === undefined ? defaultValue : value}</ComboboxButton>
+			{open && <ComboboxContent>{children}</ComboboxContent>}
 		</div>
 	)
-})
+}
 Combobox.displayName = 'Combobox'
 
 export interface ComboboxButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -74,7 +31,12 @@ export interface ComboboxButtonProps extends React.ButtonHTMLAttributes<HTMLButt
 export const ComboboxButton = React.forwardRef<HTMLButtonElement, ComboboxButtonProps>(
 	({ children, ...props }, ref) => {
 		return (
-			<button ref={ref} type="button" className="py-2 px-4 rounded border flex items-center justify-between" {...props}>
+			<button
+				ref={ref}
+				type="button"
+				className="py-2 px-4 rounded border flex items-center justify-between bg-zinc-50"
+				{...props}
+			>
 				{children}
 				<ExpandMore size="24" />
 			</button>
@@ -84,18 +46,31 @@ export const ComboboxButton = React.forwardRef<HTMLButtonElement, ComboboxButton
 ComboboxButton.displayName = 'ComboboxButton'
 
 export interface ComboboxInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-	icon?: React.ReactNode
+	value: string
+	onValueChange: (value: string) => void
 }
 
 export const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputProps>(
-	({ children, icon, ...props }, ref) => {
+	({ children, value, onValueChange, ...props }, ref) => {
+		const handleClearClick = () => {
+			onValueChange('')
+		}
+
 		return (
 			<div className="inline-flex w-full relative items-center">
-				{icon && <div className="absolute left-4">{icon}</div>}
+				<div className="absolute left-4">
+					<Search />
+				</div>
+
+				<div className="absolute right-4 cursor-pointer" onClick={handleClearClick}>
+					<Close />
+				</div>
 				<input
 					placeholder="Шукати"
-					className={`${icon && '!pl-12'} w-full bg-zinc-50 outline-none py-2 px-4`}
+					className={`w-full bg-zinc-50 outline-none py-2 pl-12 pr-4`}
 					ref={ref}
+					value={value}
+					onChange={e => onValueChange(e.target.value)}
 					{...props}
 				/>
 			</div>
@@ -104,19 +79,15 @@ export const ComboboxInput = React.forwardRef<HTMLInputElement, ComboboxInputPro
 )
 ComboboxInput.displayName = 'ComboboxInput'
 
-export interface ComboboxContentProps extends React.HTMLProps<HTMLDivElement> {
-	open: boolean
-}
+export interface ComboboxContentProps extends React.HTMLProps<HTMLDivElement> {}
 
 export const ComboboxContent = React.forwardRef<HTMLDivElement, ComboboxContentProps>(
-	({ title, open, children, ...props }, ref) => {
+	({ title, children, ...props }, ref) => {
 		return (
 			<div
 				ref={ref}
 				{...props}
-				className={`${
-					open ? 'absolute' : 'hidden'
-				} w-full flex flex-col gap-2 bg-white border rounded z-50 top-12 overflow-hidden max-h-[300px]`}
+				className={`absolute w-full flex flex-col bg-white border rounded z-50 top-12 overflow-hidden max-h-[300px]`}
 			>
 				{children}
 			</div>
@@ -138,13 +109,18 @@ ComboboxOptions.displayName = 'ComboboxOptions'
 
 export interface ComboboxOptionProps extends React.HTMLProps<HTMLDivElement> {
 	value?: string
+	selected?: boolean
 }
 
 export const ComboboxOption = React.forwardRef<HTMLDivElement, ComboboxOptionProps>(
-	({ title, children, ...props }, ref) => {
+	({ title, children, selected, ...props }, ref) => {
 		return (
-			<div ref={ref} {...props} className="px-4 py-2 hover:bg-zinc-50">
-				<span className="cursor-pointer">{children}</span>
+			<div
+				ref={ref}
+				{...props}
+				className={`px-4 py-2 hover:bg-zinc-50 cursor-pointer ${selected && 'text-green-600 font-medium'}`}
+			>
+				<span>{children}</span>
 			</div>
 		)
 	}

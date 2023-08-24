@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 import { Button, ButtonLink } from './ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import ListService from '@/services/list-service'
+import WishlistService from '@/services/wishlist-service'
 import CartService from '@/services/cart-service'
 import CreateListForm from './forms/create-list-form'
 
@@ -15,40 +15,40 @@ interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryI
 	href: string
 }
 
-export default function ProductCard({ id, href, name, variants, rating }: ProductProps) {
+export default function ProductCard({ id, href, name, images, price, stock, rating }: ProductProps) {
 	const [openDialog, setOpenDialog] = useState(false)
 	const [newList, setNewList] = useState(false)
 
 	const queryClient = useQueryClient()
 
 	const { data: cartCheck } = useQuery(['check-product-in-cart', id], () => CartService.checkProductInCart(id))
-	const { data: listCheck } = useQuery(['check-product-in-list', id], () => ListService.checkProductInList(id))
-	const { data: listData } = useQuery(['lists'], ListService.findAll)
+	const { data: listCheck } = useQuery(['check-product-in-wishlist', id], () => WishlistService.checkProductInList(id))
+	const { data: listData } = useQuery(['lists'], WishlistService.findAllWishlists)
 
 	const addCartItemMutation = useMutation({
-		mutationFn: CartService.addItem,
+		mutationFn: CartService.createCartItem,
 		onSuccess: () => {
 			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries(['check-product-in-cart', id])
 		}
 	})
 
 	const addProductToListMutation = useMutation({
-		mutationFn: (listId: number) => ListService.addProduct(listId, id),
+		mutationFn: (listId: number) => WishlistService.addProductToWishlist(listId, id),
 		onSuccess: () => {
-			queryClient.invalidateQueries(['check-product-in-list', id])
+			queryClient.invalidateQueries(['check-product-in-wishlist', id])
 		}
 	})
 
 	const deleteProductFromListMutation = useMutation({
-		mutationFn: () => ListService.deleteProduct(id),
+		mutationFn: () => WishlistService.deleteProductFromWishlist(id),
 		onSuccess: () => {
-			queryClient.invalidateQueries(['check-product-in-list', id])
+			queryClient.invalidateQueries(['check-product-in-wishlist', id])
 		}
 	})
 
 	const handleAddProductToCart = async () => {
 		try {
-			await addCartItemMutation.mutateAsync({ productVariationId: variants[0].id, quantity: 1 })
+			await addCartItemMutation.mutateAsync({ productId: id, quantity: 1 })
 		} catch (error) {
 			console.error('Помилка при додаванні товару до корзини:', error)
 		}
@@ -72,10 +72,7 @@ export default function ProductCard({ id, href, name, variants, rating }: Produc
 	}
 
 	return (
-		<li
-			// id={id.toString()}
-			className="relative flex flex-col min-w-[240px] border rounded hover:border-zinc-300 overflow-hidden bg-white"
-		>
+		<li className="relative flex flex-col min-w-[240px] border rounded hover:border-zinc-300 overflow-hidden bg-white">
 			{listCheck?.isInList ? (
 				<div
 					className="absolute flex items-center top-2 right-2 z-50 bg-white p-2 rounded-full"
@@ -127,11 +124,7 @@ export default function ProductCard({ id, href, name, variants, rating }: Produc
 			)}
 
 			<div className="absolute z-50 bottom-32 right-4">
-				{variants.length > 1 ? (
-					<ButtonLink href={href} shape="round" intent="secondary">
-						Опції
-					</ButtonLink>
-				) : cartCheck?.isInCart ? (
+				{cartCheck?.isInCart ? (
 					<ButtonLink intent="positive" shape="circle" href="/cart">
 						<CartFilled />
 					</ButtonLink>
@@ -144,21 +137,15 @@ export default function ProductCard({ id, href, name, variants, rating }: Produc
 
 			<Link href={href}>
 				<div className="relative h-[180px] w-full">
-					{variants[0].images && variants[0].images.length > 0 ? (
-						<Image
-							src={variants[0].images[0]}
-							alt={'Product photo'}
-							fill
-							sizes="300px"
-							className="p-4 object-contain"
-						/>
+					{images && images.length > 0 ? (
+						<Image src={images[0]} alt={'Product photo'} fill sizes="300px" className="p-4 object-contain" />
 					) : (
 						<Image src="/../public/no-product-photo.png" alt={'Product photo'} className="object-contain" fill />
 					)}
 				</div>
 
 				<div className="flex flex-col p-4 gap-2">
-					<span className="font-bold">₴{variants[0].price}</span>
+					<span className="font-bold">₴{price}</span>
 					<span className="hover:text-amber-700 line-clamp-1" title={name}>
 						{name}
 					</span>

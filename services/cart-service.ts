@@ -3,7 +3,7 @@ import instance from './api'
 const CART = '/cart'
 
 class CartServ {
-	async getAllItems(): Promise<Cart> {
+	async findAllCartItems(): Promise<Cart> {
 		try {
 			const res = await instance.get(`${CART}`)
 			return res.data
@@ -12,36 +12,36 @@ class CartServ {
 		}
 	}
 
-	async deleteItems() {
+	async createCartItem(data: CreateCartItem): Promise<CartItem> {
 		try {
-			const res = await instance.delete(`${CART}`)
+			const res = await instance.post(`${CART}/create`, data)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async addItem(data: AddCartItem): Promise<CartItem> {
+	async updateCartItem(id: number, data: UpdateCartItem): Promise<CartItem> {
 		try {
-			const res = await instance.post(`${CART}/add`, data)
+			const res = await instance.patch(`${CART}/update/${id}`, data)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async updateItem(id: number, data: EditCartItem): Promise<CartItem> {
+	async deleteCartItem(id: number) {
 		try {
-			const res = await instance.patch(`${CART}/${id}`, data)
+			const res = await instance.delete(`${CART}/delete/${id}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async deleteItem(id: number) {
+	async deleteAllCartItems() {
 		try {
-			const res = await instance.delete(`${CART}/${id}`)
+			const res = await instance.delete(`${CART}/delete-all`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)

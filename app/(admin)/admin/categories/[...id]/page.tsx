@@ -7,7 +7,6 @@ import React from 'react'
 
 export default async function Page({ params }: { params: { id: number } }) {
 	const categoryData = await CategoryService.findCategoryAndChildrenById(params.id)
-	const attributeData = await AttributeService.findByCategoryId(params.id)
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -37,7 +36,6 @@ export default async function Page({ params }: { params: { id: number } }) {
 					</Link>
 				))}
 			</div>
-			{categoryData.children.length > 0 ? null : <>{attributeData.map(item => item.name)}</>}
 		</div>
 	)
 }

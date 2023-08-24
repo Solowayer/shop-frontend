@@ -8,7 +8,7 @@ import React from 'react'
 
 export default function Page({ searchParams }: { searchParams: { q: string } }) {
 	const { data: productsData, isLoading: isProductsLoading } = useQuery(['products-search', searchParams.q], () =>
-		ProductService.findAll({ q: searchParams.q })
+		ProductService.findAllProducts({ q: searchParams.q })
 	)
 
 	if (isProductsLoading) {

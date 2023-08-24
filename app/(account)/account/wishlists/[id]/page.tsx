@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import ListService from '@/services/list-service'
+import ListService from '@/services/wishlist-service'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Spinner } from '@/components/ui'
 import ProductService from '@/services/product-service'
@@ -15,9 +15,9 @@ export default function Page({ params, searchParams }: { params: { id: number };
 	const PER_PAGE = 8
 
 	const [openDialog, setOpenDialog] = useState(false)
-	const { data: list, isLoading } = useQuery([`list`, params.id], () => ListService.findById(params.id))
+	const { data: list, isLoading } = useQuery([`list`, params.id], () => ListService.findWishlistById(params.id))
 	const { data: productsData } = useQuery(['list-products', params.id], () =>
-		ProductService.findByWishlist(params.id, {
+		ProductService.findProductsByWishlist(params.id, {
 			sort: 'high-price',
 			min_price: undefined,
 			max_price: undefined,

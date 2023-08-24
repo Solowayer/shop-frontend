@@ -4,7 +4,7 @@ const accountCards = [
 	{ href: '/account/profile', title: 'Профіль', subtitle: 'Моя особиста інформація' },
 	{ href: '/account/orders', title: 'Замовлення', subtitle: 'Відслідковувати замовлення' },
 	{ href: '/account/reviews', title: 'Відгуки', subtitle: 'Список ваших відгуків до товарів' },
-	{ href: '/account/lists', title: 'Списки', subtitle: 'Ваші списки' },
+	{ href: '/account/wishlists', title: 'Списки', subtitle: 'Ваші списки' },
 	{ href: '/account/adresses', title: 'Адреси', subtitle: 'Додавайте адреси на які будуть приходити замовлення' }
 ]
 

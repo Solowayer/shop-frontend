@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComponentProps, forwardRef } from 'react'
 
-const inputStyles = ['w-full px-4 bg-zinc-50 border border-zinc-400 rounded overflow', 'text-md h-10']
+const inputStyles = ['w-full px-4 bg-zinc-50 border rounded overflow', 'text-md h-10']
 
 interface InputProps extends ComponentProps<'input'> {
 	label?: string

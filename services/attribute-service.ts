@@ -3,7 +3,7 @@ import instance from './api'
 const ATTRIBUTES = '/attributes'
 
 class AttributeServ {
-	async findByCategoryId(categoryId: number): Promise<Attribute[]> {
+	async findAttributeByCategoryId(categoryId: number): Promise<Attribute[]> {
 		try {
 			const res = await instance.get(`${ATTRIBUTES}/category/${categoryId}`)
 			return res.data
@@ -12,7 +12,7 @@ class AttributeServ {
 		}
 	}
 
-	async createValue() {
+	async createAttributeValue() {
 		try {
 			const res = await instance.get(`${ATTRIBUTES}/create-value`)
 			return res.data

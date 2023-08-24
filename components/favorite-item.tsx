@@ -7,28 +7,28 @@ import Link from 'next/link'
 import { Button, ButtonLink } from './ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import CartService from '@/services/cart-service'
-import ListService from '@/services/list-service'
+import ListService from '@/services/wishlist-service'
 
 interface FavoriteItemProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string
 	listId: number
 }
 
-export default function FavoriteItem({ id, listId, href, name, variants, rating }: FavoriteItemProps) {
+export default function FavoriteItem({ id, listId, images, price, href, name, rating }: FavoriteItemProps) {
 	const queryClient = useQueryClient()
 
 	const { data: cartData } = useQuery(['check-product-in-cart', id], () => CartService.checkProductInCart(id))
 
 	const addCartItemMutation = useMutation({
-		mutationFn: CartService.addItem,
+		mutationFn: CartService.createCartItem,
 		onSuccess: () => {
 			queryClient.invalidateQueries(['cart']), queryClient.invalidateQueries(['check-product-in-cart', id])
 		}
 	})
 
 	const deleteListItemMutation = useMutation({
-		mutationFn: () => ListService.deleteProduct(id),
-		onSuccess: () => queryClient.invalidateQueries(['list-products', listId])
+		mutationFn: () => ListService.deleteProductFromWishlist(id),
+		onSuccess: () => queryClient.invalidateQueries(['wishlist-products', listId])
 	})
 
 	const addProductToCart = async () => {
@@ -51,8 +51,8 @@ export default function FavoriteItem({ id, listId, href, name, variants, rating 
 		<li className="flex gap-8">
 			<Link href={href}>
 				<div className="relative h-[180px] w-[180px] select-none">
-					{variants[0].images && variants[0].images.length > 0 ? (
-						<Image src={variants[0].images[0]} alt={'Product photo'} fill sizes="300px" className="p-4 object-contain" />
+					{images && images.length > 0 ? (
+						<Image src={images[0]} alt={'Product photo'} fill sizes="300px" className="p-4 object-contain" />
 					) : (
 						<Image src="/../public/no-product-photo.png" alt={'Product photo'} className="object-contain" fill />
 					)}
@@ -65,7 +65,7 @@ export default function FavoriteItem({ id, listId, href, name, variants, rating 
 							{name}
 						</span>
 					</Link>
-					<span className="font-bold text-xl whitespace-nowrap">{variants[0].price} ₴</span>
+					<span className="font-bold text-xl whitespace-nowrap">{price} ₴</span>
 					<span className="flex items-center gap-1">
 						{rating} <Star fill="#ffa41c" />
 					</span>

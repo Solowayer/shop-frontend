@@ -9,7 +9,9 @@ export default function ProductsGrid({ products }: { products: Product[] }) {
 					id={product.id}
 					key={product.id}
 					name={product.name}
-					variants={product.variants}
+					images={product.images}
+					price={product.price}
+					stock={product.stock}
 					rating={product.rating}
 					href={`/product/${product.slug}`}
 				/>

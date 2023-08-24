@@ -6,14 +6,14 @@ import { ChevronRight } from '@/components/icons'
 import DefaultError from '@/components/layouts/default-error'
 import { Button, Spinner } from '@/components/ui'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import ListService from '@/services/list-service'
+import ListService from '@/services/wishlist-service'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
 export default function Page() {
 	const [openDialog, setOpenDialog] = useState(false)
-	const { data: lists, isError, isLoading, refetch } = useQuery(['lists'], ListService.findAll)
+	const { data: wishlists, isError, isLoading, refetch } = useQuery(['wishlists'], ListService.findAllWishlists)
 
 	if (isLoading) return <Spinner />
 	if (isError) return <DefaultError reset={refetch} />
@@ -38,9 +38,9 @@ export default function Page() {
 				</Dialog>
 			</div>
 			<div className="grid grid-cols-3 gap-4">
-				{lists && lists.length
-					? lists.map((list, index) => (
-							<Link href={`/account/lists/${list.id}`} key={index} className="bg-zinc-100 rounded p-4 h-[130px]">
+				{wishlists && wishlists.length
+					? wishlists.map((list, index) => (
+							<Link href={`/account/wishlists/${list.id}`} key={index} className="bg-zinc-100 rounded p-4 h-[130px]">
 								<div className="flex flex-col gap-1">
 									<div className="flex items-center justify-between">
 										<span className="font-medium">{list.name}</span>

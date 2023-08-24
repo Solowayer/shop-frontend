@@ -20,11 +20,11 @@ export default function Cart() {
 		refetch
 	} = useQuery({
 		queryKey: ['cart'],
-		queryFn: CartService.getAllItems
+		queryFn: CartService.findAllCartItems
 	})
 
 	const cartMutation = useMutation({
-		mutationFn: CartService.deleteItems,
+		mutationFn: CartService.deleteAllCartItems,
 		onSuccess: () => {
 			queryClient.invalidateQueries(['cart'])
 			setCartTotalQty(0)

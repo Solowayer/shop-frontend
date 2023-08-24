@@ -2,10 +2,12 @@ interface Product {
 	id: number
 	slug: string
 	name: string
+	images: string[]
+	price: number
+	stock: number
 	description?: string | null
 	categoryId: number
 	rating: number
-	variants: Variant[]
 }
 
 interface FullProduct extends Product {
@@ -22,7 +24,6 @@ interface CreateProduct {
 	images?: string[]
 	price: number
 	stock: number
-	attributeValues: CreateAttributeValue[]
 }
 
 interface EditProduct extends Partial<CreateProduct> {}

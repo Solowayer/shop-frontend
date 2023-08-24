@@ -18,7 +18,7 @@ export default function ProductsByCategoryId({ id, page, perPage }: { id: number
 		isSuccess,
 		refetch
 	} = useQuery(['products-by-category-id', page, perPage], () =>
-		ProductService.findByCategoryId(id, {
+		ProductService.findProductsByCategoryId(id, {
 			sort: undefined,
 			min_price: undefined,
 			max_price: undefined,

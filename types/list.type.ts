@@ -8,4 +8,4 @@ interface CreateList {
 	name: string
 }
 
-interface EditList extends Partial<CreateList> {}
+interface UpdateList extends Partial<CreateList> {}
