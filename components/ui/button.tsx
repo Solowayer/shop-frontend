@@ -9,8 +9,6 @@ export const buttonStyles = cva(
 		'select-none',
 		'inline-flex items-center',
 		'font-medium',
-		'focus:outline-none focus:ring focus:ring-blue-300 focus:ring-offset-2',
-		'focus-visible:outline-none focus-visible:ring focus-visible:ring-blue-300 focus-visible:ring-offset-2',
 		'disabled:bg-gray-200',
 		'disabled:text-gray-400',
 		'disabled:hover:cursor-not-allowed'

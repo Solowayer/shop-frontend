@@ -8,12 +8,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			title: 'Категорії',
 			children: [
 				{
-					href: '/admin/categories/all',
+					href: '/admin/categories',
 					title: 'Всі категорії'
 				},
 				{
 					href: '/admin/categories/create',
-					title: 'Додати'
+					title: 'Додати категорію'
 				}
 			]
 		}

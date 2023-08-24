@@ -14,9 +14,9 @@ export default async function Category({
 }) {
 	const PER_PAGE = 8
 
-	const category = await CategoryService.findBySlug(params.slug)
+	const category = await CategoryService.findCategoryBySlug(params.slug)
 
-	const breadcrumbs = await CategoryService.findBreadcrumbs(category.id)
+	const breadcrumbs = await CategoryService.findCategoryBreadcrumbs(category.id)
 
 	const children = category.children
 	const childrenWithSameParent = children.filter(childCategory => childCategory.parentId === category.id)

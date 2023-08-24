@@ -14,12 +14,12 @@ type Props = {
 export default function CategorySelect({ setCategoryId }: Props) {
 	const queryClient = useQueryClient()
 	const [openDialog, setOpenDialog] = useState(false)
-	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [categoryName, setCategoryName] = useState<string>('')
+	const [searchTerm, setSearchTerm] = useState<string>('')
 	const debouncedSearch = useDebounce(searchTerm)
 
 	const { data: categories, isLoading } = useQuery(['all-categories', debouncedSearch], () =>
-		CategoryService.findAll({ q: debouncedSearch })
+		CategoryService.findAllCategories({ q: debouncedSearch })
 	)
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {

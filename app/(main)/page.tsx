@@ -13,7 +13,7 @@ export default function Home() {
 		isLoading
 	} = useQuery({
 		queryKey: ['main-categories'],
-		queryFn: CategoryService.findMain,
+		queryFn: CategoryService.findMainCategories,
 		retry: false
 	})
 

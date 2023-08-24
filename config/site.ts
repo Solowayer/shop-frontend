@@ -1,8 +1,11 @@
-const Routes = {
-	ACCOUNT: '/account',
-	SELLER: '/seller'
+import { Routes } from './routes'
+
+type Dropdown = {
+	title: string
+	href: string
 }
 
+// типізація
 export const siteConfig = {
 	userHeaderMenu: [
 		{

@@ -3,7 +3,7 @@ import instance from './api'
 const CATEGORIES = '/categories'
 
 class CategoryServ {
-	async findMain(): Promise<Category[]> {
+	async findMainCategories(): Promise<Category[]> {
 		try {
 			const res = await instance.get(`${CATEGORIES}/main`)
 			return res.data
@@ -12,7 +12,7 @@ class CategoryServ {
 		}
 	}
 
-	async findAll(queryData?: CategoryFilters): Promise<Category[]> {
+	async findAllCategories(queryData?: CategoryFilters): Promise<Category[]> {
 		try {
 			const res = await instance.get(`${CATEGORIES}`, { params: queryData })
 			return res.data
@@ -21,34 +21,25 @@ class CategoryServ {
 		}
 	}
 
-	async findTree(queryData?: CategoryFilters): Promise<Category[]> {
+	async findCategoryAndChildrenById(id: number): Promise<{ category: Category; children: Category[] }> {
 		try {
-			const res = await instance.get(`${CATEGORIES}/c-tree`, { params: queryData })
+			const res = await instance.get(`${CATEGORIES}/category-children/${id}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async findAllById(id: number): Promise<Category[]> {
+	async findCategoryById(id: number): Promise<{ category: Category; children: Category[] }> {
 		try {
-			const res = await instance.get(`${CATEGORIES}/c-all/${id}`)
+			const res = await instance.get(`${CATEGORIES}/category/${id}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async findById(id: number): Promise<FullCategory> {
-		try {
-			const res = await instance.get(`${CATEGORIES}/c/${id}`)
-			return res.data
-		} catch (error: any) {
-			throw new Error(error?.response?.data?.message)
-		}
-	}
-
-	async findBySlug(slug: string): Promise<FullCategory> {
+	async findCategoryBySlug(slug: string): Promise<FullCategory> {
 		try {
 			const res = await instance.get(`${CATEGORIES}/${slug}`)
 			return res.data
@@ -57,7 +48,7 @@ class CategoryServ {
 		}
 	}
 
-	async findBreadcrumbs(id: number): Promise<Category[]> {
+	async findCategoryBreadcrumbs(id: number): Promise<Category[]> {
 		try {
 			const res = await instance.get(`${CATEGORIES}/breadcrumbs/${id}`)
 			return res.data
@@ -66,7 +57,7 @@ class CategoryServ {
 		}
 	}
 
-	async create(data: CreateCategory): Promise<Category> {
+	async createCategory(data: CreateCategory): Promise<Category> {
 		try {
 			const res = await instance.post(`${CATEGORIES}/create`, data)
 			return res.data
@@ -75,18 +66,18 @@ class CategoryServ {
 		}
 	}
 
-	async update(id: number, data: EditCategory): Promise<Category> {
+	async updateCategory(id: number, data: EditCategory): Promise<Category> {
 		try {
-			const res = await instance.patch(`${CATEGORIES}/c/${id}`, data)
+			const res = await instance.patch(`${CATEGORIES}/${id}`, data)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
 		}
 	}
 
-	async delete(id: number) {
+	async deleteCategory(id: number) {
 		try {
-			const res = await instance.delete(`${CATEGORIES}/c/${id}`)
+			const res = await instance.delete(`${CATEGORIES}/${id}`)
 			return res.data
 		} catch (error: any) {
 			throw new Error(error?.response?.data?.message)
