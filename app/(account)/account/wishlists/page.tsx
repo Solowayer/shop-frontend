@@ -1,7 +1,7 @@
 'use client'
 
 import Breadcrumbs from '@/components/breadcrumbs'
-import AddListForm from '@/components/forms/create-list-form'
+import CreateWishlistForm from '@/components/forms/create-wishlist-form'
 import { ChevronRight } from '@/components/icons'
 import DefaultError from '@/components/layouts/default-error'
 import { Button, Spinner } from '@/components/ui'
@@ -33,7 +33,7 @@ export default function Page() {
 						<Button>Додати список</Button>
 					</DialogTrigger>
 					<DialogContent title={'Додати список'}>
-						<AddListForm setDialogClose={() => setOpenDialog(false)} />
+						<CreateWishlistForm setDialogClose={() => setOpenDialog(false)} />
 					</DialogContent>
 				</Dialog>
 			</div>

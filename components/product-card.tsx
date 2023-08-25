@@ -9,7 +9,7 @@ import { Button, ButtonLink } from './ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import WishlistService from '@/services/wishlist-service'
 import CartService from '@/services/cart-service'
-import CreateListForm from './forms/create-list-form'
+import CreateListForm from './forms/create-wishlist-form'
 
 interface ProductProps extends Omit<Product, 'slug' | 'description' | 'categoryId' | 'published'> {
 	href: string

@@ -10,9 +10,9 @@ type NotificationProps = {
 
 export function Notification({ text, isError, isSuccess, isWarn }: NotificationProps) {
 	return (
-		<div className="flex bottom-0 absolute z-10 w-full items-end justify-center p-6">
+		<div className="absolute flex bottom-0 right-0 z-10 items-end justify-center p-6 w-[400px]">
 			<div
-				className={`inline-flex overflow-hidden bg-white drop-shadow-md border-2 rounded w-[30%] ${
+				className={`inline-flex overflow-hidden bg-white drop-shadow-md border-2 rounded w-full ${
 					isError ? 'border-red-300' : isSuccess ? 'border-green-300' : isWarn ? 'border-orange-300' : 'border-zinc-500'
 				}`}
 			>

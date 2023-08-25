@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
 
 type Props = {
-	setCategoryId: (parentId: number) => void
+	setCategoryId: (categoryId: number) => void
 	value?: string
 }
 

@@ -17,7 +17,7 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 	const isAuth = useStore(useUserStore, state => state.isAuth)
 
 	const mutation = useMutation({
-		mutationFn: CartService.addItem,
+		mutationFn: CartService.createCartItem,
 		onSuccess: () => queryClient.invalidateQueries(['cart'])
 	})
 
@@ -25,7 +25,7 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting }
-	} = useForm<AddCartItem>({
+	} = useForm<CreateCartItem>({
 		defaultValues: {
 			quantity: 1,
 			productId: productId
@@ -33,7 +33,7 @@ export default function AddToCartForm({ productId }: { productId: number }) {
 		resolver: zodResolver(addToCartSchema)
 	})
 
-	const onSubmit: SubmitHandler<AddCartItem> = data => {
+	const onSubmit: SubmitHandler<CreateCartItem> = data => {
 		try {
 			mutation.mutate({ ...data })
 		} catch (error) {

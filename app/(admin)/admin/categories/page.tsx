@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight, ExpandMore } from '@/components/icons'
+import { ChevronLeft, ChevronRight, ExpandMore } from '@/components/icons'
 import { Button, ButtonLink, Spinner } from '@/components/ui'
 import CategoryService from '@/services/category-service'
 import { useQuery } from '@tanstack/react-query'

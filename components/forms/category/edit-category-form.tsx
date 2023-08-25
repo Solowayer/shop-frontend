@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from 'react'
 import { Check } from '@/components/icons'
 import { Button, Spinner, Input } from '@/components/ui'
@@ -31,7 +33,7 @@ export default function EditCategoryForm({ categoryId }: { categoryId: number })
 		register,
 		handleSubmit,
 		reset,
-		formState: { errors, isSubmitting, isDirty }
+		formState: { errors, isSubmitting }
 	} = useForm<UpdateCategory>({
 		resolver: zodResolver(updateCategorySchema)
 	})
@@ -40,11 +42,13 @@ export default function EditCategoryForm({ categoryId }: { categoryId: number })
 		if (category) {
 			reset(category)
 		}
+
+		console.log()
 	}, [category, reset])
 
 	const onSubmit: SubmitHandler<UpdateCategory> = async data => {
 		try {
-			updateCategory.mutateAsync({ ...data, parentId })
+			await updateCategory.mutateAsync({ ...data, parentId })
 		} catch (error) {
 			console.log(error)
 		}
@@ -68,8 +72,8 @@ export default function EditCategoryForm({ categoryId }: { categoryId: number })
 
 			<CategoriesCombobox setCategoryId={setParentId} value={category.parent?.name} />
 
-			<Button size="large" type="submit" disabled={isSubmitting || !isDirty}>
-				{isSubmitting ? 'Створюється...' : 'Створити'}
+			<Button size="large" type="submit" disabled={isSubmitting}>
+				{isSubmitting ? 'Вносимо зміни...' : 'Внести зміни'}
 			</Button>
 
 			{updateCategory.isSuccess && (

@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Button, Input } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import ListService from '@/services/wishlist-service'
+import WishlistService from '@/services/wishlist-service'
 import { listSchema } from '@/lib/validation/listSchema'
 
 type AddListFormProps = {
@@ -13,19 +13,19 @@ type AddListFormProps = {
 	productId?: number
 }
 
-export default function CreateListForm({ setDialogClose, productId }: AddListFormProps) {
+export default function CreateWishlistForm({ setDialogClose, productId }: AddListFormProps) {
 	const queryClient = useQueryClient()
 
 	const createListmutation = useMutation({
-		mutationFn: ListService.create,
-		onSuccess: () => queryClient.invalidateQueries(['lists'])
+		mutationFn: WishlistService.createWishlist,
+		onSuccess: () => queryClient.invalidateQueries(['wishlists'])
 	})
 
 	const addProductToListMutation = useMutation({
 		mutationFn: ({ listId, productId }: { listId: number; productId: number }) =>
-			ListService.addProduct(listId, productId),
+			WishlistService.addProductToWishlist(listId, productId),
 		onSuccess: () => {
-			queryClient.invalidateQueries(['check-product-in-list', productId])
+			queryClient.invalidateQueries(['check-product-in-wishlist', productId])
 		}
 	})
 
@@ -33,14 +33,14 @@ export default function CreateListForm({ setDialogClose, productId }: AddListFor
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting }
-	} = useForm<CreateList>({
+	} = useForm<CreateWishlist>({
 		defaultValues: {
 			name: ''
 		},
 		resolver: zodResolver(listSchema)
 	})
 
-	const onSubmit: SubmitHandler<CreateList> = async data => {
+	const onSubmit: SubmitHandler<CreateWishlist> = async data => {
 		try {
 			const createdList = await createListmutation.mutateAsync({ ...data })
 			const listId = createdList.id

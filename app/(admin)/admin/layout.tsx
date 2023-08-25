@@ -16,6 +16,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 					title: 'Атрибути'
 				}
 			]
+		},
+		{
+			title: 'Юзери',
+			children: [
+				{
+					href: '/admin/users',
+					title: 'Всі юзери'
+				}
+			]
 		}
 	]
 

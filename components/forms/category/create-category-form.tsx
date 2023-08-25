@@ -1,3 +1,5 @@
+'use client'
+
 import { Check } from '@/components/icons'
 import { Button } from '@/components/ui'
 import { Input } from '@/components/ui'
@@ -30,7 +32,7 @@ export default function CreateCategoryForm() {
 
 	const onSubmit: SubmitHandler<CreateCategory> = async data => {
 		try {
-			addCategory.mutateAsync({ ...data, parentId })
+			await addCategory.mutateAsync({ ...data, parentId })
 		} catch (error) {
 			console.log(error)
 		}

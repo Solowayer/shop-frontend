@@ -1,9 +1,9 @@
 import { Routes } from './routes'
 
-type Dropdown = {
-	title: string
-	href: string
-}
+// type Dropdown = {
+// 	title: string
+// 	href: string
+// }
 
 // типізація
 export const siteConfig = {
@@ -14,7 +14,7 @@ export const siteConfig = {
 		},
 		{
 			title: 'Обране',
-			href: `${Routes.ACCOUNT}/lists`
+			href: `${Routes.ACCOUNT}/wishlists`
 		},
 		{
 			title: 'Дашборд продавця',

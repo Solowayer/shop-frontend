@@ -7,7 +7,7 @@ import { Button, Spinner } from '@/components/ui'
 import ProductService from '@/services/product-service'
 import { More } from '@/components/icons'
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog'
-import EditListForm from '@/components/forms/edit-list-form'
+import EditWishlistForm from '@/components/forms/edit-wishlist-form'
 import FavoriteItem from '@/components/favorite-item'
 import Breadcrumbs from '@/components/breadcrumbs'
 
@@ -15,8 +15,8 @@ export default function Page({ params, searchParams }: { params: { id: number };
 	const PER_PAGE = 8
 
 	const [openDialog, setOpenDialog] = useState(false)
-	const { data: list, isLoading } = useQuery([`list`, params.id], () => ListService.findWishlistById(params.id))
-	const { data: productsData } = useQuery(['list-products', params.id], () =>
+	const { data: list, isLoading } = useQuery([`wishlist`, params.id], () => ListService.findWishlistById(params.id))
+	const { data: productsData } = useQuery(['wishlist-products', params.id], () =>
 		ProductService.findProductsByWishlist(params.id, {
 			sort: 'high-price',
 			min_price: undefined,
@@ -34,7 +34,7 @@ export default function Page({ params, searchParams }: { params: { id: number };
 			<Breadcrumbs
 				breadcrumbs={[
 					{ name: 'Аккаунт', href: '/account' },
-					{ name: 'Мої списки', href: '/account/lists' },
+					{ name: 'Мої списки', href: '/account/wishlists' },
 					{ name: `Список "${list?.name}"`, href: '/' }
 				]}
 			/>
@@ -48,7 +48,7 @@ export default function Page({ params, searchParams }: { params: { id: number };
 						</Button>
 					</DialogTrigger>
 					<DialogContent title="Налаштування">
-						<EditListForm listId={params.id} setDialogClose={() => setOpenDialog(false)} />
+						<EditWishlistForm listId={params.id} setDialogClose={() => setOpenDialog(false)} />
 					</DialogContent>
 				</Dialog>
 			</div>
@@ -61,9 +61,11 @@ export default function Page({ params, searchParams }: { params: { id: number };
 							href={`/product/${product.slug}`}
 							id={product.id}
 							listId={params.id}
-							variants={product.variants}
 							rating={product.rating}
+							images={product.images}
 							name={product.name}
+							price={product.price}
+							stock={product.stock}
 						/>
 					))}
 				</ul>

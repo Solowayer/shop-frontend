@@ -1,11 +1,11 @@
-interface List {
+interface Wishlist {
 	id: number
 	name: string
 	userId: number
 }
 
-interface CreateList {
+interface CreateWishlist {
 	name: string
 }
 
-interface UpdateList extends Partial<CreateList> {}
+interface UpdateWishlist extends Partial<CreateWishlist> {}
