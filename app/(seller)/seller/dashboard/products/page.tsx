@@ -20,18 +20,18 @@ export default function SellerProducts({ searchParams }: { searchParams: { page:
 		isLoading,
 		isSuccess
 	} = useQuery(['seller-products', 'high-price', searchParams.page, PER_PAGE], () =>
-		ProductService.findSellerProducts({
+		ProductService.findProductsBySellerId({
 			sort: 'high-price',
 			min_price: undefined,
 			max_price: undefined,
-			searchTerm: undefined,
+			q: undefined,
 			page: searchParams.page,
 			limit: PER_PAGE
 		})
 	)
 
 	const deleteProductMutation = useMutation({
-		mutationFn: ProductService.delete,
+		mutationFn: ProductService.deleteProduct,
 		onSuccess: () => {
 			queryClient.invalidateQueries(['seller-products'])
 		}
@@ -121,7 +121,7 @@ export default function SellerProducts({ searchParams }: { searchParams: { page:
 					<h3>Товарів поки що немає</h3>
 				)}
 			</div>
-			<Pagination totalPages={totalPages} />
+			{totalPages > 1 && <Pagination totalPages={totalPages} />}
 		</div>
 	)
 }

@@ -10,7 +10,7 @@ interface Category {
 interface CreateCategory {
 	slug: string
 	name: string
-	parentId?: number
+	parentId?: number | null
 	childrenIds?: number[]
 }
 
@@ -19,7 +19,7 @@ interface FullCategory extends Category {
 	products: Product[]
 }
 
-interface EditCategory extends Partial<CreateCategory> {}
+interface UpdateCategory extends Partial<CreateCategory> {}
 
 interface CategoryFilters {
 	q?: string

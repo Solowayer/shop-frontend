@@ -6,13 +6,19 @@ import CategoriesCombobox from './categories-combobox'
 import { createCategorySchema } from '@/lib/validation/categorySchema'
 import CategoryService from '@/services/category-service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 export default function CreateCategoryForm() {
-	const [parentId, setParentId] = useState<number>(0)
+	const queryClient = useQueryClient()
+	const [parentId, setParentId] = useState<number | null>(null)
 
-	const addCategory = useMutation({ mutationFn: (data: CreateCategory) => CategoryService.createCategory(data) })
+	const addCategory = useMutation({
+		mutationFn: (data: CreateCategory) => CategoryService.createCategory(data),
+		onSuccess: () => {
+			queryClient.invalidateQueries(['all-categories'])
+		}
+	})
 
 	const {
 		register,
@@ -47,6 +53,12 @@ export default function CreateCategoryForm() {
 			{addCategory.isSuccess && (
 				<div className="p-4 w-full bg-green-700 text-white font-medium flex gap-2 rounded items-center">
 					<Check size="24" /> Категорію створено
+				</div>
+			)}
+
+			{addCategory.isError && (
+				<div className="p-4 w-full bg-red-700 text-white font-medium flex gap-2 rounded items-center">
+					Виникла перевірка при створенні категорії, от халепа!
 				</div>
 			)}
 		</form>

@@ -28,12 +28,12 @@ export default function EditProductForm({ productId }: { productId: number }) {
 		isSuccess: isProductSuccess
 	} = useQuery({
 		queryKey: ['product', productId],
-		queryFn: () => ProductService.findById(productId),
+		queryFn: () => ProductService.findProductById(productId),
 		retry: false
 	})
 
 	const editProductMutation = useMutation({
-		mutationFn: (data: EditProduct) => ProductService.update(productId, data)
+		mutationFn: (data: EditProduct) => ProductService.updateProduct(productId, data)
 	})
 
 	const imagesMutation = useMutation({
@@ -61,14 +61,10 @@ export default function EditProductForm({ productId }: { productId: number }) {
 		data: categories,
 		isLoading: isCategoriesLoading,
 		isError: isCategoriesError
-	} = useQuery({
-		queryKey: ['all-categories'],
-		queryFn: CategoryService.findAll,
-		retry: false
-	})
+	} = useQuery(['all-categories'], () => CategoryService.findAllCategories())
 
 	const {
-		register, 
+		register,
 		handleSubmit,
 		getValues,
 		reset,

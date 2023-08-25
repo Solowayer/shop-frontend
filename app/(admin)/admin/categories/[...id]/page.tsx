@@ -20,9 +20,9 @@ export default async function Page({ params }: { params: { id: number } }) {
 
 			<div className="flex justify-between items-center">
 				<h3 className="text-xl font-bold">{categoryData.category.name}</h3>
-				<Button intent="secondary" shape="round">
+				<ButtonLink href={`/admin/categories/edit/${params.id}`} intent="secondary" shape="round">
 					Змінити
-				</Button>
+				</ButtonLink>
 			</div>
 			<div className="flex flex-col">
 				{categoryData.children.map(subCategory => (

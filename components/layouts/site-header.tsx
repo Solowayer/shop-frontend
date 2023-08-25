@@ -42,7 +42,7 @@ export default function SiteHeader() {
 
 	const { data: cartData, isSuccess: cartIsSuccess } = useQuery({
 		queryKey: ['cart'],
-		queryFn: CartService.getAllItems
+		queryFn: CartService.findAllCartItems
 	})
 
 	const exitMutation = useMutation({

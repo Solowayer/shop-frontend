@@ -10,7 +10,6 @@ import { Button, Input, Textarea } from '@/components/ui'
 import { useRouter } from 'next/navigation'
 import CategorySelect from './category-select'
 import ProductImageGallery from './product-image-gallery'
-import AttributeService from '@/services/attribute-service'
 
 export default function CreateProductForm() {
 	const [categoryId, setCategoryId] = useState<number>(0)
@@ -19,31 +18,17 @@ export default function CreateProductForm() {
 	const router = useRouter()
 
 	const productMutation = useMutation({
-		mutationFn: ProductService.create,
+		mutationFn: ProductService.createProduct,
 		onSuccess: () => {
 			router.push('/seller/dashboard/products')
 		}
 	})
-
-	const { data: categoryAttributes } = useQuery(['attrs', categoryId], () =>
-		AttributeService.findByCategoryId(categoryId)
-	)
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting, isDirty }
 	} = useForm<CreateProduct>({
-		defaultValues: {
-			slug: '',
-			name: '',
-			description: '',
-			tags: [],
-			images: [],
-			price: undefined,
-			stock: undefined,
-			attributeValues: []
-		},
 		resolver: zodResolver(createProductSchema)
 	})
 
@@ -54,12 +39,6 @@ export default function CreateProductForm() {
 			console.log(error)
 		}
 	}
-
-	useEffect(() => {
-		console.log(productImages)
-		console.log(categoryId)
-		console.log(categoryAttributes)
-	}, [categoryAttributes, categoryId, productImages])
 
 	return (
 		<div className="flex flex-col gap-8">
@@ -109,16 +88,6 @@ export default function CreateProductForm() {
 						min={0}
 						disabled={isSubmitting}
 					/>
-
-					{categoryAttributes?.map(attr => (
-						<Input
-							label={attr.name}
-							key={attr.id}
-							placeholder={attr.name}
-							// onChange={e => handleAttributeChange(attr.id, e.target.value)}
-							name={`attr_${attr.id}`}
-						/>
-					))}
 				</div>
 
 				<div className="flex flex-col gap-4">

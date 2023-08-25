@@ -30,7 +30,7 @@ class CategoryServ {
 		}
 	}
 
-	async findCategoryById(id: number): Promise<{ category: Category; children: Category[] }> {
+	async findCategoryById(id: number): Promise<Category> {
 		try {
 			const res = await instance.get(`${CATEGORIES}/category/${id}`)
 			return res.data
@@ -66,7 +66,7 @@ class CategoryServ {
 		}
 	}
 
-	async updateCategory(id: number, data: EditCategory): Promise<Category> {
+	async updateCategory(id: number, data: UpdateCategory): Promise<Category> {
 		try {
 			const res = await instance.patch(`${CATEGORIES}/${id}`, data)
 			return res.data

@@ -18,15 +18,15 @@ type EditListFormProps = {
 export default function EditListForm({ listId, setDialogClose }: EditListFormProps) {
 	const router = useRouter()
 	const queryClient = useQueryClient()
-	const { data: list } = useQuery(['list', listId], () => ListService.findById(listId))
+	const { data: list } = useQuery(['list', listId], () => ListService.findWishlistById(listId))
 
 	const updateListmutation = useMutation({
-		mutationFn: (data: EditList) => ListService.update(listId, data),
+		mutationFn: (data: UpdateList) => ListService.updateWishlist(listId, data),
 		onSuccess: () => queryClient.invalidateQueries(['list', listId])
 	})
 
 	const deleteListMutation = useMutation({
-		mutationFn: () => ListService.delete(listId),
+		mutationFn: () => ListService.deleteWishlist(listId),
 		onSuccess: () => {
 			queryClient.invalidateQueries(['lists'])
 		}
@@ -36,14 +36,14 @@ export default function EditListForm({ listId, setDialogClose }: EditListFormPro
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting, isDirty }
-	} = useForm<EditList>({
+	} = useForm<UpdateList>({
 		defaultValues: {
 			name: list?.name
 		},
 		resolver: zodResolver(listSchema)
 	})
 
-	const onSubmit: SubmitHandler<EditList> = async data => {
+	const onSubmit: SubmitHandler<UpdateList> = async data => {
 		try {
 			updateListmutation.mutateAsync({ ...data })
 			setDialogClose()

@@ -4,14 +4,15 @@ import { Spinner } from '@/components/ui'
 import { Combobox, ComboboxInput, ComboboxOptions, ComboboxOption } from '@/components/ui/combobox'
 import CategoryService from '@/services/category-service'
 import { useQuery } from '@tanstack/react-query'
-import React, { ChangeEvent, useState } from 'react'
+import React, { useState } from 'react'
 
 type Props = {
 	setCategoryId: (parentId: number) => void
+	value?: string
 }
 
-export default function CategoriesCombobox({ setCategoryId }: Props) {
-	const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined)
+export default function CategoriesCombobox({ setCategoryId, value }: Props) {
+	const [selectedValue, setSelectedValue] = useState<string | undefined>(value)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 
 	const { data: categories, isLoading } = useQuery(['all-categories'], () => CategoryService.findAllCategories())
